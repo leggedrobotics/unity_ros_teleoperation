@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<robot name="example" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:include filename="$(find psyonic_ability_hand_model)/model/urdf/ability_hand_right.urdf.xacro" />
+	<link name="floating"/>
+
+    <xacro:psyonic_ability_hand parent = "floating">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:psyonic_ability_hand>
+
+</robot>

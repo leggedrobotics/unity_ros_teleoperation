@@ -1,0 +1,150 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel Debayer
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+Texture2D<float4> Input;
+
+uint mode = 1; // 0 for RGGB debayer, 1 for BGGR, 2 for GBRG, 3 for GRBG
+
+[numthreads(2,2,1)]
+void Debayer (uint3 id : SV_DispatchThreadID)
+{
+    // Perform bilinear debayering
+    float4 color;
+
+
+    // BGGR debayer
+
+    if(mode == 0){
+        // red
+        if (id.x % 2 == 0 && id.y % 2 == 0)
+        {
+            color = float4(Input[id.xy].r,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                        (Input[id.xy + float2(-1, -1)].b + Input[id.xy + float2(1, -1)].b + Input[id.xy + float2(-1, 1)].b + Input[id.xy + float2(1, 1)].b) / 4,
+                        1);
+        } 
+        // blue
+        else if(id.x % 2 == 1 && id.y % 2 == 1) {
+            color = float4(
+                (Input[id.xy + float2(-1, -1)].r + Input[id.xy + float2(1, -1)].r + Input[id.xy + float2(-1, 1)].r + Input[id.xy + float2(1, 1)].r) / 4,
+                (Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                Input[id.xy].b,
+                1);
+        }
+        else if (id.x % 2 == 1 && id.y % 2 == 0)
+        {
+            color = float4((Input[id.xy + float2(1, 0)].r + Input[id.xy + float2(-1, 0)].r) / 2,
+                            Input[id.xy].g,
+                            (Input[id.xy + float2(0, 1)].r + Input[id.xy + float2(0, -1)].r) / 2,
+                        1);
+        }
+        else if (id.x % 2 == 0 && id.y % 2 == 1)
+        {
+            color = float4((Input[id.xy + float2(0,1)].r + Input[id.xy + float2(0,-1)].r) / 2,
+                            Input[id.xy].g,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g ) / 2,
+                        1);
+        }
+    } else if (mode == 1) { // BGGR
+        // red
+        if (id.x % 2 == 1 && id.y % 2 == 1)
+        {
+            color = float4(Input[id.xy].r,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                        (Input[id.xy + float2(-1, -1)].b + Input[id.xy + float2(1, -1)].b + Input[id.xy + float2(-1, 1)].b + Input[id.xy + float2(1, 1)].b) / 4,
+                        1);
+        } 
+        // blue
+        else if(id.x % 2 == 0 && id.y % 2 == 0) {
+            color = float4(
+                (Input[id.xy + float2(-1, -1)].r + Input[id.xy + float2(1, -1)].r + Input[id.xy + float2(-1, 1)].r + Input[id.xy + float2(1, 1)].r) / 4,
+                (Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                Input[id.xy].b,
+                1);
+        }
+        else if (id.x % 2 == 0 && id.y % 2 == 1)
+        {
+            color = float4((Input[id.xy + float2(1, 0)].r + Input[id.xy + float2(-1, 0)].r) / 2,
+                            Input[id.xy].g,
+                            (Input[id.xy + float2(0, 1)].r + Input[id.xy + float2(0, -1)].r) / 2,
+                        1);
+        }
+        else if (id.x % 2 == 1 && id.y % 2 == 0)
+        {
+            color = float4((Input[id.xy + float2(0,1)].r + Input[id.xy + float2(0,-1)].r) / 2,
+                            Input[id.xy].g,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g ) / 2,
+                        1);
+        }
+    } else if (mode == 2) { // GBRG
+        // red
+        if (id.x % 2 == 1 && id.y % 2 == 0)
+        {
+            color = float4(Input[id.xy].r,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                        (Input[id.xy + float2(-1, -1)].b + Input[id.xy + float2(1, -1)].b + Input[id.xy + float2(-1, 1)].b + Input[id.xy + float2(1, 1)].b) / 4,
+                        1);
+        } 
+        // blue
+        else if(id.x % 2 == 0 && id.y % 2 == 1) {
+            color = float4(
+                (Input[id.xy + float2(-1, -1)].r + Input[id.xy + float2(1, -1)].r + Input[id.xy + float2(-1, 1)].r + Input[id.xy + float2(1, 1)].r) / 4,
+                (Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                Input[id.xy].b,
+                1);
+        }
+        else if (id.x % 2 == 0 && id.y % 2 == 0)
+        {
+            color = float4((Input[id.xy + float2(1, 0)].r + Input[id.xy + float2(-1, 0)].r) / 2,
+                            Input[id.xy].g,
+                            (Input[id.xy + float2(0, 1)].r + Input[id.xy + float2(0, -1)].r) / 2,
+                        1);
+        }
+        else if (id.x % 2 == 1 && id.y % 2 == 1)
+        {
+            color = float4((Input[id.xy + float2(0,1)].r + Input[id.xy + float2(0,-1)].r) / 2,
+                            Input[id.xy].g,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g ) / 2,
+                        1);
+        }
+    } else if (mode == 3) { // GRBG
+        // red
+        if (id.x % 2 == 0 && id.y % 2 == 1)
+        {
+            color = float4(Input[id.xy].r,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                        (Input[id.xy + float2(-1, -1)].b + Input[id.xy + float2(1, -1)].b + Input[id.xy + float2(-1, 1)].b + Input[id.xy + float2(1, 1)].b) / 4,
+                        1);
+        } 
+        // blue
+        else if(id.x % 2 == 1 && id.y % 2 == 0) {
+            color = float4(
+                (Input[id.xy + float2(-1, -1)].r + Input[id.xy + float2(1, -1)].r + Input[id.xy + float2(-1, 1)].r + Input[id.xy + float2(1, 1)].r) / 4,
+                (Input[id.xy + float2(-1, 0)].g + Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(0, 1)].g + Input[id.xy + float2(0, -1)].g) / 4,
+                Input[id.xy].b,
+                1);
+        }
+        else if (id.x % 2 == 1 && id.y % 2 == 1)
+        {
+            color = float4((Input[id.xy + float2(1, 0)].r + Input[id.xy + float2(-1, 0)].r) / 2,
+                            Input[id.xy].g,
+                            (Input[id.xy + float2(0, 1)].r + Input[id.xy + float2(0, -1)].r) / 2,
+                        1);
+        }
+        else if (id.x % 2 == 0 && id.y % 2 == 0)
+        {
+            color = float4((Input[id.xy + float2(0,1)].r + Input[id.xy + float2(0,-1)].r) / 2,
+                            Input[id.xy].g,
+                        (Input[id.xy + float2(1, 0)].g + Input[id.xy + float2(-1, 0)].g ) / 2,
+                        1);
+        }
+    }
+    
+
+
+     
+    Result[id.xy] = color;
+}

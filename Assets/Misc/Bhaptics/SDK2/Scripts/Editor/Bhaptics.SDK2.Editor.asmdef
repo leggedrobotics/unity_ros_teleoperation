@@ -1,0 +1,17 @@
+{
+    "name": "Bhaptics.SDK2.Editor",
+    "references": [
+        "GUID:464dd5f1479658c42bf2844d11534e1e"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

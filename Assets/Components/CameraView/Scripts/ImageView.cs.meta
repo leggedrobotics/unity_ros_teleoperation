@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 666ed0da4c932cd4186e9ec4fc76dd9c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - dropdown: {instanceID: 0}
+  - topMenu: {instanceID: 0}
+  - manager: {instanceID: 0}
+  - name: {instanceID: 0}
+  - untracked: {fileID: 3286163911610860551, guid: d60032fc7bdc8db91b454ee5c68f9105, type: 3}
+  - tracked: {fileID: 3286163911610860551, guid: 59f25925f06319d02925dc6f372d08c3, type: 3}
+  - headTracked: {fileID: 3286163911610860551, guid: 0eebeed137c5a666e810befadd04c4b5, type: 3}
+  - debayer: {instanceID: 0}
+  - material: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1185d37376fa7ac79a90d08b59b34f6e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - lidarSpawner: {instanceID: 0}
+  - mesh: {instanceID: 0}
+  - lidar_material: {fileID: 2100000, guid: cff58e95e3efb7ea995ef3989b51e681, type: 2}
+  - rgbd_material: {fileID: 2100000, guid: b010de748c08a6d40b3f631265381ff6, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

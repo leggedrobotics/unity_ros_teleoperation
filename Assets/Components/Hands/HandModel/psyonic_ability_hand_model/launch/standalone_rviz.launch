@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+	<param name="robot_description" command="$(find xacro)/xacro $(find psyonic_ability_hand_model)/model/urdf/hand_standalone.urdf.xacro"/>
+ 	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui"/>
+     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+     <param name="ignore_timestamp" value="true"/>
+     </node>
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find psyonic_ability_hand_model)/launch/view.rviz" output="screen"/>
+</launch>

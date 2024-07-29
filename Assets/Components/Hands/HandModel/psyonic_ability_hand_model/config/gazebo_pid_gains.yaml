@@ -1,0 +1,20 @@
+gazebo_ros_control:
+  pid_gains:
+    index_q1:
+      p: 0.2
+      d: 0.005
+    middle_q1:
+      p: 0.2
+      d: 0.005
+    ring_q1:
+      p: 0.2
+      d: 0.005
+    pinky_q1:
+      p: 0.2
+      d: 0.005
+    thumb_q1:
+      p: 0.2
+      d: 0.005
+    thumb_q2:
+      p: 0.2
+      d: 0.005

@@ -1,0 +1,4 @@
+*.splat filter=lfs diff=lfs merge=lfs -text
+Assets/UMS_LODs/base/base_combined_static/01_unnamed.mesh filter=lfs diff=lfs merge=lfs -text
+Assets/UMS_LODs/base/base_combined_static/02_unnamed[[:space:]]1.mesh filter=lfs diff=lfs merge=lfs -text
+Assets/UMS_LODs/base/base_combined_static/02_unnamed.mesh filter=lfs diff=lfs merge=lfs -text
