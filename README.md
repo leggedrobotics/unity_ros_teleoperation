@@ -1,5 +1,5 @@
 # Unity ROS Teleoperation Project
-
+[Project Page](https://leggedrobotics.github.io/rffr.github.io/)
 
 This repo contains a series of components for Unity XR teleoperation with ROS integration. It is designed to be run on a Quest 3 VR headset, and support OpenXR, hand tracking, Unity input system, and is built with Unity 2022.3.12f1.
 
@@ -48,3 +48,16 @@ In general the scenes should have a few objects by default:
 - Added standalone dynaarm, and franka panda robots
 - Updated dynaarm for newer model (may still need simplification)
 - Added robot manager for switching between robots
+
+---
+
+## Citing
+If you use this project in your work please cite [this paper](https://arxiv.org/abs/2407.20194):
+```text
+@article{wildersmith2024rfteleoperation,
+  author    = {Maximum Wilder-Smith, Vaishakh Patil, Marco Hutter},
+  title     = {Radiance Fields for Robotic Teleoperation},
+  journal   = {arXiv},
+  year      = {2024},
+}
+```
