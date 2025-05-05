@@ -13,9 +13,12 @@ public class URDFConverterEditor : Editor
     {
         DrawDefaultInspector();
 
-        string res = "0";
-        GUILayout.Label("Count: " + res);
         URDFConverter converter = (URDFConverter)target;
+        string res = converter.count.ToString();
+        string meshData = converter.meshData;
+        GUILayout.Label("Removal Iterations: " + res);
+        GUILayout.Label(meshData);
+
         if(GUILayout.Button("Convert"))
         {
             Debug.Log("Converting...");
@@ -24,7 +27,7 @@ public class URDFConverterEditor : Editor
         if(GUILayout.Button("Count"))
         {
             Debug.Log("Counting...");
-            res = converter.Count();
+            converter.Count();
         }
 
     }
@@ -33,13 +36,23 @@ public class URDFConverterEditor : Editor
 
 public class URDFConverter : MonoBehaviour
 {
-    public void Convert(){
+    [HideInInspector]
+    public int count = 0;
+    [HideInInspector]
+    public string meshData = "Run Count() to get mesh data";
 
-        int count = Convert("", transform);
-        Debug.Log("Removed " + count + " missing scripts");
+    public void Convert(){
+        // Run convert until there is nothing lest to remove or 100 times
+        int removed = 1;
+        int i = 0;
+        for(i=0; i < 100 && removed > 0; i++){
+            removed = Convert("", transform);
+            Debug.Log("Removed " + removed + " extra objects");
+        }
+        count = i-1;
     }
 
-    public string Count(){
+    public void Count(){
         // counts the tris and verts in this object and all children
         int tris = 0;
         int verts = 0;
@@ -53,18 +66,19 @@ public class URDFConverter : MonoBehaviour
                 path = mf.transform.name;
             }
         }
-        string res = "Verts: " + verts + " Tris: " + tris + " Max Tris: " + maxTris + " Path: " + path;
+        string res = "Verts: " + verts.ToString("N0") + "       Tris: " + tris.ToString("N0") + "       Max Tris: " + maxTris.ToString("N0") + "       Path: " + path;
         Debug.Log(res);
-        return res;
+        
+        meshData = res;
     }
 
 
     int Convert(string path, Transform o)
     {
-        int count = 1;
+        count = 0;
         if(o.name == "Collisions" || o.name == "Plugins"){
             DestroyImmediate(o.gameObject);
-            return 0;
+            return 1;
         }
         else if(!(o.name == "Visuals" || o.name == "unnamed"))
         {
@@ -77,7 +91,7 @@ public class URDFConverter : MonoBehaviour
                 t.SetParent(o.parent);
             }
             DestroyImmediate(o.gameObject);
-            return 0;
+            return 1;
         }
 
         // if mesh in name return
@@ -89,7 +103,7 @@ public class URDFConverter : MonoBehaviour
                     DestroyImmediate(c);
                 }
             }
-            return 0;
+            return 1;
         }
 
 
