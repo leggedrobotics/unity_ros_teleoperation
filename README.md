@@ -1,5 +1,5 @@
 # Unity ROS Teleoperation Project
-[Project Page](https://leggedrobotics.github.io/rffr.github.io/)
+[Project Page](https://rffr.leggedrobotics.com/works/teleoperation/)
 
 This repo contains a series of components for Unity XR teleoperation with ROS integration. It is designed to be run on a Quest 3 VR headset, and support OpenXR, hand tracking, Unity input system, and is built with Unity 2022.3.12f1.
 
