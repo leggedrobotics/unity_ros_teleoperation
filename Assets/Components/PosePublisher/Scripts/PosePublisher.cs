@@ -38,7 +38,7 @@ public class PosePublisher : MonoBehaviour
 
     private GameObject arrowInstance;
 
-    private XRRayInteractor interactor;
+    private UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor interactor;
 
     private Vector3 start;
     private Vector3 end;
@@ -117,7 +117,7 @@ public class PosePublisher : MonoBehaviour
 
     public void FirstSelected(SelectEnterEventArgs args)
     {
-        if (args.interactorObject is XRRayInteractor interactor)
+        if (args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor interactor)
         {
             if (interactor.TryGetHitInfo(out Vector3 hit, out _, out _, out _))
             {
@@ -165,7 +165,7 @@ public class PosePublisher : MonoBehaviour
     {
         Debug.Log("Last Selected (XR)");
 
-        if (args.interactorObject is XRRayInteractor interactor)
+        if (args.interactorObject is UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor interactor)
         {
             if (interactor.TryGetHitInfo(out Vector3 hit, out _, out _, out _))
             {

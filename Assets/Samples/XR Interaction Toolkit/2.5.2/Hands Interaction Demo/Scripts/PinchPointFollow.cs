@@ -28,7 +28,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.Hands
 
         [SerializeField]
         [Tooltip("The transform will use the XRRayInteractor endpoint position to calculate the transform rotation.")]
-        XRRayInteractor m_RayInteractor;
+        UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor m_RayInteractor;
 
         [SerializeField]
         [Tooltip("How fast to match rotation (0 means no rotation smoothing.)")]
