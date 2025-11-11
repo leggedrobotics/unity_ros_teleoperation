@@ -264,7 +264,7 @@ public class PoseManager : MonoBehaviour
         if (_root == null || !handSelectable) return;
 
         Vector3 position;
-        XRRayInteractor rayInteractor = (XRRayInteractor)args.interactor;
+        UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor rayInteractor = (UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor)args.interactorObject;
         rayInteractor.TryGetHitInfo(out position, out _, out _, out _);
         _root.position = position;
     }

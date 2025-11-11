@@ -1,17 +1,17 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+
 
 public class PinchVizController : MonoBehaviour
 {
     [SerializeField]
     SkinnedMeshRenderer m_Pointer;
 
-    XRRayInteractor m_Interactor;
+    UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor m_Interactor;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_Interactor = this.GetComponent<XRRayInteractor>();
+        m_Interactor = this.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactors.XRRayInteractor>();
     }
 
     // Update is called once per frame
