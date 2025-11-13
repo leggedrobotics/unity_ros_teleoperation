@@ -849,6 +849,10 @@ MonoBehaviour:
     modelRoot: {fileID: 6290577396253601059, guid: 5d1dd78a402115b4086c4c808a0cb281, type: 3}
     RobotSprite: {fileID: 0}
     rootFrame: world
+  - name: GR2
+    modelRoot: {fileID: 6564372226819960366, guid: 7aef5000c2b727c3c8ed7ad881b09401, type: 3}
+    RobotSprite: {fileID: 0}
+    rootFrame: world
   startRobotIndex: 3
   currentRobot:
     name: 
