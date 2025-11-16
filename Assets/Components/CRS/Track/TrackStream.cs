@@ -11,6 +11,10 @@ using UnityEngine;
 public class TrackStream : SensorStream
 {
     public Material lineMaterial;
+    public Color trackOutline = Color.red;
+    public float outlineWidth = 0.01f;
+    public Color trackCenterLine = Color.green;
+    public float centerLineWidth = 0.01f;
     private List<GameObject> lineObjects = new List<GameObject>();
 
     void Awake()
@@ -51,19 +55,25 @@ public class TrackStream : SensorStream
 
         foreach (var marker in track.markers)
         {
-            if (marker.ns != "track_boundary") continue;
+            if (marker.ns != "track_boundary")
+            {
+                // Center line
+                CreateLine(marker.points, 0, marker.points.Length, trackCenterLine, centerLineWidth);
+                continue;
+            }
 
             if (marker.points != null && marker.points.Length > 0)
             {
+                // Track outlines
                 int halfSize = marker.points.Length / 2;
 
-                CreateLine(marker.points, 0, halfSize, Color.red);
-                CreateLine(marker.points, halfSize, marker.points.Length, Color.red);
+                CreateLine(marker.points, 0, halfSize, trackOutline, outlineWidth);
+                CreateLine(marker.points, halfSize, marker.points.Length, trackOutline, outlineWidth);
             }
         }
     }
 
-    private void CreateLine(PointMsg[] points, int startIdx, int endIdx, Color color)
+    private void CreateLine(PointMsg[] points, int startIdx, int endIdx, Color color, float width)
     {
         GameObject lineObj = new GameObject("TrackBoundaryLine");
         lineObj.transform.SetParent(transform);
@@ -72,8 +82,8 @@ public class TrackStream : SensorStream
         lineRenderer.material = lineMaterial != null ? lineMaterial : new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = color;
         lineRenderer.endColor = color;
-        lineRenderer.startWidth = 0.01f;
-        lineRenderer.endWidth = 0.01f;
+        lineRenderer.startWidth = width;
+        lineRenderer.endWidth = width;
         lineRenderer.positionCount = endIdx - startIdx;
 
         for (int i = startIdx; i < endIdx; i++)

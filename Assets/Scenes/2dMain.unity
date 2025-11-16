@@ -973,6 +973,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 586504482001101433, guid: 7d598e17ab9db43018cc3cca1da12eac, type: 3}
+      propertyPath: outlineWidth
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 586504482001101433, guid: 7d598e17ab9db43018cc3cca1da12eac, type: 3}
+      propertyPath: centerLineWidth
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 3370059981396333478, guid: 7d598e17ab9db43018cc3cca1da12eac, type: 3}
       propertyPath: m_Name
       value: TrackSensor
