@@ -110,6 +110,7 @@ public class LidarStream : SensorStream
     GraphicsBuffer _meshVertices;
     GraphicsBuffer _ptData;
 
+    public bool useTF = true;
     public float scale = 1.0f;
     public int maxPts = 30_000_000;
     public int displayPts = 10;
@@ -176,24 +177,30 @@ public class LidarStream : SensorStream
 
         SetColorMode(renderParams.material, _intensityKeyword);
 
-        colorModeDropdown.ClearOptions();
-        List<string> colorOptions = new List<string>
+        if (colorModeDropdown != null)
         {
-            "RGB",
-            "Intensity",
-            "Z"
-        };
-        colorModeDropdown.AddOptions(colorOptions);
-        colorModeDropdown.onValueChanged.AddListener(OnColorSelect);
+            colorModeDropdown.ClearOptions();
+            List<string> colorOptions = new List<string>
+            {
+                "RGB",
+                "Intensity",
+                "Z"
+            };
+            colorModeDropdown.AddOptions(colorOptions);
+            colorModeDropdown.onValueChanged.AddListener(OnColorSelect);
+        }
+
 
         debugText?.SetText("--");
 
         RefreshTopics();
-        topicDropdown.onValueChanged.AddListener(OnTopicSelect);
-
-        densitySlider.onValueChanged.AddListener(OnDensityChange);
-        sizeSlider.onValueChanged.AddListener(OnSizeChange);
-        densitySlider.value = (float)displayPts / maxPts;
+        if (topicDropdown != null && densitySlider != null && sizeSlider != null)
+        {
+            topicDropdown.onValueChanged.AddListener(OnTopicSelect);
+            densitySlider.onValueChanged.AddListener(OnDensityChange);
+            sizeSlider.onValueChanged.AddListener(OnSizeChange);
+            densitySlider.value = (float)displayPts / maxPts;
+        }
 
         if ((_lidarSpawner = GetComponent<LidarSpawner>()) != null)
         {
@@ -315,8 +322,12 @@ public class LidarStream : SensorStream
     {
         if (_enabled)
         {
-            Transform parentTransform = _parent != null ? _parent.transform : transform;
+            Transform parentTransform = _parent != null && useTF ? _parent.transform : transform;
             Matrix4x4 localToWorldMatrix = parentTransform.localToWorldMatrix;
+            if (!useTF)
+            {
+                localToWorldMatrix = Matrix4x4.Translate(new Vector3(0, -1, 0)) * localToWorldMatrix;
+            }
             Matrix4x4 rotationMatrix = Matrix4x4.Rotate(Quaternion.Euler(-90, 90, 0));
             Matrix4x4 inversionMatrix = Matrix4x4.Scale(new Vector3(-1, 1, 1));
             Matrix4x4 transformationMatrix = localToWorldMatrix * rotationMatrix * inversionMatrix;
@@ -427,6 +438,13 @@ public class LidarStream : SensorStream
         });
     }
 
+    public override void ToggleTrack(int mode)
+    {
+        // 0 is normal TF tracking
+        // 1 spawns the lidar at the floating origin
+        useTF = mode == 0;
+    }
+
     public void ToggleEnabled()
     {
         _enabled = !_enabled;
@@ -450,33 +468,33 @@ public class LidarStream : SensorStream
         Debug.Log("Set color mode to " + keyword.name);
     }
 
-    public override void ToggleTrack(int mode)
-    {
+    // public override void ToggleTrack(int mode)
+    // {
 
-        if (mode == 0)
-        {
-            Transform rootTransform = GameObject.FindWithTag("root")?.transform;
-            if (rootTransform != null)
-            {
-                transform.SetParent(rootTransform, true);
-            }
-            else
-            {
-                Debug.LogWarning("Root object with tag 'root' not found.");
-                transform.SetParent(null, true);
-            }
-        }
-        else if (mode == 1)
-        {
-            transform.SetParent(Camera.main.transform);
-        }
-        else
-        {
-            Debug.LogWarning("Invalid tracking mode: " + mode);
-            return;
-        }
-        _trackingMode = mode;
-    }
+    //     if (mode == 0)
+    //     {
+    //         Transform rootTransform = GameObject.FindWithTag("root")?.transform;
+    //         if (rootTransform != null)
+    //         {
+    //             transform.SetParent(rootTransform, true);
+    //         }
+    //         else
+    //         {
+    //             Debug.LogWarning("Root object with tag 'root' not found.");
+    //             transform.SetParent(null, true);
+    //         }
+    //     }
+    //     else if (mode == 1)
+    //     {
+    //         transform.SetParent(Camera.main.transform);
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("Invalid tracking mode: " + mode);
+    //         return;
+    //     }
+    //     _trackingMode = mode;
+    // }
     public void IncrementTrack()
     {
         _trackingMode++;

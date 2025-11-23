@@ -1839,26 +1839,17 @@ PrefabInstance:
       value: ToggleActive
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 9104629308992232546, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 4197839313685064837, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 7298180979472307458, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 814472453159136473, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 1088471588891827483, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
     m_RemovedGameObjects:
-    - {fileID: 4376497706627098865, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 923135301453199207, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 4759465421483217724, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 8509599093384562108, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 6323885894499326072, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
     - {fileID: 565488554920534056, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
     - {fileID: 5433062592904838693, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
     - {fileID: 426374264964647378, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 7698799660873029664, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
     - {fileID: 7938711345128612918, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
     - {fileID: 5489272953859667216, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 540167284909689661, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 4095084541436391919, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
-    - {fileID: 5810119681572449327, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7994880554089775646, guid: ea0cb4e4d8806b12f8ce749e4ff6b1c8, type: 3}
       insertIndex: -1

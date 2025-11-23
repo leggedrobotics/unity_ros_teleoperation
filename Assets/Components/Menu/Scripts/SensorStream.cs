@@ -77,6 +77,7 @@ public abstract class SensorStream : MonoBehaviour
             if (topic.Value == _msgType)
             {
                 options.Add(topic.Key);
+                Debug.Log($"Found topic {topic.Key} for {_msgType}");
             }
         }
 
