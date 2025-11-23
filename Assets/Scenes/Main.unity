@@ -252,6 +252,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5884591376981465578, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 33.38
+      objectReference: {fileID: 0}
     - target: {fileID: 8605111556703751387, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: m_Name
       value: palmmenu
