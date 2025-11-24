@@ -828,7 +828,7 @@ MonoBehaviour:
   - visibleName: Quest 3S
     manifestName: quest3s
     enabled: 1
-  forceRemoveInternetPermission: 1
+  forceRemoveInternetPermission: 0
   symmetricProjection: 0
   foveatedRenderingApi: 0
   systemSplashScreen: {fileID: 0}
@@ -886,11 +886,11 @@ MonoBehaviour:
   - {fileID: 9194935164463965147}
   - {fileID: 8480019163179737122}
   - {fileID: -8810156147816208863}
-  - {fileID: -4598149537378619116}
-  - {fileID: 7580661102952965255}
-  - {fileID: 8755599959745183887}
-  - {fileID: 8244246707400249563}
-  - {fileID: 840084188764597421}
+  - {fileID: -9015804294976478637}
+  - {fileID: -4757796577965182110}
+  - {fileID: -5286828368980579911}
+  - {fileID: -575348576208249789}
+  - {fileID: -7161072439605469686}
   - {fileID: 315150067318983369}
   - {fileID: 4310998839853916376}
   - {fileID: -2963271187863106873}
@@ -905,7 +905,7 @@ MonoBehaviour:
     m_List: 00000000
   m_depthSubmissionMode: 0
   m_spacewarpMotionVectorTextureFormat: 0
-  m_optimizeBufferDiscards: 0
+  m_optimizeBufferDiscards: 1
   m_symmetricProjection: 0
 --- !u!114 &-771665836016098028
 MonoBehaviour:
@@ -957,10 +957,10 @@ MonoBehaviour:
   - {fileID: -2219817466959367303}
   - {fileID: 4173203162611387019}
   - {fileID: 2854535590174715903}
-  - {fileID: 5001279415773860685}
-  - {fileID: 1345799758422713247}
-  - {fileID: 3668757033579080316}
-  - {fileID: 158333911571880558}
+  - {fileID: -3418911424217352175}
+  - {fileID: -4765756134715843832}
+  - {fileID: -8394983168345708223}
+  - {fileID: -4706073243627648233}
   - {fileID: -2095540665616182821}
   - {fileID: -5446457473316053994}
   - {fileID: -7381718955035835987}

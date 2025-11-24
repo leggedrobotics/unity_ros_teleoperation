@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 83738145}
   - component: {fileID: 83738144}
   m_Layer: 0
-  m_Name: QRCodeVisulaizer
+  m_Name: QRCodeAlignment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,7 +151,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25e10d916795f463e991f4b65ff7c6bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  qrVisualizationPrefab: {fileID: 806137164379574119, guid: d991707f9e90b428193f088b3616c0e0, type: 3}
+  qrMarkerPrefab: {fileID: 806137164379574119, guid: d991707f9e90b428193f088b3616c0e0, type: 3}
+  ulColor: {r: 0, g: 0, b: 1, a: 1}
+  lrColor: {r: 1, g: 0, b: 0, a: 1}
+  sceneRoot: {fileID: 1244467566}
+  autoAlign: 1
+  debugVisualization: 1
+  isAligned: 0
+  debugTranslation: {x: 0, y: 0, z: 0}
+  debugRotation: 0
+  debugScale: 0
 --- !u!4 &83738145
 Transform:
   m_ObjectHideFlags: 0
@@ -1159,6 +1168,37 @@ MonoBehaviour:
   tag: track
   sensorPrefab: {fileID: 3370059981396333478, guid: 7d598e17ab9db43018cc3cca1da12eac, type: 3}
   count: {fileID: 1175508709}
+--- !u!1 &1244467565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1244467566}
+  m_Layer: 0
+  m_Name: SceneRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1244467566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244467565}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1245098680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1496,7 +1536,19 @@ MonoBehaviour:
           m_CallState: 2
     <TrackableRemoved>k__BackingField:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 83738144}
+          m_TargetAssemblyTypeName: QRCodeAlignment, Assembly-CSharp
+          m_MethodName: OnTrackableRemoved
+          m_Mode: 0
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   _immersiveSceneDebuggerPrefab: {fileID: 0}
 --- !u!4 &1827246497
 Transform:
@@ -1524,3 +1576,4 @@ SceneRoots:
   - {fileID: 615282063}
   - {fileID: 1827246497}
   - {fileID: 83738145}
+  - {fileID: 1244467566}
