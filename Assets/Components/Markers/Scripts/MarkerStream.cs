@@ -10,10 +10,9 @@ using UnityEngine.UI;
 using UnityEngine.Timeline;
 using System;
 
-
-
 #if UNITY_EDITOR
 using UnityEditor;
+
 [CustomEditor(typeof(MarkerStream))]
 public class MarkerStreamEditor : SensorStreamEditor
 {
@@ -76,6 +75,7 @@ public class MarkerStream : SensorStream
 
     public TMPro.TextMeshProUGUI topicText;
 
+    public bool useMarkerArray = false;
 
     public Mesh arrowMesh;
     public GameObject pointsPrefab;
@@ -86,12 +86,17 @@ public class MarkerStream : SensorStream
     private UpdatePointSize _updatePointSize;
     private bool _enabled = true;
 
+    // Message counting for debugging
+    private Dictionary<string, int> _messageCounters = new Dictionary<string, int>();
+    private float _lastLogTime = 0f;
+    private const float LOG_INTERVAL = 10f; // Log every 10 seconds
+
     public enum MarkerAction
     {
-        Add_modify,     // 0
-        Deprecated,    // 1
-        Delete,        // 2
-        Delete_all,   // 3
+        Add_modify, // 0
+        Deprecated, // 1
+        Delete, // 2
+        Delete_all, // 3
     }
 
     void Awake()
@@ -100,26 +105,54 @@ public class MarkerStream : SensorStream
         // Initialize ROS connection
         _ros = ROSConnection.GetOrCreateInstance();
     }
+
     // Start is called before the first frame update
     void Start()
     {
-        _msgType = "visualization_msgs/Marker";
+        _msgType = useMarkerArray ? "visualization_msgs/MarkerArray" : "visualization_msgs/Marker";
         _namespaces = new Dictionary<string, GameObject>();
+        _lastLogTime = Time.time;
 
         // Initialize the topic dropdown
         topicDropdown.ClearOptions();
-        topicDropdown.onValueChanged.AddListener((value) =>
-        {
-            OnTopicSelected(value);
-        });
+        topicDropdown.onValueChanged.AddListener(
+            (value) =>
+            {
+                OnTopicSelected(value);
+            }
+        );
 
         RefreshTopics();
     }
 
+    void Update()
+    {
+        // Log message counts every LOG_INTERVAL seconds
+        if (Time.time - _lastLogTime >= LOG_INTERVAL)
+        {
+            if (_messageCounters.Count > 0)
+            {
+                Debug.Log("===== Marker Message Counts (last " + LOG_INTERVAL + " seconds) =====");
+                foreach (var kvp in _messageCounters)
+                {
+                    Debug.Log($"  Namespace '{kvp.Key}': {kvp.Value} messages");
+                }
+                Debug.Log("========================================");
+
+                // Reset counters
+                _messageCounters.Clear();
+            }
+            _lastLogTime = Time.time;
+        }
+    }
 
     bool Validate(MarkerMsg msg)
     {
-        if (msg.id == (int)MarkerType.Text_view_facing || msg.id == (int)MarkerType.Mesh_resource || msg.id == (int)MarkerType.Triangle_list)
+        if (
+            msg.id == (int)MarkerType.Text_view_facing
+            || msg.id == (int)MarkerType.Mesh_resource
+            || msg.id == (int)MarkerType.Triangle_list
+        )
         {
             // Possibly log unsupported
             return false;
@@ -135,6 +168,13 @@ public class MarkerStream : SensorStream
             // If the marker stream is not enabled, do not process the message
             return;
         }
+
+        // Count messages by namespace for debugging
+        if (!_messageCounters.ContainsKey(msg.ns))
+        {
+            _messageCounters[msg.ns] = 0;
+        }
+        _messageCounters[msg.ns]++;
 
         // Handle the received marker message
         // Get the marker type name from the enum
@@ -167,16 +207,20 @@ public class MarkerStream : SensorStream
             points[0] = new PointMsg(0, 0, 0); // Default point if none are provided
         }
         // else we want to add or modify the marker
-        if (!_namespaces.TryGetValue(markerKey, out markerObject) || markerObject.GetComponent<MarkerPointStream>().markerType != (MarkerType)msg.type)
+        if (
+            !_namespaces.TryGetValue(markerKey, out markerObject)
+            || markerObject.GetComponent<MarkerPointStream>().markerType != (MarkerType)msg.type
+        )
         {
-
-            if (msg.type == (int)MarkerType.Text_view_facing || msg.type == (int)MarkerType.Mesh_resource || msg.type == (int)MarkerType.Triangle_list)
+            if (
+                msg.type == (int)MarkerType.Text_view_facing
+                || msg.type == (int)MarkerType.Mesh_resource
+                || msg.type == (int)MarkerType.Triangle_list
+            )
             {
                 Debug.LogWarning($"Unsupported marker type: {markerTypeName}");
                 return; // Skip unsupported types
             }
-
-
 
             if (markerObject == null)
             {
@@ -186,13 +230,13 @@ public class MarkerStream : SensorStream
                 _updatePointSize += markerObject.GetComponent<MarkerPointStream>().OnSizeChange;
             }
 
-
-
             switch (msg.type)
             {
                 case (int)MarkerType.Arrow:
                     markerObject.name = markerKey + "_Arrow";
-                    markerObject.GetComponent<MarkerPointStream>().SetMesh(LidarUtils.MakeArrow(0.5f, 10));
+                    markerObject
+                        .GetComponent<MarkerPointStream>()
+                        .SetMesh(LidarUtils.MakeArrow(0.5f, 10));
                     markerObject.GetComponent<MarkerPointStream>().markerType = MarkerType.Arrow;
                     break;
                 case (int)MarkerType.Cube:
@@ -206,26 +250,34 @@ public class MarkerStream : SensorStream
                 case (int)MarkerType.Sphere_list:
                     // markerObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     markerObject.name = markerKey + "_Sphere";
-                    markerObject.GetComponent<MarkerPointStream>().SetMesh(LidarUtils.MakeSphere(10));
+                    markerObject
+                        .GetComponent<MarkerPointStream>()
+                        .SetMesh(LidarUtils.MakeSphere(10));
                     markerObject.GetComponent<MarkerPointStream>().markerType = MarkerType.Sphere;
                     break;
                 case (int)MarkerType.Cylinder:
                     // markerObject = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                     markerObject.name = markerKey + "_Cylinder";
-                    markerObject.GetComponent<MarkerPointStream>().SetMesh(LidarUtils.MakeCylinder(10));
+                    markerObject
+                        .GetComponent<MarkerPointStream>()
+                        .SetMesh(LidarUtils.MakeCylinder(10));
                     markerObject.GetComponent<MarkerPointStream>().markerType = MarkerType.Cylinder;
                     break;
                 case (int)MarkerType.Line_strip:
                     markerObject.name = markerKey + "_LineStrip";
-                    markerObject.GetComponent<MarkerPointStream>().markerType = MarkerType.Line_strip;
+                    markerObject.GetComponent<MarkerPointStream>().markerType =
+                        MarkerType.Line_strip;
                     break;
                 case (int)MarkerType.Line_list:
                     markerObject.name = markerKey + "_LineList";
-                    markerObject.GetComponent<MarkerPointStream>().markerType = MarkerType.Line_list;
+                    markerObject.GetComponent<MarkerPointStream>().markerType =
+                        MarkerType.Line_list;
                     break;
                 case (int)MarkerType.Points:
                     markerObject.name = markerKey + "_Points";
-                    markerObject.GetComponent<MarkerPointStream>().SetMesh(LidarUtils.MakeSphere(4));
+                    markerObject
+                        .GetComponent<MarkerPointStream>()
+                        .SetMesh(LidarUtils.MakeSphere(4));
                     markerObject.GetComponent<MarkerPointStream>().markerType = MarkerType.Points;
 
                     break;
@@ -242,7 +294,6 @@ public class MarkerStream : SensorStream
             }
 
             _namespaces[markerKey] = markerObject;
-
         }
 
         if (msg.colors.Length == 0)
@@ -251,14 +302,12 @@ public class MarkerStream : SensorStream
             msg.colors = new ColorRGBAMsg[] { msg.color };
         }
 
-        markerObject.GetComponent<IMarkerViz>().SetData(
-            msg.pose,
-            msg.scale,
-            msg.colors,
-            points
-        );
+        markerObject.GetComponent<IMarkerViz>().SetData(msg.pose, msg.scale, msg.colors, points);
 
-        if (markerObject.transform.parent == null || markerObject.transform.parent.name != msg.header.frame_id)
+        if (
+            markerObject.transform.parent == null
+            || markerObject.transform.parent.name != msg.header.frame_id
+        )
         {
             // If the marker object has a parent, check if it is under the root
             Transform parentTransform = GameObject.Find(msg.header.frame_id)?.transform;
@@ -273,15 +322,25 @@ public class MarkerStream : SensorStream
             }
             markerObject.transform.localPosition = msg.pose.position.From<FLU>();
             markerObject.transform.localRotation = msg.pose.orientation.From<FLU>();
+        }
+    }
 
-
+    void OnMarkerArray(MarkerArrayMsg msg)
+    {
+        if (!_enabled)
+        {
+            return;
         }
 
+        // Process each marker in the array
+        foreach (var marker in msg.markers)
+        {
+            OnMarker(marker);
+        }
     }
 
     public void OnTopicSelected(int value)
     {
-
         if (value < 0 || value >= topicDropdown.options.Count)
         {
             Debug.LogWarning("Invalid topic selected: " + value);
@@ -299,7 +358,6 @@ public class MarkerStream : SensorStream
         }
     }
 
-
     public override void OnTopicChange(string topic)
     {
         if (topicName != null)
@@ -312,6 +370,11 @@ public class MarkerStream : SensorStream
             }
             _namespaces.Clear();
         }
+
+        // Reset message counters when changing topics
+        _messageCounters.Clear();
+        _lastLogTime = Time.time;
+
         if (topic == null)
         {
             Debug.Log("Disabling Marker display");
@@ -322,7 +385,15 @@ public class MarkerStream : SensorStream
         _enabled = true;
         topicName = topic;
         topicText?.SetText(topic);
-        _ros.Subscribe<MarkerMsg>(topic, OnMarker);
+
+        if (useMarkerArray)
+        {
+            _ros.Subscribe<MarkerArrayMsg>(topic, OnMarkerArray);
+        }
+        else
+        {
+            _ros.Subscribe<MarkerMsg>(topic, OnMarker);
+        }
         Debug.Log("Subscribed to " + topic);
     }
 
@@ -335,9 +406,8 @@ public class MarkerStream : SensorStream
         {
             Destroy(ns);
         }
-        _namespaces.Clear();        
+        _namespaces.Clear();
     }
-
 
     public override void ToggleTrack(int trackId)
     {

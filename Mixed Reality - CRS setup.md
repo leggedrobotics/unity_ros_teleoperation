@@ -33,6 +33,19 @@ To start the tcp endpoint run
 ```bash
 roslaunch ros_tcp_endpoint endpoint.launch
 ```
+If there is a error regarding python, create symlink in the docker file
+```bash
+# Create python symlink so 'python' command works
+RUN ln -s /usr/bin/python3 /usr/bin/python <-- add this
+
+# Install, on top of core, the desktop packages of ROS
+RUN \
+    --mount=type=cache,sharing=locked,target=/var/lib/apt/lists \
+    --mount=type=cache,sharing=locked,target=/var/cache/apt \
+    rm -f /etc/apt/apt.conf.d/docker-clean \
+    && apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-desktop=1.5.0-1*
+```
 
 
 
