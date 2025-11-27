@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 7009126693386000540}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12563609, y: 0.30380657, z: 0.093716055}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -49,3 +49,8 @@ MonoBehaviour:
   manager: {fileID: 0}
   carPrefab: {fileID: 2951512550953270698, guid: 89efeddadced841ad813b4ca52b76bb3, type: 3}
   carScale: 0.4
+  carMaterial: {fileID: 0}
+  showCar: 1
+  showTrail: 1
+  trailTime: 3
+  trailColor: {r: 1, g: 1, b: 1, a: 1}
