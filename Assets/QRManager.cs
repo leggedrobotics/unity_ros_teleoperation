@@ -20,13 +20,11 @@ public class QRCodeAlignment : MonoBehaviour
     [SerializeField] private bool debugVisualization = true;
     
     [Header("Debug Info")]
-    [SerializeField] private bool isAligned = false;
-    [SerializeField] private Vector3 debugTranslation;
-    [SerializeField] private float debugRotation;
-    [SerializeField] private float debugScale;
+    [SerializeField] private Transform debugUpperLeft;
+    [SerializeField] private Transform debugLowerRight;
     
     // QR code tracking
-    private Dictionary<string, MRUKTrackable> detectedQRCodes = new Dictionary<string, MRUKTrackable>();
+    private Dictionary<string, Vector3> detectedQRCodes = new Dictionary<string, Vector3>();
     
     // Transformation components
     private Vector3 translation;
@@ -53,7 +51,7 @@ public class QRCodeAlignment : MonoBehaviour
         // Only track UL and LR codes
         if (payload == "UL" || payload == "LR")
         {
-            detectedQRCodes[payload] = trackable;
+            detectedQRCodes[payload] = trackable.transform.position;
             Debug.Log($"QR: QR Code '{payload}' detected at position: {trackable.transform.position}");
             
             // Create visual marker
@@ -100,9 +98,15 @@ public class QRCodeAlignment : MonoBehaviour
                 Destroy(connectionLine.gameObject);
                 connectionLine = null;
             }
-            
-            isAligned = false;
         }
+    }
+
+    public void DebugAlignment()
+    {
+        detectedQRCodes["UL"] = debugUpperLeft.position;
+        detectedQRCodes["LR"] = debugLowerRight.position;
+
+        CalculateAndApplyAlignment();
     }
     
     public void CalculateAndApplyAlignment()
@@ -124,10 +128,9 @@ public class QRCodeAlignment : MonoBehaviour
         // Get virtual (track) coordinates
         Vector3 virtualUL = TrackStream.Instance.GetUpperLeftCorner();
         Vector3 virtualLR = TrackStream.Instance.GetLowerRightCorner();
-        
         // Get physical (QR code) coordinates
-        Vector3 physicalUL = detectedQRCodes["UL"].transform.position;
-        Vector3 physicalLR = detectedQRCodes["LR"].transform.position;
+        Vector3 physicalUL = detectedQRCodes["UL"];
+        Vector3 physicalLR = detectedQRCodes["LR"];
         
         Debug.Log($"QR: Virtual UL: {virtualUL}, LR: {virtualLR}");
         Debug.Log($"QR: Physical UL: {physicalUL}, LR: {physicalLR}");
@@ -138,7 +141,6 @@ public class QRCodeAlignment : MonoBehaviour
         // Apply transformation
         ApplyTransformation();
         
-        isAligned = true;
         Debug.Log("QR: Alignment complete!");
     }
     
@@ -174,11 +176,6 @@ public class QRCodeAlignment : MonoBehaviour
         
         Debug.Log($"QR: Scaled/Rotated UL: {scaledRotatedUL}");
         Debug.Log($"QR: Calculated translation: {translation}");
-        
-        // Store debug values
-        debugTranslation = translation;
-        debugRotation = yaw;
-        debugScale = scale;
     }
     
     private void ApplyTransformation()
@@ -207,7 +204,7 @@ public class QRCodeAlignment : MonoBehaviour
         if (TrackStream.Instance == null) return;
         
         Vector3 virtualLR = TrackStream.Instance.GetLowerRightCorner();
-        Vector3 physicalLR = detectedQRCodes["LR"].transform.position;
+        Vector3 physicalLR = detectedQRCodes["LR"];
         
         // Transform virtualLR through sceneRoot
         Vector3 predictedPhysicalLR = sceneRoot.TransformPoint(virtualLR);
@@ -243,7 +240,6 @@ public class QRCodeAlignment : MonoBehaviour
             sceneRoot.position = Vector3.zero;
         }
         
-        isAligned = false;
         Debug.Log("QR: Alignment reset");
     }
 
@@ -307,7 +303,7 @@ public class QRCodeAlignment : MonoBehaviour
             connectionLine.positionCount = 2;
         }
         
-        connectionLine.SetPosition(0, detectedQRCodes["UL"].transform.position);
-        connectionLine.SetPosition(1, detectedQRCodes["LR"].transform.position);
+        connectionLine.SetPosition(0, detectedQRCodes["UL"]);
+        connectionLine.SetPosition(1, detectedQRCodes["LR"]);
     }
 }

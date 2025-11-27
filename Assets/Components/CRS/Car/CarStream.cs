@@ -39,6 +39,12 @@ public class CarStream : SensorStream
     void Awake()
     {
         _ros = ROSConnection.GetOrCreateInstance();
+
+        GameObject sceneRootObj = GameObject.Find("SceneRoot");
+        if (sceneRootObj != null)
+        {
+            transform.SetParent(sceneRootObj.transform);
+        }
     }
 
     void Start()

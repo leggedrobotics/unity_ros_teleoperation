@@ -10,6 +10,12 @@ using UnityEngine;
 
 public class TrackStream : SensorStream
 {
+
+    [Header("Debug Corners")]
+    [SerializeField] private GameObject debugMarkerPrefab;
+    private GameObject ulDebugMarker;
+    private GameObject lrDebugMarker;
+
     public static TrackStream Instance { get; private set; }
     
     public Material lineMaterial;
@@ -25,7 +31,7 @@ public class TrackStream : SensorStream
     public Bounds TrackBounds => trackBounds;
     public bool HasTrackData { get; private set; } = false;
     
-    private const float PLATE_SIZE = 0.6f;
+    private const float PLATE_SIZE = 0.3f;
     
 void Awake()
 {
@@ -117,37 +123,39 @@ void Awake()
         }
     }
     
-private void CalculatePaddedBounds(Vector3[] trackPoints)
-{
-    // Find raw min/max
-    Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
-    Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
-    
-    foreach (var point in trackPoints)
+    private void CalculatePaddedBounds(Vector3[] trackPoints)
     {
-        min = Vector3.Min(min, point);
-        max = Vector3.Max(max, point);
+        // Find raw min/max
+        Vector3 min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+        Vector3 max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+        
+        foreach (var point in trackPoints)
+        {
+            min = Vector3.Min(min, point);
+            max = Vector3.Max(max, point);
+        }
+        
+        // Extend to plate bounds
+        min.x = Mathf.Floor(min.x / PLATE_SIZE) * PLATE_SIZE;
+        min.z = Mathf.Floor(min.z / PLATE_SIZE) * PLATE_SIZE;
+        
+        max.x = Mathf.Ceil(max.x / PLATE_SIZE) * PLATE_SIZE;
+        max.z = Mathf.Ceil(max.z / PLATE_SIZE) * PLATE_SIZE;
+        
+        min.y = 0;
+        max.y = 0;
+        
+        trackBounds = new Bounds();
+        trackBounds.SetMinMax(min, max);
+        
+        HasTrackData = true;
+        
+        Debug.Log($"Track bounds calculated: Min={min}, Max={max}");
+        Debug.Log($"Track dimensions: {max.x - min.x}m x {max.z - min.z}m");
+        Debug.Log($"Number of plates: X={Mathf.RoundToInt((max.x - min.x) / PLATE_SIZE)}, Z={Mathf.RoundToInt((max.z - min.z) / PLATE_SIZE)}");
+
+        UpdateDebugMarkers();
     }
-    
-    // Extend to plate bounds
-    min.x = Mathf.Floor(min.x / PLATE_SIZE) * PLATE_SIZE;
-    min.z = Mathf.Floor(min.z / PLATE_SIZE) * PLATE_SIZE;
-    
-    max.x = Mathf.Ceil(max.x / PLATE_SIZE) * PLATE_SIZE;
-    max.z = Mathf.Ceil(max.z / PLATE_SIZE) * PLATE_SIZE;
-    
-    min.y = 0;
-    max.y = 0;
-    
-    trackBounds = new Bounds();
-    trackBounds.SetMinMax(min, max);
-    
-    HasTrackData = true;
-    
-    Debug.Log($"Track bounds calculated: Min={min}, Max={max}");
-    Debug.Log($"Track dimensions: {max.x - min.x}m x {max.z - min.z}m");
-    Debug.Log($"Number of plates: X={Mathf.RoundToInt((max.x - min.x) / PLATE_SIZE)}, Z={Mathf.RoundToInt((max.z - min.z) / PLATE_SIZE)}");
-}
     
     private void CreateLine(PointMsg[] points, int startIdx, int endIdx, Color color, float width)
     {
@@ -180,11 +188,47 @@ private void CalculatePaddedBounds(Vector3[] trackPoints)
     // Helper methods for QRCodeAlignment to get corners
     public Vector3 GetUpperLeftCorner()
     {
-        return new Vector3(trackBounds.min.x, 0, trackBounds.max.z);
+        return new Vector3(trackBounds.max.x, 0, trackBounds.max.z);
     }
     
     public Vector3 GetLowerRightCorner()
     {
-        return new Vector3(trackBounds.max.x, 0, trackBounds.min.z);
+        return new Vector3(trackBounds.min.x, 0, trackBounds.min.z);
+    }
+
+    private void UpdateDebugMarkers()
+    {
+        if (debugMarkerPrefab == null)
+        {
+            Debug.LogWarning("Debug Marker Prefab not assigned. Cannot show corners.");
+            return;
+        }
+
+        Vector3 ulPos = GetUpperLeftCorner();
+        Vector3 lrPos = GetLowerRightCorner();
+        
+        Transform trackTransform = transform; 
+        
+        if (ulDebugMarker == null)
+        {
+            ulDebugMarker = Instantiate(debugMarkerPrefab, trackTransform);
+            ulDebugMarker.name = "DEBUG_UL_Corner (Red)";
+            // Set the color
+            Renderer ulRenderer = ulDebugMarker.GetComponent<Renderer>();
+            if (ulRenderer != null) ulRenderer.material.color = Color.red;
+        }
+        ulDebugMarker.transform.localPosition = ulPos;
+
+        if (lrDebugMarker == null)
+        {
+            lrDebugMarker = Instantiate(debugMarkerPrefab, trackTransform);
+            lrDebugMarker.name = "DEBUG_LR_Corner (Blue)";
+            // Set the color
+            Renderer lrRenderer = lrDebugMarker.GetComponent<Renderer>();
+            if (lrRenderer != null) lrRenderer.material.color = Color.blue;
+        }
+        lrDebugMarker.transform.localPosition = lrPos;
+        
+        Debug.Log($"Debug Markers updated. UL: {ulPos} (Red), LR: {lrPos} (Blue)");
     }
 }
