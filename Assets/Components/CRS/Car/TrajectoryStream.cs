@@ -56,7 +56,7 @@ public class TrajectoryStream : SensorStream
     // Start is called before the first frame update
     void Start()
     {
-        _msgType = "visualization_msgs/Marker";
+        _msgType = "visualization_msgs/MarkerArray";
         _namespaces = new Dictionary<string, GameObject>();
 
         OnTopicChange("/controller_visualization");
@@ -213,6 +213,20 @@ public class TrajectoryStream : SensorStream
 
     }
 
+    void OnMarkerArray(MarkerArrayMsg msg)
+    {
+        if (!_enabled)
+        {
+            return;
+        }
+
+        // Process each marker in the array
+        foreach (var marker in msg.markers)
+        {
+            OnMarker(marker);
+        }
+    }
+
     public void OnTopicSelected(int value)
     {
 
@@ -256,7 +270,7 @@ public class TrajectoryStream : SensorStream
         _enabled = true;
         topicName = topic;
         topicText?.SetText(topic);
-        _ros.Subscribe<MarkerMsg>(topic, OnMarker);
+        _ros.Subscribe<MarkerArrayMsg>(topic, OnMarkerArray);
         Debug.Log("Subscribed to " + topic);
     }
 
