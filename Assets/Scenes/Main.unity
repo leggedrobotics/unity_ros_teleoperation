@@ -587,6 +587,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2710794226769770187, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 6635270378056780479, guid: 8757f3fd46b0248348f492e546505f1e, type: 3}
+    - target: {fileID: 2710794226769770187, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Clear
+      objectReference: {fileID: 0}
+    - target: {fileID: 2710794226769770187, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SensorStream, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 2888525264618850335, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -659,6 +671,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 20.300001
       objectReference: {fileID: 0}
+    - target: {fileID: 6527713706999178746, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 967053341876336871, guid: 05feaa31a529a4c73a6c12d7dc6c3158, type: 3}
+    - target: {fileID: 6527713706999178746, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddSensor
+      objectReference: {fileID: 0}
     - target: {fileID: 6684810958608463283, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: m_LocalPosition.z
       value: -105.9
@@ -666,6 +686,14 @@ PrefabInstance:
     - target: {fileID: 6684810958608463283, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 176.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6904466874637950267, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_text
+      value: Trajectory
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353414286358478259, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_Name
+      value: TrajectoryManager
       objectReference: {fileID: 0}
     - target: {fileID: 8605111556703751387, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: m_Name
@@ -723,7 +751,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2526278586862690660, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
     m_RemovedGameObjects:
     - {fileID: 1149102795662457594, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
     - {fileID: 4849663882253706487, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
@@ -743,7 +772,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4196524410204605326, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 191595962}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8353414286358478259, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1000287983}
   m_SourcePrefab: {fileID: 100100000, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
 --- !u!114 &639842764 stripped
 MonoBehaviour:
@@ -1194,6 +1226,28 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d9be845c256ccbb5a4780c5dc1f98a4, type: 3}
+--- !u!1 &1000287975 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8353414286358478259, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+  m_PrefabInstance: {fileID: 639842761}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1000287983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000287975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c042066614b5f47cba933b4fd0766d83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Trajectory
+  tag: trajectory
+  sensorPrefab: {fileID: 6161794687624562909, guid: 8757f3fd46b0248348f492e546505f1e, type: 3}
+  count: {fileID: 0}
+  vizPrefabs: []
 --- !u!1001 &1175508707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1669,7 +1723,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1827246495}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de27d7f2f20024e18898941292d6c164, type: 3}
   m_Name: 
