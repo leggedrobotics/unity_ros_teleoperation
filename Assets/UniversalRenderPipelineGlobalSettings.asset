@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ec995e51a6e251468d2a3fd8a686257, type: 3}
+  m_Script: {fileID: 0}
   m_Name: UniversalRenderPipelineGlobalSettings
-  m_EditorClassIdentifier: 
-  m_ShaderVariantLogLevel: 0
-  m_ExportShaderVariants: 1
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime:UnityEngine.Rendering.Universal:UniversalRenderPipelineGlobalSettings
   k_AssetVersion: 3
   m_RenderingLayerNames:
   - Default
@@ -32,3 +30,5 @@ MonoBehaviour:
   m_StripUnusedLODCrossFadeVariants: 1
   m_StripScreenCoordOverrideVariants: 1
   supportRuntimeDebugDisplay: 0
+  m_ShaderVariantLogLevel: 0
+  m_ExportShaderVariants: 1
