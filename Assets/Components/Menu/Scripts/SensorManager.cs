@@ -5,7 +5,7 @@ using TMPro;
 using Unity.Robotics.ROSTCPConnector;
 using UnityEngine.UI;
 using System;
-
+using UnityEngine.SceneManagement;
 
 
 #if UNITY_EDITOR
@@ -75,15 +75,19 @@ public abstract class SensorManager : MonoBehaviour, IComparable<SensorManager>
     protected ROSConnection _ros;
     protected Image _icon;
 
+    private string _sceneName = "";
+
 
     private void Awake()
     {
         _ros = ROSConnection.GetOrCreateInstance();
         sensors = new List<GameObject>();
 
-        if (PlayerPrefs.HasKey(name+"_layout"))
+        _sceneName = SceneManager.GetActiveScene().name;
+
+        if (PlayerPrefs.HasKey(_sceneName+"_"+name+"_layout"))
         {
-            Deserialize(PlayerPrefs.GetString(name+"_layout"));
+            Deserialize(PlayerPrefs.GetString(_sceneName+"_"+name+"_layout"));
         }
 
         // Register on quit in case disabled
@@ -120,8 +124,8 @@ public abstract class SensorManager : MonoBehaviour, IComparable<SensorManager>
     
     void OnApplicationQuit()
     {
-        Debug.Log("Saving layout for "+name);
-        PlayerPrefs.SetString(name+"_layout", Serialize());
+        Debug.Log("Saving layout for "+name+" in scene "+_sceneName);
+        PlayerPrefs.SetString(_sceneName+"_"+name+"_layout", Serialize());
         PlayerPrefs.Save();
     }
 

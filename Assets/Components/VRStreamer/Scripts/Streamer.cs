@@ -52,7 +52,7 @@ public class Streamer : MonoBehaviour
 
         _camera.CopyFrom(Camera.main);
 
-        _header = new HeaderMsg(new TimeMsg(0, 0), "VR");
+        _header = new HeaderMsg();
 
         // _camera = Camera.main;
         _camera.targetTexture = _renderTexture;
