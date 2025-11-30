@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8469737763378058609}
-  - component: {fileID: 7877703476627854652}
+  - component: {fileID: 3437829783805100689}
   m_Layer: 0
   m_Name: ControlInputStream
   m_TagString: Untagged
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7877703476627854652
+--- !u!114 &3437829783805100689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,10 +45,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   topicDropdown: {fileID: 0}
-  topicName: 
+  topicName: /car_1/control_input
   manager: {fileID: 0}
   carObject: {fileID: 0}
-  arrowLength: 1
-  arrowHeight: 0.5
-  barHeight: 1
-  barOffset: 0.3
+  currentMode: 0
+  arrowLength: 0.3
+  arrowHeight: 0.25
+  barHeight: 0.5
+  barOffset: 0.25
+  steeringWheelPanel: {fileID: 0}
+  steeringWheelBase: {fileID: 0}
+  steeringText: {fileID: 0}
+  torqueBarPanel: {fileID: 0}
+  torqueBarBackground: {fileID: 0}
+  torqueBarFillPositive: {fileID: 0}
+  torqueBarFillNegative: {fileID: 0}
+  torqueCenterLine: {fileID: 0}
+  torqueLabelTop: {fileID: 0}
+  torqueLabelBottom: {fileID: 0}
+  torqueValueText: {fileID: 0}

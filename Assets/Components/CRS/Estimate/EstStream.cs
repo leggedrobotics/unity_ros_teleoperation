@@ -16,8 +16,8 @@ public class EstimatorCarStream : SensorStream
     private Material carMaterial;
     
     public bool showEstimator = true;
-    
-    // Trail settings
+
+    [Header("Estimator Trail Settings")]
     public bool showTrail = true;
     private GameObject trailObject;
     private TrailRenderer trail;
@@ -110,7 +110,6 @@ public class EstimatorCarStream : SensorStream
     {
         showEstimator = !showEstimator;
     }
-
     public void ToggleTrailVisibility()
     {
         showTrail = !showTrail;
