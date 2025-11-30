@@ -141,7 +141,7 @@ PlayerSettings:
   loadStoreDebugModeEnabled: 0
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
-  bundleVersion: 0.1.0
+  bundleVersion: 0.0.1
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 11400000, guid: 6b918cfc057fe4892b3de24c7d5aec73, type: 2}
@@ -270,8 +270,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: /Users/funsi/Documents/ETH/Master/dev/mixed-reality/user.keystore
-  AndroidKeyaliasName: androiddebugkey
+  AndroidKeystoreName: '{inproject}: user.keystore'
+  AndroidKeyaliasName: rsl-osaravanja
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0

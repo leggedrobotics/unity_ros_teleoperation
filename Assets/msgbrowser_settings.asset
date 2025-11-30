@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c444d6f85828f1b4f9b89c7c387f9ddd, type: 3}
   m_Name: msgbrowser_settings
   m_EditorClassIdentifier: 
-  inputPath: /Users/funsi/Documents/ETH/Master/dev/mixed-reality/crs-2.0/src/ros4crs/crs_msgs
+  inputPath: ../crs-2.0/src/ros4crs/crs_msgs
   relativeOutPath: RosMessages
