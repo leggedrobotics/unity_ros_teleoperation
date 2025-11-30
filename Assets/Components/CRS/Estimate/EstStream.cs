@@ -83,12 +83,12 @@ public class EstimatorCarStream : SensorStream
         // Handle keyboard input (Desktop)
         if (Input.GetKeyDown(toggleCarKey))
         {
-            showEstimator = !showEstimator;
+            ToggleCarVisibility();
         }
         
         if (Input.GetKeyDown(toggleTrailKey))
         {
-            showTrail = !showTrail;
+            ToggleTrailVisibility();
         }
 
         // Handle Quest controller input
@@ -104,6 +104,16 @@ public class EstimatorCarStream : SensorStream
         {
             trailObject.SetActive(showTrail);
         }
+    }
+
+    public void ToggleCarVisibility()
+    {
+        showEstimator = !showEstimator;
+    }
+
+    public void ToggleTrailVisibility()
+    {
+        showTrail = !showTrail;
     }
 
     private void HandleQuestInput()

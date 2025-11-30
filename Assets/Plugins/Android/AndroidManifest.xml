@@ -8,6 +8,7 @@
   <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="false" />
   <uses-feature android:name="android.hardware.touchscreen.multitouch.distinct" android:required="false" />
   <uses-feature android:name="com.oculus.feature.PASSTHROUGH" android:required="true" />
+  <uses-feature android:name="oculus.software.overlay_keyboard" android:required="true"/>
   <uses-feature android:name="com.oculus.experimental.enabled" android:required="true" />
   <!-- <uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" /> -->
   <uses-permission android:name="android.permission.INTERNET" />
@@ -42,4 +43,5 @@
   </application>
   <uses-permission android:name="com.oculus.permission.USE_ANCHOR_API" />
   <uses-permission android:name="com.oculus.permission.USE_SCENE" />
+  <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
