@@ -987,6 +987,10 @@ MonoBehaviour:
     modelRoot: {fileID: 6564372226819960366, guid: 7aef5000c2b727c3c8ed7ad881b09401, type: 3}
     RobotSprite: {fileID: 0}
     rootFrame: world
+  - name: b2w
+    modelRoot: {fileID: 5246889467303309071, guid: 8dfb0d1b19bc5da4481922089682e6d4, type: 3}
+    RobotSprite: {fileID: 0}
+    rootFrame: world
   startRobotIndex: 3
   currentRobot:
     name: 
