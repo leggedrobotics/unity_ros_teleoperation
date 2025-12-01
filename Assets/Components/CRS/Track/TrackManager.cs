@@ -19,4 +19,8 @@ public class TrackManagerEditor : SensorManagerEditor
 
 public class TrackManager : SensorManager
 {
+    private void Awake()
+    {
+        name = "Track";
+    }
 }
