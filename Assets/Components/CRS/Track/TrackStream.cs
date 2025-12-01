@@ -51,6 +51,9 @@ void Awake()
     if (sceneRootObj != null)
     {
         transform.SetParent(sceneRootObj.transform);
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
         Debug.Log($"Track: TrackStream auto-parented to SceneRoot");
         Debug.Log($"Track: TrackStream parent is now: {transform.parent.name}");
     }
