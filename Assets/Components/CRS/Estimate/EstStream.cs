@@ -37,6 +37,7 @@ public class EstimatorCarStream : SensorStream
     void Awake()
     {
         _ros = ROSConnection.GetOrCreateInstance();
+        
     }
 
     void Start()
@@ -46,7 +47,6 @@ public class EstimatorCarStream : SensorStream
 
         carMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         carMaterial.SetColor("_BaseColor", estimatorColor);
-
 
         if (carPrefab != null)
         {

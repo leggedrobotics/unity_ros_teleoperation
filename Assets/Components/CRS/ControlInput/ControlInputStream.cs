@@ -21,7 +21,7 @@ public class ControlInputStream : SensorStream
     }
 
     [Header("Visualization Mode")]
-    public VisualizationMode currentMode = VisualizationMode.FollowCar;
+    public VisualizationMode currentMode = VisualizationMode.Hide;
 
     [Header("Follow Car Mode Settings")]
     public float arrowLength = 0.3f;
@@ -31,20 +31,19 @@ public class ControlInputStream : SensorStream
 
     [Header("Steering Wheel UI")]
     public GameObject steeringWheelPanel;
-    public Image steeringWheelBase;
-    public TextMeshProUGUI steeringText;
+    private Image _steeringWheelBase;
+    private TextMeshProUGUI _steeringText;
 
     [Header("F1-Style Torque Bar UI")]
-    public GameObject gaugesPanel;
     public GameObject torqueBarPanel;
-    public Image torqueBarBackground;
-    public Image torqueBarFillPositive;  // Green bar for throttle (fills up)
-    public Image torqueBarFillNegative;  // Red bar for brake (fills down)
-    public Image torqueCenterLine;
+    private Image _torqueBarBackground;
+    private Image _torqueBarFillPositive;  // Green bar for throttle (fills up)
+    private Image _torqueBarFillNegative;  // Red bar for brake (fills down)
+    private Image _torqueCenterLine;
 
-    public TextMeshProUGUI torqueLabelTop;
-    public TextMeshProUGUI torqueLabelBottom;
-    public TextMeshProUGUI torqueValueText;
+    private TextMeshProUGUI _torqueLabelTop;
+    private TextMeshProUGUI _torqueLabelBottom;
+    private TextMeshProUGUI _torqueValueText;
 
     // Follow Car Mode objects
     private LineRenderer steeringArrow;
@@ -79,8 +78,6 @@ public class ControlInputStream : SensorStream
 
         // Start coroutine to find car
         StartCoroutine(FindCarCoroutine());
-
-        currentMode = VisualizationMode.FollowCar;
 
         // Delay the initial visibility update to next frame
         StartCoroutine(InitializeVisualizationMode());
@@ -144,62 +141,72 @@ public class ControlInputStream : SensorStream
 
     private void SetupUIElements()
     {
+        _torqueBarFillPositive = torqueBarPanel.transform.Find("TorqueBarFillPositive").GetComponent<Image>();
+        _torqueBarFillNegative = torqueBarPanel.transform.Find("TorqueBarFillNegative").GetComponent<Image>();
+        _torqueValueText = torqueBarPanel.transform.Find("TorqueValueText").GetComponent<TextMeshProUGUI>();
+        _torqueLabelTop = torqueBarPanel.transform.Find("TorqueLabelTop").GetComponent<TextMeshProUGUI>();
+        _torqueLabelBottom = torqueBarPanel.transform.Find("TorqueLabelBottom").GetComponent<TextMeshProUGUI>();
+        _torqueBarBackground = torqueBarPanel.transform.Find("TorqueBarBackground").GetComponent<Image>();
+        _torqueCenterLine = torqueBarPanel.transform.Find("TorqueCenterLine").GetComponent<Image>();
+        _steeringWheelBase = steeringWheelPanel.transform.Find("SteeringWheelBase").GetComponent<Image>();
+        _steeringText = steeringWheelPanel.transform.Find("SteeringText").GetComponent<TextMeshProUGUI>();
+
         // Steering Wheel Setup
-        if (steeringWheelBase != null)
+        if (_steeringWheelBase != null)
         {
             // Wheel will be rotated as a whole
         }
 
         // F1-Style Torque Bar Setup
-        if (torqueBarBackground != null)
+        if (_torqueBarBackground != null)
         {
-            torqueBarBackground.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
+            _torqueBarBackground.color = new Color(0.1f, 0.1f, 0.1f, 0.8f);
         }
 
-        if (torqueBarFillPositive != null)
+        if (_torqueBarFillPositive != null)
         {
-            torqueBarFillPositive.type = Image.Type.Filled;
-            torqueBarFillPositive.fillMethod = Image.FillMethod.Vertical;
-            torqueBarFillPositive.fillOrigin = (int)Image.OriginVertical.Bottom;
-            torqueBarFillPositive.fillAmount = 0f;
-            torqueBarFillPositive.color = Color.green;
+            _torqueBarFillPositive.type = Image.Type.Filled;
+            _torqueBarFillPositive.fillMethod = Image.FillMethod.Vertical;
+            _torqueBarFillPositive.fillOrigin = (int)Image.OriginVertical.Bottom;
+            _torqueBarFillPositive.fillAmount = 0f;
+            _torqueBarFillPositive.color = Color.green;
         }
 
-        if (torqueBarFillNegative != null)
+        if (_torqueBarFillNegative != null)
         {
-            torqueBarFillNegative.type = Image.Type.Filled;
-            torqueBarFillNegative.fillMethod = Image.FillMethod.Vertical;
-            torqueBarFillNegative.fillOrigin = (int)Image.OriginVertical.Top;
-            torqueBarFillNegative.fillAmount = 0f;
-            torqueBarFillNegative.color = Color.red;
+            _torqueBarFillNegative.type = Image.Type.Filled;
+            _torqueBarFillNegative.fillMethod = Image.FillMethod.Vertical;
+            _torqueBarFillNegative.fillOrigin = (int)Image.OriginVertical.Top;
+            _torqueBarFillNegative.fillAmount = 0f;
+            _torqueBarFillNegative.color = Color.red;
         }
 
-        if (torqueCenterLine != null)
+        if (_torqueCenterLine != null)
         {
-            torqueCenterLine.color = new Color(1f, 1f, 1f, 0.8f);
+            _torqueCenterLine.color = new Color(1f, 1f, 1f, 0.8f);
         }
 
-        if (torqueLabelTop != null)
+        if (_torqueLabelTop != null)
         {
-            torqueLabelTop.text = "ACCEL";
-            torqueLabelTop.color = Color.green;
-            torqueLabelTop.fontSize = 7;
-            torqueLabelTop.fontStyle = FontStyles.Bold;
+            _torqueLabelTop.text = "ACCEL";
+            _torqueLabelTop.color = Color.green;
+            _torqueLabelTop.fontSize = 7;
+            _torqueLabelTop.fontStyle = FontStyles.Bold;
         }
 
-        if (torqueLabelBottom != null)
+        if (_torqueLabelBottom != null)
         {
-            torqueLabelBottom.text = "BRAKE";
-            torqueLabelBottom.color = Color.red;
-            torqueLabelBottom.fontSize = 7;
-            torqueLabelBottom.fontStyle = FontStyles.Bold;
+            _torqueLabelBottom.text = "BRAKE";
+            _torqueLabelBottom.color = Color.red;
+            _torqueLabelBottom.fontSize = 7;
+            _torqueLabelBottom.fontStyle = FontStyles.Bold;
         }
 
-        if (torqueValueText != null)
+        if (_torqueValueText != null)
         {
-            torqueValueText.fontSize = 8;
-            torqueValueText.fontStyle = FontStyles.Bold;
-            torqueValueText.color = Color.white;
+            _torqueValueText.fontSize = 8;
+            _torqueValueText.fontStyle = FontStyles.Bold;
+            _torqueValueText.color = Color.white;
         }
     }
 
@@ -237,12 +244,7 @@ public class ControlInputStream : SensorStream
 
     public void SetVisualizationMode(int mode)
     {
-        VisualizationMode[] mapping = {
-            VisualizationMode.Hide,
-            VisualizationMode.FollowCar,
-            VisualizationMode.ScreenHUD
-        };
-        currentMode = mapping[mode];
+        currentMode = (VisualizationMode)mode;
         UpdateVisualizationMode();
     }
 
@@ -256,9 +258,9 @@ public class ControlInputStream : SensorStream
         if (torqueBarObj != null) torqueBarObj.SetActive(showFollowCar);
 
         // Toggle UI panels
-        if (gaugesPanel != null) gaugesPanel.SetActive(showHUD);
         if (steeringWheelPanel != null) steeringWheelPanel.SetActive(showHUD);
         if (torqueBarPanel != null) torqueBarPanel.SetActive(showHUD);
+        if (showHUD && steeringWheelPanel != null && torqueBarPanel != null) SetupUIElements();
     }
 
     private void OnControlInput(Car_inputMsg msg)
@@ -346,6 +348,7 @@ public class ControlInputStream : SensorStream
     }
 
     // ========== UI HUD UPDATE ==========
+
     private void UpdateUIVisualization()
     {
         UpdateSteeringWheelUI();
@@ -355,21 +358,21 @@ public class ControlInputStream : SensorStream
     private void UpdateSteeringWheelUI()
     {
         // Rotate the entire steering wheel based on steering angle
-        if (steeringWheelBase != null)
+        if (_steeringWheelBase != null)
         {
             // Amplify rotation for better visibility
             float rotationAngle = -currentSteering * Mathf.Rad2Deg * 2.0f;
-            steeringWheelBase.rectTransform.localRotation = Quaternion.Euler(0, 0, -rotationAngle);
+            _steeringWheelBase.rectTransform.localRotation = Quaternion.Euler(0, 0, -rotationAngle);
         }
 
         // Update text
-        if (steeringText != null)
+        if (_steeringText != null)
         {
-            steeringText.text = $"STEER\n{(currentSteering * Mathf.Rad2Deg):F1}°";
+            _steeringText.text = $"STEER\n{(currentSteering * Mathf.Rad2Deg):F1}°";
 
             // Color based on steering amount
             float steerPercent = Mathf.Abs(currentSteering / maxSteeringAngle);
-            steeringText.color = Color.Lerp(Color.white, Color.red, steerPercent);
+            _steeringText.color = Color.Lerp(Color.white, Color.red, steerPercent);
         }
     }
 
@@ -378,66 +381,66 @@ public class ControlInputStream : SensorStream
         float clampedTorque = Mathf.Clamp(currentTorque, -1f, 1f);
 
         // Update positive bar (throttle - fills upward)
-        if (torqueBarFillPositive != null)
+        if (_torqueBarFillPositive != null)
         {
             if (clampedTorque > 0)
             {
-                torqueBarFillPositive.fillAmount = clampedTorque;
+                _torqueBarFillPositive.fillAmount = clampedTorque;
                 // Gradient from light green to bright green
-                torqueBarFillPositive.color = Color.Lerp(new Color(0.4f, 1f, 0.4f), Color.green, clampedTorque);
+                _torqueBarFillPositive.color = Color.Lerp(new Color(0.4f, 1f, 0.4f), Color.green, clampedTorque);
             }
             else
             {
-                torqueBarFillPositive.fillAmount = 0f;
+                _torqueBarFillPositive.fillAmount = 0f;
             }
         }
 
         // Update negative bar (brake - fills downward)
-        if (torqueBarFillNegative != null)
+        if (_torqueBarFillNegative != null)
         {
             if (clampedTorque < 0)
             {
-                torqueBarFillNegative.fillAmount = -clampedTorque;
+                _torqueBarFillNegative.fillAmount = -clampedTorque;
                 // Gradient from light red to bright red
-                torqueBarFillNegative.color = Color.Lerp(new Color(1f, 0.4f, 0.4f), Color.red, -clampedTorque);
+                _torqueBarFillNegative.color = Color.Lerp(new Color(1f, 0.4f, 0.4f), Color.red, -clampedTorque);
             }
             else
             {
-                torqueBarFillNegative.fillAmount = 0f;
+                _torqueBarFillNegative.fillAmount = 0f;
             }
         }
 
         // Update value text
-        if (torqueValueText != null)
+        if (_torqueValueText != null)
         {
-            torqueValueText.text = $"{(currentTorque * 100f):F0}%";
+            _torqueValueText.text = $"{(currentTorque * 100f):F0}%";
 
             // Color text based on current action
             if (currentTorque > 0.1f)
-                torqueValueText.color = Color.green;
+                _torqueValueText.color = Color.green;
             else if (currentTorque < -0.1f)
-                torqueValueText.color = Color.red;
+                _torqueValueText.color = Color.red;
             else
-                torqueValueText.color = Color.white;
+                _torqueValueText.color = Color.white;
         }
 
         // Highlight active label
-        if (torqueLabelTop != null && torqueLabelBottom != null)
+        if (_torqueLabelTop != null && _torqueLabelBottom != null)
         {
             if (currentTorque > 0.1f)
             {
-                torqueLabelTop.color = Color.green;
-                torqueLabelBottom.color = new Color(0.3f, 0.3f, 0.3f);
+                _torqueLabelTop.color = Color.green;
+                _torqueLabelBottom.color = new Color(0.3f, 0.3f, 0.3f);
             }
             else if (currentTorque < -0.1f)
             {
-                torqueLabelTop.color = new Color(0.3f, 0.3f, 0.3f);
-                torqueLabelBottom.color = Color.red;
+                _torqueLabelTop.color = new Color(0.3f, 0.3f, 0.3f);
+                _torqueLabelBottom.color = Color.red;
             }
             else
             {
-                torqueLabelTop.color = new Color(0.3f, 0.6f, 0.3f);
-                torqueLabelBottom.color = new Color(0.6f, 0.3f, 0.3f);
+                _torqueLabelTop.color = new Color(0.3f, 0.6f, 0.3f);
+                _torqueLabelBottom.color = new Color(0.6f, 0.3f, 0.3f);
             }
         }
     }
