@@ -16,7 +16,7 @@ public class TrajectoryStream : SensorStream
     // This class is used to manage the visualization of markers in Unity.
     private static int nextId = 0;
     private int _id;
-    public float pointSize = 0.03f; // Default point size for point markers
+    public float pointSize = 0.01f; // Default point size for point markers
 
     public TMPro.TextMeshProUGUI topicText;
 

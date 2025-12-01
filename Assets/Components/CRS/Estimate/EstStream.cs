@@ -182,16 +182,19 @@ public class EstimatorCarStream : SensorStream
         PointMsg rosPosition = new(msg.x, msg.y, msg.z);
         Vector3 unityPosition = rosPosition.From<FLU>();
         
-        carInstance.transform.position = unityPosition;
+        if (carInstance != null)
+        {
+            carInstance.transform.localPosition = unityPosition;
+        }
         
         if (trailObject != null)
         {
-            trailObject.transform.position = unityPosition;
+            trailObject.transform.localPosition = unityPosition;
         }
 
         // Rotation
         float yawDegrees = (float)msg.yaw * Mathf.Rad2Deg;
-        carInstance.transform.rotation = Quaternion.Euler(0, -yawDegrees, 0);
+        carInstance.transform.localRotation = Quaternion.Euler(0, -yawDegrees, 0);
     }
 
     void OnDestroy()

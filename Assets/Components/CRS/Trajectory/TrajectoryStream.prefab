@@ -47,7 +47,7 @@ MonoBehaviour:
   topicDropdown: {fileID: 0}
   topicName: /controller_visualization
   manager: {fileID: 0}
-  pointSize: 0.03
+  pointSize: 0.01
   topicText: {fileID: 0}
   arrowMesh: {fileID: 0}
   pointsPrefab: {fileID: 201565594600729684, guid: 5a33eb890ce29a540ba2774feaa0b8a4, type: 3}

@@ -48,5 +48,9 @@ MonoBehaviour:
   topicName: car_1/estimation_node/best_state
   manager: {fileID: 0}
   carPrefab: {fileID: 0}
-  carScale: 0.4
+  carScale: 0.2
   estimatorColor: {r: 0, g: 1, b: 0, a: 1}
+  showEstimator: 1
+  showTrail: 1
+  trailTime: 3
+  trailColor: {r: 0, g: 0, b: 1, a: 1}
