@@ -64,6 +64,9 @@ public class CarStream : SensorStream
             carInstance.transform.SetParent(transform);
             carInstance.name = "Car";
             carInstance.transform.localScale = Vector3.one * carScale;
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
 
             Renderer[] renderers = carInstance.GetComponentsInChildren<Renderer>();
             foreach (Renderer renderer in renderers)
