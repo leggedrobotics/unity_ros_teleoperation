@@ -19,6 +19,16 @@ public class AlignmentEditor : Editor
         {
             myScript.DebugAlignment();
         }
+
+        if (GUILayout.Button("Toggle Auto Alignment Mode"))
+        {
+            myScript.ToggleAutoAlignmentMode();
+        }
+        
+        if (GUILayout.Button("Toggle Manual Alignment"))
+        {
+            myScript.ToggleManualAlignmentMode();
+        }
     }
 }
 #endif

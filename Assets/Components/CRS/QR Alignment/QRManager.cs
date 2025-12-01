@@ -2,9 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Meta.XR.MRUtilityKit;
+using UnityEngine.UI;
 
-public class QRCodeAlignment : MonoBehaviour
+public class QRCodeAlignment : SensorManager
 {
+    [Header("Menu Settings")]
+    public Sprite qrIcon;
+    public Sprite idleIcon;
+    public Sprite alignIcon;
+    public Image toggleAlignImage;
+    public Image toggleAutoImage;
+    public TMPro.TextMeshProUGUI statusText;
+
     [Header("Runtime Visualization")]
     [SerializeField] private GameObject qrMarkerPrefab;
     [SerializeField] private Color ulColor = Color.blue;
@@ -18,12 +27,14 @@ public class QRCodeAlignment : MonoBehaviour
     [SerializeField] private Transform sceneRoot; // The root object to transform
     [SerializeField] private bool autoAlign = true;
     [SerializeField] private bool debugVisualization = true;
+
+    public bool manualAlignActive = false;
     
     [Header("Debug Info")]
     [SerializeField] private Transform debugUpperLeft;
     [SerializeField] private Transform debugLowerRight;
 
-    private bool alignmentModeActive = false;
+    public bool alignmentModeActive = false;
     private MRUK mrTrackingComponent;
     
     // QR code tracking
@@ -42,6 +53,8 @@ public class QRCodeAlignment : MonoBehaviour
         {
             Debug.LogError("Qr: Unable to find MRUK instance");
         }
+        UpdateButtonIcon();
+        UpdateStatusText();
     }
 
     void Start()
@@ -61,6 +74,21 @@ public class QRCodeAlignment : MonoBehaviour
         }
     }
 
+    public void ToggleAutoAlignmentMode()
+    {
+        SetAlignmentTrackingActive(!alignmentModeActive);
+        UpdateButtonIcon();
+        UpdateStatusText();
+    }
+
+    public void ToggleManualAlignmentMode()
+    {
+        manualAlignActive = !manualAlignActive;
+        sceneRoot.GetComponent<SceneRootManualAlignment>().SetAlignmentMode(manualAlignActive);
+        UpdateButtonIcon();
+        UpdateStatusText();
+    }
+
     public void SetAlignmentTrackingActive(bool active)
     {
         alignmentModeActive = active;
@@ -72,6 +100,7 @@ public class QRCodeAlignment : MonoBehaviour
         if (active)
         {
             ResetAlignmentState();
+            sceneRoot.GetComponent<SceneRootManualAlignment>().ToggleAlignmentMode();
         }
     }
 
@@ -212,6 +241,8 @@ public class QRCodeAlignment : MonoBehaviour
         
         // Apply transformation
         ApplyTransformation();
+
+        alignmentModeActive = false;
         
         Debug.Log("QR: Alignment complete!");
     }
@@ -355,6 +386,45 @@ public class QRCodeAlignment : MonoBehaviour
         if (renderer != null)
         {
             renderer.material.color = color;
+        }
+    }
+
+    private void UpdateButtonIcon()
+    {
+        Sprite autoSprite = alignmentModeActive ? qrIcon : idleIcon;
+        Sprite alignSprite = manualAlignActive ? alignIcon : idleIcon;
+        
+        if (toggleAutoImage != null)
+        {
+            toggleAutoImage.sprite = autoSprite;
+        }
+        if (toggleAlignImage != null)
+        {
+            toggleAlignImage.sprite = alignSprite;
+        }
+    }
+
+    private void UpdateStatusText()
+    {
+        if (manualAlignActive)
+        {
+            SetStatusText("Aligning manually...");
+            return;
+        }
+
+        if (alignmentModeActive)
+        {
+            SetStatusText("Aligning automatically...");
+            return;
+        }
+        SetStatusText("Idle");
+    }
+
+    private void SetStatusText(string text)
+    {
+        if (statusText != null)
+        {
+            statusText.text = "Status: " + text;
         }
     }
 

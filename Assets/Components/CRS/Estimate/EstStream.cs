@@ -37,7 +37,15 @@ public class EstimatorCarStream : SensorStream
     void Awake()
     {
         _ros = ROSConnection.GetOrCreateInstance();
-        
+
+        GameObject sceneRootObj = GameObject.Find("SceneRoot");
+        if (sceneRootObj != null)
+        {
+            transform.SetParent(sceneRootObj.transform);
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+        }
     }
 
     void Start()
