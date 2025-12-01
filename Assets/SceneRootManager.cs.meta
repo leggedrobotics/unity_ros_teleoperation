@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 1b9c16740128149618139402cc3642e1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - leftJoystick: {fileID: -2712430539226112537, guid: 2e52aefc8c982aa458ead95f51a6749e, type: 3}
+  - rightJoystick: {instanceID: 0}
+  - backButton: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
