@@ -15,6 +15,11 @@ public class TrajectoryManagerEditor : SensorManagerEditor
     {
         base.OnInspectorGUI();
         TrajectoryManager markerManager = (TrajectoryManager)target;
+
+        if (GUILayout.Button("Toggle Trajectory"))
+        {
+            markerManager.ToggleTrajectory();
+        }
     }
 }
 #endif
@@ -22,12 +27,34 @@ public class TrajectoryManagerEditor : SensorManagerEditor
 public class TrajectoryManager : SensorManager
 {
     public GameObject[] vizPrefabs;
+    private bool _enabled = false;
 
     void Awake()
     {
         _ros = ROSConnection.GetOrCreateInstance();
         sensors = new List<GameObject>();
         CreateDummyCount();
+    }
+
+    public void ToggleTrajectory()
+    {
+        _enabled = !_enabled;
+        UpdateSensor();
+    }
+
+    private void UpdateSensor()
+    {
+        bool hasSensor = sensors.Count > 0;
+
+        if (!_enabled && hasSensor)
+        {
+            ClearAll();
+        }
+
+        if (_enabled && !hasSensor)
+        {
+            AddSensor();
+        }
     }
 
     private void CreateDummyCount()

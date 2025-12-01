@@ -100,7 +100,6 @@ public class QRCodeAlignment : SensorManager
         if (active)
         {
             ResetAlignmentState();
-            sceneRoot.GetComponent<SceneRootManualAlignment>().ToggleAlignmentMode();
         }
     }
 
