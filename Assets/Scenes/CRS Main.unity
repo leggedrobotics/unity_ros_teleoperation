@@ -161,6 +161,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3084445420371436793, guid: 0aadc3347e99445e0bcf3547c4067b48, type: 3}
+      propertyPath: topicName
+      value: /car_1/car_state_converter/gt_state
+      objectReference: {fileID: 0}
     - target: {fileID: 4096305110057869459, guid: 0aadc3347e99445e0bcf3547c4067b48, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1234,7 +1238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1827246496
 MonoBehaviour:
   m_ObjectHideFlags: 0
