@@ -242,6 +242,9 @@ public class QRCodeAlignment : SensorManager
         ApplyTransformation();
 
         alignmentModeActive = false;
+
+        UpdateButtonIcon();
+        UpdateStatusText();
         
         Debug.Log("QR: Alignment complete!");
     }

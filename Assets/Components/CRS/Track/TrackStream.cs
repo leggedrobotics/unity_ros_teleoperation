@@ -181,7 +181,8 @@ void Awake()
             Vector3 position = points[i].From<FLU>();
             Vector3 globalTransform = _sceneRoot != null ? _sceneRoot.transform.position : Vector3.zero;
             Quaternion globalRotation = _sceneRoot != null ? _sceneRoot.transform.rotation : Quaternion.identity;
-            position = globalRotation * position + globalTransform;
+            Vector3 globalScale = _sceneRoot != null ? _sceneRoot.transform.localScale : Vector3.one;
+            position = Vector3.Scale(globalScale, globalRotation * position) + globalTransform;
             lineRenderer.SetPosition(i - startIdx, position);
         }
         

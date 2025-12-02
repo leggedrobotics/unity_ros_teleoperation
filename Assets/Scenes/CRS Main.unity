@@ -1234,7 +1234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1827246496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1291,8 +1291,8 @@ MonoBehaviour:
     <TrackableAdded>k__BackingField:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: QRManager, Assembly-CSharp
+        - m_Target: {fileID: 873674243}
+          m_TargetAssemblyTypeName: QRCodeAlignment, Assembly-CSharp
           m_MethodName: OnTrackableAdded
           m_Mode: 0
           m_Arguments:
@@ -1306,7 +1306,7 @@ MonoBehaviour:
     <TrackableRemoved>k__BackingField:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
+        - m_Target: {fileID: 873674243}
           m_TargetAssemblyTypeName: QRCodeAlignment, Assembly-CSharp
           m_MethodName: OnTrackableRemoved
           m_Mode: 0
@@ -7226,7 +7226,7 @@ MonoBehaviour:
   managers:
   - {fileID: 6494627975041377915}
   - {fileID: 2111862242}
-  - {fileID: 873674243}
+  - {fileID: 0}
   - {fileID: 7806596123953479917}
   headerPrefab: {fileID: 2080445218081258707, guid: dc98c027ed3bfbc4fa3be53538927f87, type: 3}
 --- !u!1 &1575608073796846617

@@ -184,7 +184,6 @@ public class TrajectoryStream : SensorStream
             }
 
             _namespaces[markerKey] = markerObject;
-
         }
 
         if (msg.colors.Length == 0)
@@ -205,6 +204,7 @@ public class TrajectoryStream : SensorStream
             markerObject.transform.SetParent(this.transform);
             markerObject.transform.localPosition = msg.pose.position.From<FLU>();
             markerObject.transform.localRotation = msg.pose.orientation.From<FLU>();
+            markerObject.transform.localScale = Vector3.one;
         }
 
     }
