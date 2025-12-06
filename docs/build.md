@@ -1,3 +1,4 @@
+[Home](../README.md)
 # Building the App
 
 Since v0.0.94 app updates can be pushed over Release Channels on the [Meta Horizon Dashboard](https://developers.meta.com/horizon/).
