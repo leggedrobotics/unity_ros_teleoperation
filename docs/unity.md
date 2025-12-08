@@ -4,7 +4,9 @@
 Unity is a game engine with extensive cross platform support and fairly simple to use workflows. Most code for Unity is written in C# with a few exceptions for shaders (HLSL) and plugins. To get started, download the [Unity Hub](https://unity.com/download) which works on Windows, Mac and Linux. 
 
 ## Adding Projects and Installs
-Once you have Unity Hub installed, you can add projects and installs. The installs are the versions of Unity that you have installed on your system. The projects contains the Unity projects which are folders generally containing an `Assets` and `Packages` folder such as this repo. Projects are built with a specific version of Unity so it is recommended to install the version of Unity (or nearest LTS) that the project was built with.
+Once you have Unity Hub installed, you can add projects and installs. The installs are the versions of Unity that you have installed on your system. The projects contains the Unity projects which are folders generally containing an `Assets` and `Packages` folder such as this repo. Projects are built with a specific version of Unity so it is recommended to install the version of Unity (or nearest LTS) that the project was built with. 
+
+**NOTE: Some versions of UnityHub with some versions of Linux have a bug where you can not actually select a folder, instead it will keep opening the folders. To address this a setup.sh script is included in the root directory. This will link the project to the UnityHub, although the UnityHub needs to be fully exited and reopended for the change to take effect (the service will create an icon in your task bar with a `Quit Unity Hub` button.**
 
 ![](images/unity_hub.png)
 
