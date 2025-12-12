@@ -17,7 +17,7 @@ PlayerSettings:
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  m_ShowUnitySplashScreen: 0
+  m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
@@ -145,9 +145,6 @@ PlayerSettings:
   preloadedAssets:
   - {fileID: 0}
   - {fileID: 11400000, guid: 6b918cfc057fe4892b3de24c7d5aec73, type: 2}
-  - {fileID: 3693302877158471611, guid: be0e8438bce994bf9b3025d014d3b0dd, type: 2}
-  - {fileID: 11400000, guid: 9502fd768ba2eebf9a447f1eb9e39f11, type: 2}
-  - {fileID: -1259983124889634441, guid: c0c3e31970d4d9d008092693dfcd9ac5, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -273,8 +270,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{inproject}: user.keystore'
-  AndroidKeyaliasName: crs_viz
+  AndroidKeystoreName: /Users/funsi/Documents/ETH/Master/dev/mixed-reality/user.keystore
+  AndroidKeyaliasName: androiddebugkey
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
