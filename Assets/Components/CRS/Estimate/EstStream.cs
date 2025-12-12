@@ -16,8 +16,8 @@ public class EstimatorCarStream : SensorStream
     private Material carMaterial;
     
     public bool showEstimator = true;
-    
-    // Trail settings
+
+    [Header("Estimator Trail Settings")]
     public bool showTrail = true;
     private GameObject trailObject;
     private TrailRenderer trail;
@@ -37,6 +37,15 @@ public class EstimatorCarStream : SensorStream
     void Awake()
     {
         _ros = ROSConnection.GetOrCreateInstance();
+
+        GameObject sceneRootObj = GameObject.Find("SceneRoot");
+        if (sceneRootObj != null)
+        {
+            transform.SetParent(sceneRootObj.transform);
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+        }
     }
 
     void Start()
@@ -46,7 +55,6 @@ public class EstimatorCarStream : SensorStream
 
         carMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
         carMaterial.SetColor("_BaseColor", estimatorColor);
-
 
         if (carPrefab != null)
         {
@@ -83,12 +91,12 @@ public class EstimatorCarStream : SensorStream
         // Handle keyboard input (Desktop)
         if (Input.GetKeyDown(toggleCarKey))
         {
-            showEstimator = !showEstimator;
+            ToggleCarVisibility();
         }
         
         if (Input.GetKeyDown(toggleTrailKey))
         {
-            showTrail = !showTrail;
+            ToggleTrailVisibility();
         }
 
         // Handle Quest controller input
@@ -104,6 +112,15 @@ public class EstimatorCarStream : SensorStream
         {
             trailObject.SetActive(showTrail);
         }
+    }
+
+    public void ToggleCarVisibility()
+    {
+        showEstimator = !showEstimator;
+    }
+    public void ToggleTrailVisibility()
+    {
+        showTrail = !showTrail;
     }
 
     private void HandleQuestInput()
@@ -165,16 +182,19 @@ public class EstimatorCarStream : SensorStream
         PointMsg rosPosition = new(msg.x, msg.y, msg.z);
         Vector3 unityPosition = rosPosition.From<FLU>();
         
-        carInstance.transform.position = unityPosition;
+        if (carInstance != null)
+        {
+            carInstance.transform.localPosition = unityPosition;
+        }
         
         if (trailObject != null)
         {
-            trailObject.transform.position = unityPosition;
+            trailObject.transform.localPosition = unityPosition;
         }
 
         // Rotation
         float yawDegrees = (float)msg.yaw * Mathf.Rad2Deg;
-        carInstance.transform.rotation = Quaternion.Euler(0, -yawDegrees, 0);
+        carInstance.transform.localRotation = Quaternion.Euler(0, -yawDegrees, 0);
     }
 
     void OnDestroy()

@@ -13,7 +13,7 @@ In order to push the app, you first need to install the CLI from the [Oculus Pla
 
 Then update the Bundle Version Code in the Player settings > Publishing Settings > Bundle Version Code. This should be incremented with every build you want to push to the channels with the least significant digit being the patch version. For example, if the current version is 0.0.94, patch 2, the next build should have a Bundle Version Code of 952.
 
-Next build the apk locally (ensure Remove Internet Permission is unchecked!) and sign it with the keystore at the root of the repo, `user.keystore`. Use `main` for the alias and `rslteleopproject` for the password.
+Next build the apk locally (ensure Remove Internet Permission is unchecked!) and sign it with the keystore at the root of the repo, `user.keystore`. Use `rslteleopproject` for the keystore password, `crs_viz` for the alias and `crsRulez` for the alias password.
 
 Then you can use the script `./upload_build` to upload the app to the desired channel. 
 

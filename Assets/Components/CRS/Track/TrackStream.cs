@@ -32,6 +32,8 @@ public class TrackStream : SensorStream
     public bool HasTrackData { get; private set; } = false;
     
     private const float PLATE_SIZE = 0.3f;
+
+    private GameObject _sceneRoot;
     
 void Awake()
 {
@@ -47,10 +49,10 @@ void Awake()
     }
     
     // Auto-parent to SceneRoot if it exists
-    GameObject sceneRootObj = GameObject.Find("SceneRoot");
-    if (sceneRootObj != null)
+    _sceneRoot = GameObject.Find("SceneRoot");
+    if (_sceneRoot != null)
     {
-        transform.SetParent(sceneRootObj.transform);
+        transform.SetParent(_sceneRoot.transform);
         transform.localPosition = Vector3.zero;
         transform.localRotation = Quaternion.identity;
         transform.localScale = Vector3.one;
@@ -177,6 +179,10 @@ void Awake()
         for (int i = startIdx; i < endIdx; i++)
         {
             Vector3 position = points[i].From<FLU>();
+            Vector3 globalTransform = _sceneRoot != null ? _sceneRoot.transform.position : Vector3.zero;
+            Quaternion globalRotation = _sceneRoot != null ? _sceneRoot.transform.rotation : Quaternion.identity;
+            Vector3 globalScale = _sceneRoot != null ? _sceneRoot.transform.localScale : Vector3.one;
+            position = Vector3.Scale(globalScale, globalRotation * position) + globalTransform;
             lineRenderer.SetPosition(i - startIdx, position);
         }
         

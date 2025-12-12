@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6161794687624562909
+--- !u!1 &7179028833284191970
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,59 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8524352922025719068}
-  - component: {fileID: 6635270378056780479}
+  - component: {fileID: 8469737763378058609}
+  - component: {fileID: 3437829783805100689}
   m_Layer: 0
-  m_Name: TrajectoryStream
+  m_Name: ControlInputStream
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8524352922025719068
+--- !u!4 &8469737763378058609
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6161794687624562909}
+  m_GameObject: {fileID: 7179028833284191970}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 25.092842, y: 11.254101, z: -2.8211489}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6635270378056780479
+--- !u!114 &3437829783805100689
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6161794687624562909}
+  m_GameObject: {fileID: 7179028833284191970}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 029945c0c6083437b9fa7be8386a2293, type: 3}
+  m_Script: {fileID: 11500000, guid: c736a0b0b39a24ae797d09388e85cf4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   topicDropdown: {fileID: 0}
-  topicName: /controller_visualization
+  topicName: /car_1/control_input
   manager: {fileID: 0}
-  pointSize: 0.1
-  topicText: {fileID: 0}
-  arrowMesh: {fileID: 0}
-  pointsPrefab: {fileID: 201565594600729684, guid: 5a33eb890ce29a540ba2774feaa0b8a4, type: 3}
+  carObject: {fileID: 0}
+  currentMode: 0
+  arrowLength: 0.3
+  arrowHeight: 0.25
+  barHeight: 0.5
+  barOffset: 0.25
+  steeringWheelPanel: {fileID: 0}
+  steeringWheelBase: {fileID: 0}
+  steeringText: {fileID: 0}
+  torqueBarPanel: {fileID: 0}
+  torqueBarBackground: {fileID: 0}
+  torqueBarFillPositive: {fileID: 0}
+  torqueBarFillNegative: {fileID: 0}
+  torqueCenterLine: {fileID: 0}
+  torqueLabelTop: {fileID: 0}
+  torqueLabelBottom: {fileID: 0}
+  torqueValueText: {fileID: 0}
