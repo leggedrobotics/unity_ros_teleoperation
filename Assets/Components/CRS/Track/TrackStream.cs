@@ -230,13 +230,25 @@ void Awake()
         
         Vector3 min = trackBounds.min;
         Vector3 max = trackBounds.max;
-        
-        lr.SetPositions(new Vector3[] {
+
+        Vector3 globalTransform = _sceneRoot != null ? _sceneRoot.transform.position : Vector3.zero;
+        Quaternion globalRotation = _sceneRoot != null ? _sceneRoot.transform.rotation : Quaternion.identity;
+        Vector3 globalScale = _sceneRoot != null ? _sceneRoot.transform.localScale : Vector3.one;
+
+        Vector3[] corners = new Vector3[] {
             new Vector3(min.x, 0, min.z),
             new Vector3(max.x, 0, min.z),
             new Vector3(max.x, 0, max.z),
             new Vector3(min.x, 0, max.z)
-        });
+        };
+        
+        for (int i = 0; i < corners.Length; i++)
+        {
+            corners[i] = Vector3.Scale(globalScale, globalRotation * corners[i]) + globalTransform;
+        }
+        
+        lr.SetPositions(corners);
+            
     }
     
     public override void ToggleTrack(int mode)
