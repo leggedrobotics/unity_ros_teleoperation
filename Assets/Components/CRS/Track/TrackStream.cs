@@ -10,6 +10,9 @@ using UnityEngine;
 
 public class TrackStream : SensorStream
 {
+    [Header("Alignment Reference")]
+    [SerializeField] private QRCodeAlignment qRCodeAlignment;
+    private GameObject boundingBoxVisual;
 
     [Header("Debug Corners")]
     [SerializeField] private GameObject debugMarkerPrefab;
@@ -86,7 +89,28 @@ void Awake()
             _ros.Subscribe<MarkerArrayMsg>(topicName, OnTrackMessage);
         }
     }
+
+    void Update()
+    {
+        if (qRCodeAlignment != null && HasTrackData)
+        {
+            UpdateBoundingBoxVisual(qRCodeAlignment.showTrackBBox);
+        }
+    }
+
+    private void UpdateBoundingBoxVisual(bool show)
+{
+    if (show && boundingBoxVisual == null)
+    {
+        CreateBoundingBox();
+    }
     
+    if (boundingBoxVisual != null)
+    {
+        boundingBoxVisual.SetActive(show);
+    }
+}
+
     private void OnTrackMessage(MarkerArrayMsg track)
     {
         foreach (GameObject lineObj in lineObjects)
@@ -187,6 +211,32 @@ void Awake()
         }
         
         lineObjects.Add(lineObj);
+    }
+
+    private void CreateBoundingBox()
+    {
+        boundingBoxVisual = new GameObject("TrackBoundingBox");
+        boundingBoxVisual.transform.SetParent(transform);
+        
+        LineRenderer lr = boundingBoxVisual.AddComponent<LineRenderer>();
+        lr.material = lineMaterial != null ? lineMaterial : new Material(Shader.Find("Sprites/Default"));
+        lr.startColor = Color.yellow;
+        lr.endColor = Color.yellow;
+        lr.startWidth = 0.02f;
+        lr.endWidth = 0.02f;
+        lr.useWorldSpace = false;
+        lr.loop = true;
+        lr.positionCount = 4;
+        
+        Vector3 min = trackBounds.min;
+        Vector3 max = trackBounds.max;
+        
+        lr.SetPositions(new Vector3[] {
+            new Vector3(min.x, 0, min.z),
+            new Vector3(max.x, 0, min.z),
+            new Vector3(max.x, 0, max.z),
+            new Vector3(min.x, 0, max.z)
+        });
     }
     
     public override void ToggleTrack(int mode)

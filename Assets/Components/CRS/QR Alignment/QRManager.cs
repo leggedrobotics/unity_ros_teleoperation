@@ -12,6 +12,7 @@ public class QRCodeAlignment : SensorManager
     public Sprite alignIcon;
     public Image toggleAlignImage;
     public Image toggleAutoImage;
+    public Image tickIcon;
     public TMPro.TextMeshProUGUI statusText;
 
     [Header("Runtime Visualization")]
@@ -29,6 +30,7 @@ public class QRCodeAlignment : SensorManager
     [SerializeField] private bool debugVisualization = true;
 
     public bool manualAlignActive = false;
+    [SerializeField] public bool showTrackBBox = false;
     
     [Header("Debug Info")]
     [SerializeField] private Transform debugUpperLeft;
@@ -64,6 +66,7 @@ public class QRCodeAlignment : SensorManager
             Debug.LogError("QRCodeAlignment: sceneRoot is not assigned! Please assign the root transform to align.");
         }
         SetAlignmentTrackingActive(false);
+        tickIcon.enabled = showTrackBBox;
     }
 
     void Update()
@@ -79,6 +82,16 @@ public class QRCodeAlignment : SensorManager
         SetAlignmentTrackingActive(!alignmentModeActive);
         UpdateButtonIcon();
         UpdateStatusText();
+    }
+
+    [ContextMenu("Toggle Track BBox")]
+    public void ToggleTrackBbox()
+    {
+        showTrackBBox = !showTrackBBox;
+        if (tickIcon != null)
+        {
+            tickIcon.enabled = showTrackBBox;
+        }
     }
 
     public void ToggleManualAlignmentMode()
