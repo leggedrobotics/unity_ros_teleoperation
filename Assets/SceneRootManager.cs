@@ -16,11 +16,19 @@ public class SceneRootManualAlignment : MonoBehaviour
     [Header("Alignment Mode")]
     public bool alignmentModeActive = false;
 
+    [Header("VR Camera Reference")]
+    public Transform vrCamera;
+
     private Transform sceneRoot;
 
     void Start()
     {
         sceneRoot = transform;
+
+        if (vrCamera == null)
+        {
+            vrCamera = Camera.main?.transform;
+        }
     }
 
     void Update()
@@ -60,11 +68,18 @@ public class SceneRootManualAlignment : MonoBehaviour
         }
         else
         {
-            Vector3 movement = new Vector3(
-                leftStick.x * translationSpeed * Time.deltaTime,
-                0,
-                leftStick.y * translationSpeed * Time.deltaTime
-            );
+            Vector3 cameraForward = vrCamera.forward;
+            cameraForward.y = 0;
+            cameraForward.Normalize();
+            
+            Vector3 cameraRight = vrCamera.right;
+            cameraRight.y = 0;
+            cameraRight.Normalize();
+            
+            // Transform joystick input to be relative to camera orientation
+            Vector3 movement = (cameraRight * leftStick.x + cameraForward * leftStick.y) 
+                               * translationSpeed * Time.deltaTime;
+            
             sceneRoot.Translate(movement, Space.World);
 
             // Right stick: Rotation (Y-axis yaw)

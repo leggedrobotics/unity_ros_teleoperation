@@ -538,6 +538,11 @@ MonoBehaviour:
   _readOnlyWideMotionModeHandPosesEnabled: 0
   wideMotionModeHandPosesEnabled: 0
   dynamicResolutionVersion: 1
+--- !u!4 &580426652 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8346325146971170010, guid: d3d12ed0ce6f192a08e712c95e1af292, type: 3}
+  m_PrefabInstance: {fileID: 356082574}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &672670654 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8233021756264646084, guid: 9b6ac0439a76e0fdfb6a726e16be7fd7, type: 3}
@@ -906,6 +911,7 @@ MonoBehaviour:
   rotationSpeed: 30
   scaleSpeed: 0.2
   alignmentModeActive: 0
+  vrCamera: {fileID: 580426652}
 --- !u!4 &1020028921
 Transform:
   m_ObjectHideFlags: 0
