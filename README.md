@@ -9,11 +9,11 @@
 
 This repo contains a series of components for Unity XR teleoperation with ROS integration. It is designed to be run on a Quest 3 VR headset, and support OpenXR, hand tracking, Unity input system, and is built with Unity 2022.3.12f1.
 
-For information on setting up Unity and opening this project [Unity Quickstart](docs/unity.md), and for Quest information see [Quest Quickstart](docs/quest.md). To side load apps to the Quest see [SideQuest Quickstart](docs/sidequest.md), and for streaming the app to a linux device see [our streaming script](https://github.com/leggedrobotics/quest-streaming).
+For information on setting up Unity and opening this project [Unity Quickstart](docs/unity.md), and for Quest information see [Quest Quickstart](docs/quest.md). To install the git-hooks, and link this project to a Linux Unity Hub, run the `setup.sh` script. To side load apps to the Quest see [SideQuest Quickstart](docs/sidequest.md), and for streaming the app to a linux device see [our streaming script](https://github.com/leggedrobotics/quest-streaming).
 
 
 ## Quickstart
-On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS-TCP-Endpoint) needs to be run somewhere on the ROS network. This node is pretty lightweight so it can be run directly on a robot. Once the node is running the device running this app needs to connect to the ROS network, and the IP of the device running the TCP Endpoint needs to be set in the menu (see [Menu](Assets/Components/Menu) for more information). If everything works, the menu should turn green, and data should be streaming between the app and ROS. For custom robots, check out the documentation on [adding new robot models](Assets/Components/Robots/).
+On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS-TCP-Endpoint) needs to be run somewhere on the ROS network (For ROS 2 systems, make sure to switch to the `main-ros2` branch). This node is pretty lightweight so it can be run directly on a robot. Once the node is running the device running this app needs to connect to the ROS network, and the IP of the device running the TCP Endpoint needs to be set in the menu (see [Menu](Assets/Components/Menu) for more information). If everything works, the menu should turn green, and data should be streaming between the app and ROS. For custom robots, check out the documentation on [adding new robot models](Assets/Components/Robots/). If you are interested in contributing to the project, check out the [contributing guidelines](docs/contributing.md).
 
 
 ## Components
@@ -42,14 +42,6 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 | VR Debug | Debugging tools for VR, namely a console | [Assets/Components/VRDebug](Assets/Components/VRDebug) | ![](/docs/images/vr_console.jpg) |
 | VR Streamer | Streams a the VR view to a ROS topic (w/o AR view) | [Assets/Components/VRStreamer](Assets/Components/VRStreamer) | ![](/docs/images/streamer.jpg) |
 
-
-## Scenes
-In general the scenes should have a few objects by default:
-- Light source (usually the default directional light)
-- MR Interaction Setup (this enables AR/VR support and acts as a camera)
-- Debug canvas (will autolink to the menu and shows debug messages)
-- Palm Menu (menu to interact and toggle things with)
-- Root (The roof of the TF/object tree and tagged at 'root')
 
 ---
 
