@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Post-merge Git hook to makre sure no meta files have been messed with.
+
+DELETED_META=$(git diff --name-only --diff-filter=D HEAD@{1} | grep '\.meta$')
+if [ -n "$DELETED_META" ]; then
+    echo "!!! Meta files deleted in this merge:"
+    echo "$DELETED_META"
+fi

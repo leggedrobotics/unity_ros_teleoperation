@@ -4,6 +4,22 @@
 CONFIG_FILE="$HOME/.config/unityhub/projects-v1.json"
 CLI_FILE="$HOME/.config/unityhub/projectsInfo.json"
 
+# Install Git hooks
+HOOKS_DIR="$(pwd)/scripts/git-hooks"
+GIT_HOOKS_DIR="$(git rev-parse --git-dir)/hooks"
+
+echo " Installing Git hooks..."
+
+for hook in "$HOOKS_DIR"/*; do
+    hook_name=$(basename "$hook")
+    echo "Installing $hook_name"
+    ln -sf "$hook" "$GIT_HOOKS_DIR/$hook_name"
+    chmod +x "$hook"
+done
+
+echo "Git hooks installed!"
+
+echo "Configuring Unity Hub..."
 PROJECT_PATH="$(pwd)"
 
 # Check if jq is installed, install if not

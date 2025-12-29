@@ -1,0 +1,40 @@
+#!/bin/bash
+# Get list of staged .meta files that have been modified
+META_FILES=$(git diff --cached --name-only --diff-filter=M | grep '\.meta$')
+
+if [ -n "$META_FILES" ]; then
+    # Check if a marker file exists to indicate this hook has already run
+    MARKER_FILE="/tmp/pre-commit-meta-check"
+    if [ -f "$MARKER_FILE" ]; then
+        echo "Pre-commit hook already ran. Skipping duplicate check."
+        exit 0
+    fi
+
+    echo "Warning: The following .meta files have been modified since the last commit:"
+    echo "$META_FILES"
+    echo "If this is unintended, please review your changes."
+    echo ""
+    # Prompt the user only if running interactively
+    if [ -t 0 ]; then
+        read -p "Do you want to continue with the commit? [y/N]: " -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo "XXXX Commit aborted."
+            exit 1
+        fi
+    else
+        echo "Non-interactive shell detected skipping prompt."
+        echo "Tip: Run commits from a terminal if you want interactive confirmation."
+    fi
+
+    # Create the marker file to prevent running the hook again
+    touch "$MARKER_FILE"
+else
+    # Remove the marker file if no .meta files are staged
+    MARKER_FILE="/tmp/pre-commit-meta-check"
+    [ -f "$MARKER_FILE" ] && rm "$MARKER_FILE"
+fi
+
+
+
+exit 0
