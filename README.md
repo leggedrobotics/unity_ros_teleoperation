@@ -1,6 +1,6 @@
 
 # Unity ROS Teleoperation Project
-[![Unity 2022.3.12f1](https://img.shields.io/badge/Unity-2022.3.12f1-blue?logo=unity)](https://unity.com/releases/editor/whats-new/2022.3.12f1)
+[![Unity 6.2.15f1](https://img.shields.io/badge/Unity-6.2.15f1-blue?logo=unity)](https://unity.com/releases/editor/whats-new/6000.2.15f1)
 [![Version 0.1.1](https://img.shields.io/badge/version-0.1.0-green)]()
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Platform: Linux x64](https://img.shields.io/badge/platform-Linux%20x64-lightgrey?logo=linux)]()
