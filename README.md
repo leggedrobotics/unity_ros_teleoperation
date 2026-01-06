@@ -1,7 +1,7 @@
 
 # Unity ROS Teleoperation Project
 [![Unity 2022.3.12f1](https://img.shields.io/badge/Unity-2022.3.12f1-blue?logo=unity)](https://unity.com/releases/editor/whats-new/2022.3.12f1)
-[![Version 0.1.0](https://img.shields.io/badge/version-0.1.0-green)]()
+[![Version 0.1.1](https://img.shields.io/badge/version-0.1.0-green)]()
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Platform: Linux x64](https://img.shields.io/badge/platform-Linux%20x64-lightgrey?logo=linux)]()
 [![Platform: Quest 3](https://img.shields.io/badge/platform-Quest%203-blueviolet?logo=oculus)]()
@@ -46,6 +46,18 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 ---
 
 ## Minor Version History
+
+### 0.1.1
+- Added setup scripts and git hooks for easier project setup
+- Fixed some image rendering issues with Image Messages
+- Added passthrough togglle
+- Improved TF modes for Lidar
+- Added State buttons for toggles
+- Fixes for ROS 2
+- Updated docs for setup and usage with streaming
+- Added Robots
+    - B2W
+    - GR2
 
 ### 0.1.0
 _May need to reset the repo as LFS has been removed from history_
