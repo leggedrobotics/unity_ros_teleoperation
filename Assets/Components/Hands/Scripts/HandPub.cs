@@ -40,9 +40,9 @@ public class HandPub : MonoBehaviour
         {20, XRHandJointID.LittleTip}
     };
 
-    public InputActionReference activeController;
-    public InputActionReference twistController;
-    public InputActionReference poseController;
+    private InputAction activeController;
+    private InputAction twistController;
+    private InputAction poseController;
 
     public Sprite enableIcon;
     public Sprite disableIcon;
@@ -65,6 +65,14 @@ public class HandPub : MonoBehaviour
 
     void Start()
     {
+        // New input System Actions fromr system wide actions
+        if(InputSystem.actions)
+        {
+            activeController = InputSystem.actions.FindAction("XRI LeftHand/Gripped");
+            twistController = InputSystem.actions.FindAction("XRI LeftHand/XButton");
+            poseController = InputSystem.actions.FindAction("XRI LeftHand/YButton");
+        }
+
         _root = GameObject.FindWithTag("root").transform;
 
         _img = enableButton.transform.Find("Image/Image").GetComponent<Image>();
@@ -89,7 +97,7 @@ public class HandPub : MonoBehaviour
 
         if(m_handSubsystem == null)
         {
-            Debug.LogError("No running hand subsystem found");
+            Debug.LogWarning("No running hand subsystem found");
         } else {
             Debug.Log("Found running hand subsystem");
             m_handSubsystem.updatedHands += OnHandUpdate;
@@ -112,13 +120,13 @@ public class HandPub : MonoBehaviour
         _ros.RegisterPublisher<HandGestureMsg>(_gestureTopic);
 
         // setup action map listeners
-        twistController.action.performed += _ => PubTwistController();
-        poseController.action.performed += _ => PubPoseController();
+        twistController.performed += _ => PubTwistController();
+        poseController.performed += _ => PubPoseController();
     }
 
     void Update()
     {
-        if(activeController.action.ReadValue<float>() > 0.5f)
+        if(activeController.ReadValue<float>() > 0.5f)
         {
             PubActiveController();
         } else {

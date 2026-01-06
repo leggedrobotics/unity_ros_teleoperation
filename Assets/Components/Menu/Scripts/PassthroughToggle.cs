@@ -11,7 +11,7 @@ public class PassthroughToggle : MonoBehaviour
         arCameraManager = FindObjectOfType<ARCameraManager>();
         if (arCameraManager == null)
         {
-            Debug.LogError("ARCameraManager not found in the scene.");
+            Debug.LogWarning("ARCameraManager not found in the scene.");
         }
     }
 

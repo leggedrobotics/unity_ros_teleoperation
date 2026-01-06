@@ -5,10 +5,10 @@ using UnityEngine.InputSystem;
 
 public class Summon : MonoBehaviour
 {
-    public InputActionReference summonAction;
-    public InputActionReference handActiveAction;
-    public InputActionReference palmRotationAction;
-    public InputActionReference palmPositionAction;
+    private InputAction summonAction;
+    private InputAction handActiveAction;
+    private InputAction palmRotationAction;
+    private InputAction palmPositionAction;
 
     // public GameObject palm;
     public bool active;
@@ -17,16 +17,27 @@ public class Summon : MonoBehaviour
     public float speed = 1f;
     public Vector3 offset = new Vector3(0,0.5f,0);
 
+    void Start()
+    {
+        if(InputSystem.actions)
+        {
+            summonAction = InputSystem.actions.FindAction("XRI RightHand/Summon");
+            handActiveAction = InputSystem.actions.FindAction("XRI RightHand/IsHand");
+            palmRotationAction = InputSystem.actions.FindAction("XRI RightHand/Palm Rotation");
+            palmPositionAction = InputSystem.actions.FindAction("XRI RightHand/Palm Position");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         float angle;
         Vector3 palm;
         // check if the right hand is tracked, if not use controller input only
-        if (useHand && handActiveAction.action.ReadValue<float>() > .5f)
+        if (useHand && handActiveAction.ReadValue<float>() > .5f)
         {
-            angle = 180 - Quaternion.Angle(palmRotationAction.action.ReadValue<Quaternion>() , Quaternion.Euler(Vector3.up));
-            palm = palmPositionAction.action.ReadValue<Vector3>();
+            angle = 180 - Quaternion.Angle(palmRotationAction.ReadValue<Quaternion>() , Quaternion.Euler(Vector3.up));
+            palm = palmPositionAction.ReadValue<Vector3>();
             palm += offset;
         }
         else
@@ -40,7 +51,7 @@ public class Summon : MonoBehaviour
 
         // apply offset to palm
 
-        if((angle < 5 || summonAction.action.ReadValue<float>()>0.5f ) && diff.magnitude > 0.15f)
+        if((angle < 5 || summonAction.ReadValue<float>()>0.5f ) && diff.magnitude > 0.15f)
         {
             transform.position += diff * Time.deltaTime * speed / diff.magnitude;
             // rotate over time to face forward
