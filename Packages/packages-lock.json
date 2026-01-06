@@ -24,7 +24,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "2.10.0",
+      "version": "2.10.2",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -98,7 +98,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.inputsystem": {
-      "version": "1.14.2",
+      "version": "1.16.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -301,7 +301,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.toolchain.linux-x86_64": {
-      "version": "2.0.10",
+      "version": "2.0.11",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -368,7 +368,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arfoundation": {
-      "version": "6.2.0",
+      "version": "6.2.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -386,7 +386,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.compositionlayers": {
-      "version": "2.1.1",
+      "version": "2.2.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -406,7 +406,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.hands": {
-      "version": "1.7.0",
+      "version": "1.7.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -479,7 +479,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.openxr": {
-      "version": "1.15.1",
+      "version": "1.16.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {
