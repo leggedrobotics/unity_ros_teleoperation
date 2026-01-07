@@ -6,50 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/oldNerf.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Components/Hands/HandTester.unity
-    guid: b2f4b25e61a8e1f4c894726eb0d70f10
-  - enabled: 0
-    path: Assets/Components/Lidar/LidarTester.unity
-    guid: d61d61fa61a78398b816f8b51efef317
-  - enabled: 0
-    path: Assets/Components/VoxBlox/VoxBloxTester.unity
-    guid: a6c6d65b093ee394b8bf77454dd06aa0
-  - enabled: 0
-    path: Assets/Components/PosePublisher/PoseTester.unity
-    guid: 1a78d5d9414241ed9b8a2ce1af602d6e
-  - enabled: 0
-    path: Assets/Components/Haptics/HapticsTest.unity
-    guid: f26fe3d8a5fed67678b7455f5ffc0fd4
-  - enabled: 0
-    path: Assets/Components/CameraView/CameraTestScene.unity
-    guid: 0260e0bd399fd85449683bc8b8a29ddd
-  - enabled: 0
-    path: Assets/Components/StereoImage/StereoTest.unity
-    guid: 73a8094554b14311baeb7fbf37c6e428
-  - enabled: 0
-    path: Assets/Components/Menu/MenuTestScene.unity
-    guid: b4a4f2a6703016c5098c2da386646f09
-  - enabled: 0
-    path: Assets/Components/HeadsetPublisher/HeadsetPublisherTester.unity
-    guid: a72a28840159b0e9fb6e2eb8c281b8d8
-  - enabled: 0
-    path: Assets/Components/VRStreamer/VRStreamerTester.unity
-    guid: 9fd76377db89753458ba399dd20b39f3
-  - enabled: 0
     path: Assets/Scenes/Main.unity
     guid: 10fc7d2cde719dc5dab5ea8a37b46803
-  - enabled: 0
-    path: Assets/Components/TactileImages/TactileImagesTestScene.unity
-    guid: c0c9f40045a04148a9c0732148a582ce
-  - enabled: 0
-    path: Assets/Components/ROSSplat/SplatTester.unity
-    guid: abc6f1db2f2bed7ea9bbadb4e68883ba
-  - enabled: 0
-    path: Assets/Components/Markers/MarkerTestScene.unity
-    guid: a9855399fbef08b8da16de5060552268
   - enabled: 1
     path: Assets/Scenes/2dMain.unity
     guid: 039100e8610c757c1b3c0aa9431c16eb
