@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Sensor;
 using RosMessageTypes.Std;
-
+using System.Security.Cryptography.X509Certificates;
+using Unity.Mathematics;
+using GaussianSplatting.Runtime;
+using Unity.Collections;
+using UnityEngine.Experimental.Rendering;
+using System.Diagnostics;
 
 
 public class LidarUtils
@@ -402,6 +407,164 @@ public class LidarUtils
                 }
             }
         }
+        return outData;
+    }
+
+    public struct SplatData
+    {
+        public byte[] position;
+        public byte[] color;
+        public byte[] other;
+        public byte[] normal;
+        public int numPts;
+    }
+
+    static uint EncodeQuatToNorm10(float4 v) // 32 bits: 10.10.10.2
+    {
+        return (uint) (v.x * 1023.5f) | ((uint) (v.y * 1023.5f) << 10) | ((uint) (v.z * 1023.5f) << 20) | ((uint) (v.w * 3.5f) << 30);
+    }
+
+    static int SplatIndexToTextureIndex(uint idx)
+    {
+        uint2 xy = GaussianUtils.DecodeMorton2D_16x16(idx);
+        uint width = GaussianSplatAsset.kTextureWidth / 16;
+        idx >>= 8;
+        uint x = (idx % width) * 16 + xy.x;
+        uint y = (idx / width) * 16 + xy.y;
+        return (int)(y * GaussianSplatAsset.kTextureWidth + x);
+    }
+
+    static int NextMultipleOf(int size, int multipleOf)
+    {
+        return (size + multipleOf - 1) / multipleOf * multipleOf;
+    }
+
+    public static SplatData ExtractSplat(PointCloud2Msg data, int maxPts, VizType vizType, out int numPts)
+    {
+
+        /**
+        For different data type the order is 
+        Splat: x, y, z, rgb, scalex, scaley, scalez, rot0, rot1, rot2, rot3, nx, ny, nz, fc_dc_0, fc_dc_1, fc_dc_2, opacity
+        */
+
+        // Just in case...
+        if (maxPts < 1) maxPts = 1;
+        int decmiator = 1;
+
+        int data_size = vizType.GetSize();
+
+        numPts = (int)(data.data.Length / data.point_step);
+
+        if (numPts > maxPts)
+        {
+            decmiator = Mathf.CeilToInt((float)numPts / maxPts);
+            numPts = numPts / decmiator;
+        }
+
+        SplatData outData = new SplatData();
+
+        outData.numPts = numPts;
+        outData.position = new byte[numPts * 12]; // 3 floats for position
+        var (width, height) = GaussianSplatAsset.CalcTextureSize(numPts);
+        float4[] color = new float4[width * height];
+        int mipmapSize = (int) GraphicsFormatUtility.ComputeMipmapSize(width, height, GraphicsFormat.R32G32B32A32_SFloat);
+        outData.color = new byte[mipmapSize]; // 4 float for color
+        outData.other = new byte[numPts * 16]; // 1 uint for rotation, 3 floats for scale
+        outData.normal = new byte[numPts * 12]; // 3 floats for normal
+
+        float3 min_scale = default;
+        float3 max_scale = default;
+        float4 min_dc = default;
+        float4 max_dc = default;
+        // For each point...
+        for (int i = 0; i < numPts; i++)
+        {
+            // Grab the point at the decimated index
+            int inIdx = (int)(i * data.point_step * (decmiator));
+            int vector3Idx = i * 12;
+            int vector4Idx = i * 16;
+
+            // Copy the first 12 bytes (three floats) from the incoming point into position data
+            int bytesToCopy = Mathf.Min(12, data.data.Length - inIdx);
+            if (bytesToCopy > 0)
+            {
+                System.Buffer.BlockCopy(data.data, inIdx, outData.position, vector3Idx, bytesToCopy);
+            }
+            // Copy the next 16 bytes (four floats) from the incoming point into color data
+            int textureIndex = SplatIndexToTextureIndex((uint) i);
+            float3 dc0 = new float3(
+                System.BitConverter.ToSingle(data.data, inIdx + 52),
+                System.BitConverter.ToSingle(data.data, inIdx + 56),
+                System.BitConverter.ToSingle(data.data, inIdx + 60)
+            );
+            float opacity = System.BitConverter.ToSingle(data.data, inIdx + 64);
+            dc0 = GaussianUtils.SH0ToColor(dc0);
+            opacity = GaussianUtils.Sigmoid(opacity);
+            color[textureIndex] = new float4(dc0.x, dc0.y, dc0.z, opacity);
+            // bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 56));
+            // if (bytesToCopy > 0)
+            // {
+            //     System.Buffer.BlockCopy(data.data, inIdx + 56, outData.color, SplatIndexToTextureIndex(i), bytesToCopy);
+            // }
+            // Copy the next 16 bytes (four floats) from the incoming point into rotation data
+                        
+            float w = System.BitConverter.ToSingle(data.data, inIdx + 24);
+            float x = System.BitConverter.ToSingle(data.data, inIdx + 28);
+            float y = System.BitConverter.ToSingle(data.data, inIdx + 32);
+            float z = System.BitConverter.ToSingle(data.data, inIdx + 36);
+            float4 rot = new float4(
+                w,
+                x, 
+                y, 
+                z
+            );
+            var qq = GaussianUtils.NormalizeSwizzleRotation(rot);
+            qq = GaussianUtils.PackSmallest3Rotation(qq);
+            uint encoded = EncodeQuatToNorm10(qq);
+            byte[] otherData = System.BitConverter.GetBytes(encoded); // little-endian Array.Copy(bytes, 0, outData.other, vector4Idx, 4);
+            System.Buffer.BlockCopy(otherData, 0, outData.other, vector4Idx, 4);
+            // System.Buffer.BlockCopy(data.data, inIdx + 28, outData.rotation, vector4Idx, bytesToCopy);
+            // Copy the next 12 bytes (three floats) from the incoming point into scale data
+            bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 12));
+            if (bytesToCopy > 0)
+            {
+                System.Buffer.BlockCopy(data.data, inIdx + 12, outData.other, vector4Idx + 4, bytesToCopy);
+            }
+            float3 scale = new float3(
+                System.BitConverter.ToSingle(data.data, inIdx + 12),
+                System.BitConverter.ToSingle(data.data, inIdx + 16),
+                System.BitConverter.ToSingle(data.data, inIdx + 20)
+                );
+            float3 linearScale = GaussianUtils.LinearScale(scale);
+            byte[] sxBytes = System.BitConverter.GetBytes(linearScale.x);
+            byte[] syBytes = System.BitConverter.GetBytes(linearScale.y);
+            byte[] szBytes = System.BitConverter.GetBytes(linearScale.z);
+            System.Buffer.BlockCopy(sxBytes, 0, outData.other, vector4Idx + 4, 4);
+            System.Buffer.BlockCopy(syBytes, 0, outData.other, vector4Idx + 8, 4);
+            System.Buffer.BlockCopy(szBytes, 0, outData.other, vector4Idx + 12, 4);
+            // Copy the next 12 bytes (three floats) from the incoming point into normal data
+            bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 40));
+            if (bytesToCopy > 0)
+            {
+                System.Buffer.BlockCopy(data.data, inIdx + 40, outData.normal, vector3Idx, bytesToCopy);
+            }
+        }
+
+        for (int y = 0; y < height; y++){
+            int srcIdx = y * width;
+            int dstIdx =  y * width * 16;
+            for (int x = 0; x < width; x++){
+                float4 pix = color[srcIdx + x];
+
+                System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.x), 0, outData.color, dstIdx + 0, 4);
+                System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.y), 0, outData.color, dstIdx + 4, 4);
+                System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.z), 0, outData.color, dstIdx + 8, 4);
+                System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.w), 0, outData.color, dstIdx + 12, 4);                dstIdx += 16;
+            }
+        }
+
+        // UnityEngine.Debug.Log($"Splat dc range: min({min_dc.x}, {min_dc.y}, {min_dc.z}, {min_dc.w}) max({max_dc.x}, {max_dc.y}, {max_dc.z}, {max_dc.w})");
+        // UnityEngine.Debug.Log($"Splat scale range: min({min_scale.x}, {min_scale.y}, {min_scale.z}) max({max_scale.x}, {max_scale.y}, {max_scale.z})");
         return outData;
     }
     

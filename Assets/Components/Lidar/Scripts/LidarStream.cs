@@ -8,7 +8,8 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
 using Unity.VisualScripting;
-
+using GaussianSplatting.Runtime;
+using Unity.Mathematics;
 
 
 #if UNITY_EDITOR
@@ -74,7 +75,7 @@ public enum VizType
     Lidar = 0,
     RGBDMesh = 1,
     RGBD = 2,
-    Splat = 4,
+    Splat = 3,
 }
 
 public static class VizTypeExtensions
@@ -89,7 +90,7 @@ public static class VizTypeExtensions
             case VizType.RGBDMesh:
                 return 5;
             case VizType.Splat:
-                return 18;
+                return 17;
             default:
                 return 4;
         }
@@ -112,7 +113,7 @@ public class LidarStream : SensorStream
 
     public bool useTF = true;
     public float scale = 1.0f;
-    public int maxPts = 30_000_000;
+    public int maxPts = 30_000;
     public int displayPts = 10;
     public int sides = 3;
     private RenderParams renderParams;
@@ -125,6 +126,8 @@ public class LidarStream : SensorStream
     public Slider densitySlider;
     public Slider sizeSlider;
     public Dropdown colorModeDropdown;
+
+    public Dropdown vizTypeDropdown;
 
     public TextMeshProUGUI debugText;
     public TextMeshProUGUI topicText;
@@ -145,7 +148,7 @@ public class LidarStream : SensorStream
 
     public GameObject p;
 
-
+    private uint _splat_counter = 0;
     void Awake()
     {
         _msgType = "sensor_msgs/PointCloud2";
@@ -188,6 +191,20 @@ public class LidarStream : SensorStream
             };
             colorModeDropdown.AddOptions(colorOptions);
             colorModeDropdown.onValueChanged.AddListener(OnColorSelect);
+        }
+
+        if (vizTypeDropdown != null)
+        {
+            vizTypeDropdown.ClearOptions();
+            List<string> vizOptions = new List<string>
+            {
+                "Lidar",
+                "RGBD Mesh",
+                "RGBD",
+                "Splat"
+            };
+            vizTypeDropdown.AddOptions(vizOptions);
+            vizTypeDropdown.onValueChanged.AddListener(OnVizTypeSelect);
         }
 
 
@@ -320,7 +337,7 @@ public class LidarStream : SensorStream
 
     private void Update()
     {
-        if (_enabled)
+        if (_enabled && vizType != VizType.Splat)
         {
             Transform parentTransform = _parent != null && useTF ? _parent.transform : transform;
             Matrix4x4 localToWorldMatrix = parentTransform.localToWorldMatrix;
@@ -346,9 +363,69 @@ public class LidarStream : SensorStream
 
         int fields = pointCloud.fields.Length;
         uint point_step = pointCloud.point_step;
-        // Debug.Log("Fields: " + fields + " Point Step: " + point_step);
+        // Debug.Log("Pointcloud received");
 
-        _ptData.SetData(LidarUtils.ExtractData(pointCloud, displayPts, vizType, out _numPts));
+        if (vizType == VizType.Splat)
+        {
+            // Debug.Log("Splat Pointcloud received");
+
+            LidarUtils.SplatData data = LidarUtils.ExtractSplat(pointCloud, displayPts, vizType, out _numPts);
+
+            GaussianSplatAsset.VectorFormat m_FormatPos = GaussianSplatAsset.VectorFormat.Float32;
+            GaussianSplatAsset.VectorFormat m_FormatScale = GaussianSplatAsset.VectorFormat.Float32;
+            GaussianSplatAsset.ColorFormat m_FormatColor = GaussianSplatAsset.ColorFormat.Float32x4;
+            GaussianSplatAsset.SHFormat m_FormatSH = GaussianSplatAsset.SHFormat.Float32;
+            GaussianSplatAsset asset = ScriptableObject.CreateInstance<GaussianSplatAsset>();
+
+            float3 boundsMin = float.PositiveInfinity;
+            float3 boundsMax = float.NegativeInfinity;
+
+            Debug.Log("Splat Pointcloud setting bounds");
+
+            for (int i = 0; i < data.numPts; ++i)
+            {
+                float posX = System.BitConverter.ToSingle(data.position, i);
+                float posY = System.BitConverter.ToSingle(data.position, i + 4);
+                float posZ = System.BitConverter.ToSingle(data.position, i + 8);
+                float3 pos = new float3(posX, posY, posZ);
+                boundsMin = math.min(boundsMin, pos);
+                boundsMax = math.max(boundsMax, pos);
+            }
+
+            // Debug.Log("Splat Pointcloud calculated bounds");
+            asset.Initialize(data.numPts, m_FormatPos, m_FormatScale, m_FormatColor, m_FormatSH, boundsMin, boundsMax, null);
+            // Debug.Log("Splat Pointcloud initialize files");
+
+            asset.name = "myNewStreamedSplatAsset";
+
+            Hash128 hash = new Hash128((uint) data.numPts, _splat_counter++, 0, 0);
+            asset.SetDataHash(hash);
+            // Debug.Log("Splat Pointcloud hashed files");
+
+            TextAsset posData = new TextAsset(data.position);
+            TextAsset otherData = new TextAsset(data.other);
+            TextAsset colorData = new TextAsset(data.color);
+            byte[] shBytes = new byte[GaussianSplatAsset.CalcSHDataSize(data.numPts,m_FormatSH)];
+            TextAsset shData = new TextAsset(shBytes);
+
+            // Debug.Log("Splat Pointcloud setting asset files");
+
+            asset.SetAssetFiles(
+                null,
+                posData,
+                otherData,
+                colorData,
+                shData);
+            
+            GameObject splatObj = GameObject.FindWithTag("gsplat");
+            GaussianSplatRenderer renderer = splatObj.GetComponent<GaussianSplatRenderer>();
+            renderer.m_Asset = asset;
+            // renderer.gameObject.SetActive(false);
+            // renderer.gameObject.SetActive(true);
+            // Debug.Log("Splat Pointcloud finished");
+        } else {
+            _ptData.SetData(LidarUtils.ExtractData(pointCloud, displayPts, vizType, out _numPts));
+        }
 
         string txt;
         if (_numPts < 1000)
@@ -436,6 +513,17 @@ public class LidarStream : SensorStream
             ColorMode.Z => _zKeyword,
             _ => _intensityKeyword // Default to intensity if something goes wrong
         });
+    }
+
+    public void OnVizTypeSelect(int value)
+    {
+        if (value < 0 || value >= vizTypeDropdown.options.Count)
+        {
+            Debug.LogWarning("Invalid viz type selected: " + value);
+            return;
+        }
+
+        vizType = (VizType)value;
     }
 
     public override void ToggleTrack(int mode)
