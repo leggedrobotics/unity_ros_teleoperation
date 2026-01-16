@@ -33,6 +33,7 @@
     "com.unity.xr.oculus": "4.5.2",
     "com.unity.xr.openxr": "1.16.1",
     "com.whinarn.unitymeshsimplifier": "https://github.com/Whinarn/UnityMeshSimplifier.git",
+    "org.nesnausk.gaussian-splatting": "git@github.com:aras-p/UnityGaussianSplatting.git?path=/package",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
     "com.unity.modules.androidjni": "1.0.0",
