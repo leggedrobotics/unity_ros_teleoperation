@@ -5,7 +5,7 @@ CONFIG_FILE="$HOME/.config/unityhub/projects-v1.json"
 CLI_FILE="$HOME/.config/unityhub/projectsInfo.json"
 
 # Install Git hooks
-HOOKS_DIR="$(pwd)/scripts/git-hooks"
+HOOKS_DIR="$(pwd)/scripts/git-hooks/linux"
 GIT_HOOKS_DIR="$(git rev-parse --git-dir)/hooks"
 
 echo " Installing Git hooks..."
