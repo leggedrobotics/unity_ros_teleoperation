@@ -1,5 +1,15 @@
 {
   "dependencies": {
+    "com.leggedrobotics.ros.robots.anymal.alma": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Alma",
+    "com.leggedrobotics.ros.robots.anymal.d": "git@github.com:leggedrobotics/unity_ros_robots.git?path=AnymalD",
+    "com.leggedrobotics.ros.robots.anymal.tytan": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Tytan",
+    "com.leggedrobotics.ros.robots.core": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/RobotCore",
+    "com.leggedrobotics.ros.robots.dynaarm": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Dynaarm",
+    "com.leggedrobotics.ros.robots.fourier.gr2": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Gr2",
+    "com.leggedrobotics.ros.robots.franka.panda": "git@github.com:leggedrobotics/unity_ros_robots.git?path=FrankaPanda",
+    "com.leggedrobotics.ros.robots.hands.pysonic": "git@github.com:leggedrobotics/unity_ros_robots.git?path=PsyonicAbilityHand",
+    "com.leggedrobotics.ros.robots.spot": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Spot",
+    "com.leggedrobotics.ros.robots.unitree.b2w": "git@github.com:leggedrobotics/unity_ros_robots.git?path=B2W",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.feature.development": "1.0.2",
     "com.unity.formats.fbx": "5.1.5",

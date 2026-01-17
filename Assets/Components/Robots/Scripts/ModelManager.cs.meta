@@ -3,7 +3,15 @@ guid: 0ba43a79e27b77842a9dc3777dfc3e1c
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - robotDatabase: {fileID: 11400000, guid: 6834d1c5eff4b16448b8b910ecd593cb, type: 2}
+  - showRobotSprite: {instanceID: 0}
+  - hideRobotSprite: {instanceID: 0}
+  - toggleModel: {instanceID: 0}
+  - robotDropdown: {instanceID: 0}
+  - rootFrame: {instanceID: 0}
+  - _currentModel: {instanceID: 0}
+  - _root: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

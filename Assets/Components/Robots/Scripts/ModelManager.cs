@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Unity.Robotics.ROSTCPConnector;
-
+using RSL.Robots;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -17,12 +17,11 @@ public class ModelManagerEditor : Editor
     {
         DrawDefaultInspector();
 
-        
-
         ModelManager myScript = (ModelManager)target;
-        for(int i=0; i<myScript.robots.Length; i++)
+        for(int i=0; i<myScript.robotDatabase.robots.Count; i++)
         {
-            if(GUILayout.Button("Change to " + myScript.robots[i].name))
+            Debug.Log("Adding button for " + myScript.robotDatabase.robots[i].name);
+            if(GUILayout.Button("Change to " + myScript.robotDatabase.robots[i].name))
             {
                 myScript.ChangeModel(i);
             }
@@ -36,13 +35,10 @@ public class ModelManager : MonoBehaviour
 {
     public static ModelManager instance;
 
-    public Robot[] robots = new Robot[]
-    {
-    };
-
+    public RobotDatabase robotDatabase;
 
     public int startRobotIndex = 0;
-    public Robot currentRobot;
+    public RobotEntry currentRobot;
     public Sprite showRobotSprite;
     public Sprite hideRobotSprite;
     public Button toggleModel;
@@ -87,7 +83,7 @@ public class ModelManager : MonoBehaviour
 
         robotDropdown.ClearOptions();
         List<string> robotNames = new List<string>();
-        foreach(Robot robot in robots)
+        foreach(RobotEntry robot in robotDatabase.robots)
         {
             robotNames.Add(robot.name);
         }
@@ -104,7 +100,12 @@ public class ModelManager : MonoBehaviour
 
     public void ChangeModel(int modelIndex)
     {
-        currentRobot = robots[modelIndex];
+        if(modelIndex < 0 || modelIndex >= robotDatabase.robots.Count)
+        {
+            Debug.LogError("Model index " + modelIndex + " is out of bounds!");
+            modelIndex = 0;
+        }
+        currentRobot = robotDatabase.robots[modelIndex];
         Debug.Log("Changed to model of " + currentRobot);
 
         PlayerPrefs.SetInt("startRobotIndex", modelIndex);
@@ -115,7 +116,7 @@ public class ModelManager : MonoBehaviour
         if(_currentModel != null)
             Destroy(_currentModel);
     
-        _currentModel = Instantiate(currentRobot.modelRoot);
+        _currentModel = Instantiate(currentRobot.prefab);
         if(_root != null)
             _currentModel.transform.SetParent(_root.transform);
 

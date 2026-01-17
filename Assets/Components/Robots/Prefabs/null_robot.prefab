@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8999560547852949099}
   - component: {fileID: 8451738013414788221}
+  - component: {fileID: 3024340081488389197}
   m_Layer: 0
   m_Name: null_robot
   m_TagString: robot
@@ -46,3 +47,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_FrameID: /pand
   m_TFTopic: /tf
+--- !u!114 &3024340081488389197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880815937606192030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc6600760eaba440b3392acb382b053, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotInfo
+  robotName: None
+  rootFrame: world
+  robotSprite: {fileID: 0}

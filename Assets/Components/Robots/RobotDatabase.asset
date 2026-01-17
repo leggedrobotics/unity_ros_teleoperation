@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6bbf40463badd34f9dcf5a479878407, type: 3}
+  m_Name: RobotDatabase
+  m_EditorClassIdentifier: RSL.Robots.Core::RSL.Robots.RobotDatabase
+  robots:
+  - name: None
+    rootFrame: world
+    icon: {fileID: 0}
+    prefab: {fileID: 1880815937606192030, guid: be6c48846e210bd06a0a91e244c843dc, type: 3}
+  - name: ALMA
+    rootFrame: odom
+    icon: {fileID: 0}
+    prefab: {fileID: 1598719177831470820, guid: 6f8a8d44d61f84fcfa0c4bfa06d7793c, type: 3}
+  - name: Anymal D
+    rootFrame: odom
+    icon: {fileID: 0}
+    prefab: {fileID: 2531815440558493778, guid: 3d69c5625475f3d94857ca68345df2aa, type: 3}
+  - name: Dynaarm
+    rootFrame: odom
+    icon: {fileID: 0}
+    prefab: {fileID: 3177042321615437450, guid: c55b48b4bf70da80c9de6542aaa56cb8, type: 3}
+  - name: GR 2
+    rootFrame: map
+    icon: {fileID: 0}
+    prefab: {fileID: 6564372226819960366, guid: 7aef5000c2b727c3c8ed7ad881b09401, type: 3}
+  - name: Panda
+    rootFrame: odom
+    icon: {fileID: 0}
+    prefab: {fileID: 1880815937606192030, guid: 323fe8428e8c26653b59e326d7c5bb49, type: 3}
+  - name: Spot
+    rootFrame: map
+    icon: {fileID: 0}
+    prefab: {fileID: 3024264895205041345, guid: 46db16ba0f49f2e4d91d8e042c2fb8ed, type: 3}
+  - name: B2W
+    rootFrame: map
+    icon: {fileID: 0}
+    prefab: {fileID: 5246889467303309071, guid: 8dfb0d1b19bc5da4481922089682e6d4, type: 3}

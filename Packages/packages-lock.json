@@ -7,6 +7,83 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.leggedrobotics.ros.robots.anymal.alma": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Alma",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.leggedrobotics.ros.robots.anymal.d": "0.9.0",
+        "com.leggedrobotics.ros.robots.dynaarm": "0.9.0"
+      },
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.anymal.d": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=AnymalD",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.anymal.tytan": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Tytan",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.leggedrobotics.ros.robots.anymal.d": "0.9.0",
+        "com.leggedrobotics.ros.robots.dynaarm": "0.9.0"
+      },
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.core": {
+      "version": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/RobotCore",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.leggedrobotics.ros.robots.dynaarm": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Dynaarm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.leggedrobotics.ros.robots.hands.pysonic": "0.9.0"
+      },
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.fourier.gr2": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Gr2",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.franka.panda": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=FrankaPanda",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.hands.pysonic": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=PsyonicAbilityHand",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.spot": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Spot",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
+    "com.leggedrobotics.ros.robots.unitree.b2w": {
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=B2W",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 1,

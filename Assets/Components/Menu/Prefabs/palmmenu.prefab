@@ -955,53 +955,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ba43a79e27b77842a9dc3777dfc3e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robots:
-  - name: None
-    modelRoot: {fileID: 1880815937606192030, guid: be6c48846e210bd06a0a91e244c843dc, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: world
-  - name: ALMA
-    modelRoot: {fileID: 1598719177831470820, guid: 6f8a8d44d61f84fcfa0c4bfa06d7793c, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: odom
-  - name: Anymal
-    modelRoot: {fileID: 2531815440558493778, guid: 3d69c5625475f3d94857ca68345df2aa, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: odom
-  - name: Tytan
-    modelRoot: {fileID: 7894528709108881304, guid: e5b9227dc1faa0d7091ddee20595c20e, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: odom
-  - name: Dynaarm
-    modelRoot: {fileID: 3177042321615437450, guid: c55b48b4bf70da80c9de6542aaa56cb8, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: odom
-  - name: Panda
-    modelRoot: {fileID: 1880815937606192030, guid: 323fe8428e8c26653b59e326d7c5bb49, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: odom
-  - name: Spot
-    modelRoot: {fileID: 3024264895205041345, guid: 859745799be9b534bb0314649c2c1b6d, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: world
-  - name: Car
-    modelRoot: {fileID: 6290577396253601059, guid: 5d1dd78a402115b4086c4c808a0cb281, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: world
-  - name: GR2
-    modelRoot: {fileID: 6564372226819960366, guid: 7aef5000c2b727c3c8ed7ad881b09401, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: world
-  - name: b2w
-    modelRoot: {fileID: 5246889467303309071, guid: 8dfb0d1b19bc5da4481922089682e6d4, type: 3}
-    RobotSprite: {fileID: 0}
-    rootFrame: world
+  robotDatabase: {fileID: 11400000, guid: 6834d1c5eff4b16448b8b910ecd593cb, type: 2}
   startRobotIndex: 3
   currentRobot:
     name: 
-    modelRoot: {fileID: 0}
-    RobotSprite: {fileID: 0}
     rootFrame: base_link
+    icon: {fileID: 0}
+    prefab: {fileID: 0}
   showRobotSprite: {fileID: 3286163911610860551, guid: ffec11417ea5fc843812ed31f421fd2b, type: 3}
   hideRobotSprite: {fileID: 3286163911610860551, guid: 74b319175386543739f211db30eb86fa, type: 3}
   toggleModel: {fileID: 3597277271151417195}
