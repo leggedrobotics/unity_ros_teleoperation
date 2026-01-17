@@ -210,6 +210,8 @@ public class LidarStream : SensorStream
             vizTypeDropdown.onValueChanged.AddListener(OnVizTypeSelect);
         }
 
+        splatRendererObj = Instantiate(splatRendererPrefab);
+        splatRendererObj.SetActive(false);
 
         debugText?.SetText("--");
 
@@ -420,9 +422,6 @@ public class LidarStream : SensorStream
                 colorData,
                 shData);
             
-            if (splatRendererObj == null) {
-                splatRendererObj = Instantiate(splatRendererPrefab);
-            }
             GaussianSplatRenderer renderer = splatRendererObj.GetComponent<GaussianSplatRenderer>();
             renderer.m_Asset = asset;
             // renderer.gameObject.SetActive(false);
@@ -529,6 +528,15 @@ public class LidarStream : SensorStream
         }
 
         vizType = (VizType)value;
+
+        if (vizType == VizType.Splat)
+        {
+            splatRendererObj.SetActive(true);
+        }
+        else
+        {
+            splatRendererObj.SetActive(false);
+        }
     }
 
     public override void ToggleTrack(int mode)
