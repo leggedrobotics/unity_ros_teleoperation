@@ -35,10 +35,11 @@
       "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
     },
     "com.leggedrobotics.ros.robots.core": {
-      "version": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/RobotCore",
+      "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=RobotCore",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "7d0b56927adebbd8aec63eb1391051d55b425980"
     },
     "com.leggedrobotics.ros.robots.dynaarm": {
       "version": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Dynaarm",

@@ -3,7 +3,7 @@
     "com.leggedrobotics.ros.robots.anymal.alma": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Alma",
     "com.leggedrobotics.ros.robots.anymal.d": "git@github.com:leggedrobotics/unity_ros_robots.git?path=AnymalD",
     "com.leggedrobotics.ros.robots.anymal.tytan": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Tytan",
-    "com.leggedrobotics.ros.robots.core": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/RobotCore",
+    "com.leggedrobotics.ros.robots.core": "git@github.com:leggedrobotics/unity_ros_robots.git?path=RobotCore",
     "com.leggedrobotics.ros.robots.dynaarm": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Dynaarm",
     "com.leggedrobotics.ros.robots.fourier.gr2": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Gr2",
     "com.leggedrobotics.ros.robots.franka.panda": "git@github.com:leggedrobotics/unity_ros_robots.git?path=FrankaPanda",
