@@ -132,6 +132,7 @@ public class LidarStream : SensorStream
     public TextMeshProUGUI debugText;
     public TextMeshProUGUI topicText;
 
+    public GameObject splatRendererPrefab;
 
     private Mesh mesh;
     private LidarSpawner _lidarSpawner;
@@ -149,6 +150,8 @@ public class LidarStream : SensorStream
     public GameObject p;
 
     private uint _splat_counter = 0;
+
+    private GameObject splatRendererObj = null;
     void Awake()
     {
         _msgType = "sensor_msgs/PointCloud2";
@@ -417,8 +420,10 @@ public class LidarStream : SensorStream
                 colorData,
                 shData);
             
-            GameObject splatObj = GameObject.FindWithTag("gsplat");
-            GaussianSplatRenderer renderer = splatObj.GetComponent<GaussianSplatRenderer>();
+            if (splatRendererObj == null) {
+                splatRendererObj = Instantiate(splatRendererPrefab);
+            }
+            GaussianSplatRenderer renderer = splatRendererObj.GetComponent<GaussianSplatRenderer>();
             renderer.m_Asset = asset;
             // renderer.gameObject.SetActive(false);
             // renderer.gameObject.SetActive(true);

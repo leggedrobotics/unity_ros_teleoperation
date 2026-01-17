@@ -2515,6 +2515,7 @@ MonoBehaviour:
   vizTypeDropdown: {fileID: 813077167679475922}
   debugText: {fileID: 2304420999122055532}
   topicText: {fileID: 6615792982704765499}
+  splatRendererPrefab: {fileID: 5253176326795913420, guid: ccfbc11895eba704dbe6e669fd5079f6, type: 3}
   _enabled: 1
   _parent: {fileID: 0}
   _numPts: 0
