@@ -20,7 +20,6 @@ public class ModelManagerEditor : Editor
         ModelManager myScript = (ModelManager)target;
         for(int i=0; i<myScript.robotDatabase.robots.Count; i++)
         {
-            Debug.Log("Adding button for " + myScript.robotDatabase.robots[i].name);
             if(GUILayout.Button("Change to " + myScript.robotDatabase.robots[i].name))
             {
                 myScript.ChangeModel(i);

@@ -69,6 +69,7 @@ public class PoseManager : MonoBehaviour
     private Vector3 _center;
     private Vector3 _forward;
     private bool _fixedLocation = false;
+    private bool _notifiedMissingRobot = false;
 
     void Awake()
     {
@@ -123,7 +124,11 @@ public class PoseManager : MonoBehaviour
             GameObject robot = GameObject.FindWithTag("robot");
             if (robot == null)
             {
-                Debug.LogWarning("PoseManager: robot not found");
+                if (!_notifiedMissingRobot)
+                {
+                    Debug.LogWarning("PoseManager: robot not found");
+                    _notifiedMissingRobot = true;
+                }
             }
             else
             {
