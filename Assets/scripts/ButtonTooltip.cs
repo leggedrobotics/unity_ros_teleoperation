@@ -1,10 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
-public class ButtonTooltip : MonoBehaviour
+public class ButtonTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField, TextArea] 
     private string tooltipText = "Tooltip text here";
@@ -25,25 +24,14 @@ public class ButtonTooltip : MonoBehaviour
     private Vector2 tooltipSize = new Vector2(0.15f, 0.04f);
     
     private GameObject tooltipInstance;
-    private TrackedDeviceGraphicRaycaster raycaster;
-    
-    private void Start()
-    {
-        // Try to hook into XR UI hover events
-        var interactable = GetComponent<XRSimpleInteractable>();
-        if (interactable != null)
-        {
-            interactable.hoverEntered.AddListener(OnHoverEnter);
-            interactable.hoverExited.AddListener(OnHoverExit);
-        }
-    }
-    
-    private void OnHoverEnter(HoverEnterEventArgs args)
+
+    // UI Event System callbacks - these work with TrackedDeviceGraphicRaycaster
+    public void OnPointerEnter(PointerEventData eventData)
     {
         ShowTooltip();
     }
     
-    private void OnHoverExit(HoverExitEventArgs args)
+    public void OnPointerExit(PointerEventData eventData)
     {
         HideTooltip();
     }
@@ -92,12 +80,15 @@ public class ButtonTooltip : MonoBehaviour
             if (parentCanvas != null)
             {
                 tooltipCanvas.worldCamera = parentCanvas.worldCamera;
+                tooltipCanvas.overrideSorting = true;
+                tooltipCanvas.sortingOrder = parentCanvas.sortingOrder + 100;
             }
             
             var canvasRect = tooltipCanvas.GetComponent<RectTransform>();
             canvasRect.sizeDelta = tooltipSize;
             canvasRect.localScale = Vector3.one;
             canvasRect.pivot = new Vector2(0.5f, 0f);
+            canvasRect.localPosition = tooltipOffset;
             
             tooltipInstance.AddComponent<GraphicRaycaster>();
             

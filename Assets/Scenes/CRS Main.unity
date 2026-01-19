@@ -935,11 +935,64 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 372860769}
   m_CullTransparentMesh: 1
+--- !u!1 &495187405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4947526592424860643, guid: 21016750aa4cc472f83ee9ad8a189b4a, type: 3}
+  m_PrefabInstance: {fileID: 7686574362445320396}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &495187411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495187405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Show/hide estimated car trail
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!4 &580426652 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8346325146971170010, guid: d3d12ed0ce6f192a08e712c95e1af292, type: 3}
   m_PrefabInstance: {fileID: 356082574}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &610122345 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 658265995962156359, guid: c617dadff6e9449c9b80debb9d197840, type: 3}
+  m_PrefabInstance: {fileID: 1951823012340266133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &610122351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610122345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: 'Enables manual alignment
+
+    Right thumbstick: Moves track
+
+    Left
+    thumbstick: Rotates track
+
+    Right trigger + right thumbstick: Scale track'
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!114 &672670654 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8233021756264646084, guid: 9b6ac0439a76e0fdfb6a726e16be7fd7, type: 3}
@@ -1185,6 +1238,11 @@ MonoBehaviour:
   handRotationLeft: {fileID: 8248158260566104461, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   handPoseRight: {fileID: -3326005586356538449, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   handRotationRight: {fileID: 5101698808175986029, guid: c348712bda248c246b8c49b3db54643f, type: 3}
+--- !u!1 &953324723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7988190071418930883, guid: 9b6ac0439a76e0fdfb6a726e16be7fd7, type: 3}
+  m_PrefabInstance: {fileID: 1689545548}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &977631055
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1349,6 +1407,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1026720173 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8627149410185719376, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
+  m_PrefabInstance: {fileID: 6538132340005575964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1026720179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1026720173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Pin car controlls to the moving car
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!1 &1245098680
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,114 +1565,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipText: Tooltip text here
+  tooltipText: Show/hide velocity, steering, and other car controls
   tooltipPrefab: {fileID: 0}
-  tooltipOffset: {x: 0, y: 0.15, z: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
   backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
   textColor: {r: 1, g: 1, b: 1, a: 1}
   tooltipSize: {x: 400, y: 200}
---- !u!114 &1309933855
+--- !u!1 &1551817606 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1584440334692235915, guid: 21016750aa4cc472f83ee9ad8a189b4a, type: 3}
+  m_PrefabInstance: {fileID: 7686574362445320396}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1551817612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1309933848}
+  m_GameObject: {fileID: 1551817606}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InteractionManager: {fileID: 0}
-  m_Colliders: []
-  m_InteractionLayerMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_InteractionLayers:
-    m_Bits: 1
-  m_DistanceCalculationMode: 1
-  m_SelectMode: 0
-  m_FocusMode: 1
-  m_CustomReticle: {fileID: 0}
-  m_AllowGazeInteraction: 0
-  m_AllowGazeSelect: 0
-  m_OverrideGazeTimeToSelect: 0
-  m_GazeTimeToSelect: 0.5
-  m_OverrideTimeToAutoDeselectGaze: 0
-  m_TimeToAutoDeselectGaze: 3
-  m_AllowGazeAssistance: 0
-  m_FirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_HoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_SelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FirstFocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_LastFocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_FocusExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Activated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Deactivated:
-    m_PersistentCalls:
-      m_Calls: []
-  m_StartingHoverFilters: []
-  m_StartingSelectFilters: []
-  m_StartingInteractionStrengthFilters: []
-  m_OnFirstHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnLastHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnHoverEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnHoverExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectEntered:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectExited:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnSelectCanceled:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnDeactivate:
-    m_PersistentCalls:
-      m_Calls: []
+  tooltipText: Show/hide estimated car state (green car)
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!1001 &1689545548
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1731,7 +1733,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7988190071418930883, guid: 9b6ac0439a76e0fdfb6a726e16be7fd7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2026986896}
   m_SourcePrefab: {fileID: 100100000, guid: 9b6ac0439a76e0fdfb6a726e16be7fd7, type: 3}
 --- !u!1 &1691583894
 GameObject:
@@ -1808,6 +1813,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691583894}
   m_CullTransparentMesh: 0
+--- !u!1 &1700124500 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8770454034239365409, guid: 05feaa31a529a4c73a6c12d7dc6c3158, type: 3}
+  m_PrefabInstance: {fileID: 3127265653518613623}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1700124506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700124500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Show/hide MPC trajectory
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!1 &1798754415
 GameObject:
   m_ObjectHideFlags: 0
@@ -2025,6 +2053,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1879906826 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2198783535487580989, guid: c617dadff6e9449c9b80debb9d197840, type: 3}
+  m_PrefabInstance: {fileID: 1951823012340266133}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1879906832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879906826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Auto-aligns track boundaries once both QR codes are detected, then
+    disables auto-align. Re-enable to align again.
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
+--- !u!1 &1885176248 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6107541199440069038, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
+  m_PrefabInstance: {fileID: 6538132340005575964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1885176254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885176248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Pin car controlls to the floating menu
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!1 &1943770438
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,6 +2277,24 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5884327349206585001, guid: 9b6ac0439a76e0fdfb6a726e16be7fd7, type: 3}
   m_PrefabInstance: {fileID: 1689545548}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2026986896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 953324723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a4730650c8a4c73ae5537c4abda679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tooltipText: Show/hide track bounds for alignment
+  tooltipPrefab: {fileID: 0}
+  tooltipOffset: {x: 0, y: 0, z: 0}
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  tooltipSize: {x: 400, y: 200}
 --- !u!1 &2065648381
 GameObject:
   m_ObjectHideFlags: 0
@@ -4542,7 +4635,13 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 765430603189046030, guid: c617dadff6e9449c9b80debb9d197840, type: 3}
       insertIndex: 3
       addedObject: {fileID: 351868590}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2198783535487580989, guid: c617dadff6e9449c9b80debb9d197840, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1879906832}
+    - targetCorrespondingSourceObject: {fileID: 658265995962156359, guid: c617dadff6e9449c9b80debb9d197840, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 610122351}
   m_SourcePrefab: {fileID: 100100000, guid: c617dadff6e9449c9b80debb9d197840, type: 3}
 --- !u!222 &1971196701620924376
 CanvasRenderer:
@@ -6574,7 +6673,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8770454034239365409, guid: 05feaa31a529a4c73a6c12d7dc6c3158, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1700124506}
   m_SourcePrefab: {fileID: 100100000, guid: 05feaa31a529a4c73a6c12d7dc6c3158, type: 3}
 --- !u!1 &3152345691600936451
 GameObject:
@@ -10767,9 +10869,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2611084537593824969, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1309933850}
-    - targetCorrespondingSourceObject: {fileID: 2611084537593824969, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 6107541199440069038, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1309933855}
+      addedObject: {fileID: 1885176254}
+    - targetCorrespondingSourceObject: {fileID: 8627149410185719376, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1026720179}
   m_SourcePrefab: {fileID: 100100000, guid: aa9df0ab898f543d1af88a383ca5e1ff, type: 3}
 --- !u!114 &6538784038589558731
 MonoBehaviour:
@@ -12218,7 +12323,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1584440334692235915, guid: 21016750aa4cc472f83ee9ad8a189b4a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1551817612}
+    - targetCorrespondingSourceObject: {fileID: 4947526592424860643, guid: 21016750aa4cc472f83ee9ad8a189b4a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 495187411}
   m_SourcePrefab: {fileID: 100100000, guid: 21016750aa4cc472f83ee9ad8a189b4a, type: 3}
 --- !u!114 &7690097829513242855
 MonoBehaviour:
