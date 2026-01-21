@@ -3,7 +3,7 @@
 # Robots
 ![Robots](/docs/images/robots.jpg)
 
-This folder contains the actual robot assets for Franka Panda arm, Dynarm, Anymal, and ALMA. It also has the Robot manager script which allows for swapping out different robot assets as well as storing the settings in the player prefs. 
+This component has now been moved to an [external repo](https://github.com/leggedrobotics/unity_ros_robots), and is available as a Unity package. By default the Robot - Core package should be loaded in this project, if it is not, add the package by git url: `git@github.com:leggedrobotics/unity_ros_robots.git?path=RobotCore` to the Unity Package Manager. For more information check out the documentation in the `unity_ros_robots` repository.
 
 
 ## Adding New Robots
