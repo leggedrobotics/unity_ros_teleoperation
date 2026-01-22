@@ -9199,6 +9199,33 @@ MonoBehaviour:
   - {fileID: 6732427895195873252}
   - {fileID: 8217275351484535040}
   - {fileID: 2065648381}
+  menuCanvas: {fileID: 6737240858039685807}
+  showMenuButton: {fileID: 0}
+  transitionDuration: 0.3
+  transitionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!224 &4827080368275727250
 RectTransform:
   m_ObjectHideFlags: 0
