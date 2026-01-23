@@ -306,5 +306,5 @@ Each visualization topic follows a consistent two-component pattern:
 
 ---
 
-*Last updated: November 2025*  
+*Last updated: January 2026*  
 *Course: Mixed Reality HS25, ETH Zurich*
