@@ -259,6 +259,20 @@ All visibility toggles work in real-time during playmode without requiring resta
 - Press `Menu` button to toggle main car visibility
 - Press `Grip` button to toggle main car trail visibility
 
+### Track alignment
+To align the digital track to the physical racetrack there are two ways of alignment:
+
+#### Automatic alignment
+Using automatic alignment requires two QR codes with the following plain-text content: "UL" (upper left corner) and "LR" (lower right corner).
+Since this alignment method makes use of meta experimental features to read and locate QR codes, make sure to enable experimental featuers on the headset following [this](https://developers.meta.com/horizon/documentation/native/android/mobile-experimental-features/) guide.
+Once everything is enabled and you have scanned the QR codes (successfull scan indicated by red dot appearing above QR code) the track automatically aligns its bounding box corners to the QR codes.
+
+#### Manual alignment
+Manual alignment can be used to manually align the track with the meta controllers. The controlls are as follows:
+- `Right thumbstick` controlls the positioning of the track
+- `Left thumbstick` controlls the rotation of the track
+- `Grip` + `Right thumbstick` controlls the scale of the track
+
 ### Summary Table
 
 | Control | Desktop Key | Quest Controller | Function |
@@ -268,6 +282,9 @@ All visibility toggles work in real-time during playmode without requiring resta
 | Main Car | `J` | Right Menu | Toggle main car visibility |
 | Main Trail | `H` | Right Grip | Toggle main car trail visibility |
 | Control Input Mode | `V` | Right A | Toggle between Follow Car and HUD modes |
+| Manual align: move | - | Right thumbstick | Move the track |
+| Manual align: rotate | - | Left thumbstick | Rotate the track |
+| Manual align: scale | - | Right Grib + Right thumbstick | Scale the track |
 
 ---
 
