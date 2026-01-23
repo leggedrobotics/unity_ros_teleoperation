@@ -2502,8 +2502,8 @@ MonoBehaviour:
   point_material: {fileID: 2100000, guid: 4a361d2cecf991e49aed96934cdc50f4, type: 2}
   useTF: 1
   scale: 0.1
-  maxPts: 30000
-  displayPts: 30000
+  maxPts: 300000
+  displayPts: 300000
   sides: 3
   vizType: 0
   colorMode: 1
@@ -4418,7 +4418,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 37
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

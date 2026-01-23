@@ -113,7 +113,7 @@ public class LidarStream : SensorStream
 
     public bool useTF = true;
     public float scale = 1.0f;
-    public int maxPts = 30_000;
+    public int maxPts = 300_000;
     public int displayPts = 10;
     public int sides = 3;
     private RenderParams renderParams;
@@ -338,6 +338,7 @@ public class LidarStream : SensorStream
         _meshVertices = null;
         _ptData?.Dispose();
         _ptData = null;
+        Destroy(splatRendererObj);
     }
 
     private void Update()
