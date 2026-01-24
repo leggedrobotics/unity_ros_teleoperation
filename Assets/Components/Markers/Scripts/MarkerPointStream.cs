@@ -7,6 +7,7 @@ using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine.Timeline;
 
+using RSL.Sensors.Lidar;
 
 public class MarkerPointStream : MonoBehaviour, IMarkerViz
 {
