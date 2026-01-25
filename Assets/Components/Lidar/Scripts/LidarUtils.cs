@@ -360,7 +360,7 @@ namespace RSL.Sensors.Lidar
             Lidar: x, y, z, intensity
             RGBD: x, y, z, rgb0
             RGBD Mesh: ??
-            Splat: x, y, z, rgba, scalex, scaley, scalez, rot0, rot1, rot2, rot3, nx, ny, nz, fc_dc_0, fc_dc_1, fc_dc_2, opacity
+            Splat: handled separately in ExtractSplat
             */
 
             // Just in case...
@@ -444,8 +444,8 @@ namespace RSL.Sensors.Lidar
         {
 
             /**
-            For different data type the order is 
-            Splat: x, y, z, rgb, scalex, scaley, scalez, rot0, rot1, rot2, rot3, nx, ny, nz, fc_dc_0, fc_dc_1, fc_dc_2, opacity
+            Extract data from PointCloud2 message into SplatData struct
+            Expected Splat Format: x, y, z, rgb, scalex, scaley, scalez, rot0, rot1, rot2, rot3, nx, ny, nz, fc_dc_0, fc_dc_1, fc_dc_2, opacity
             */
 
             // Just in case...
@@ -491,7 +491,7 @@ namespace RSL.Sensors.Lidar
                 {
                     System.Buffer.BlockCopy(data.data, inIdx, outData.position, vector3Idx, bytesToCopy);
                 }
-                // Copy the next 16 bytes (four floats) from the incoming point into color data
+                // Copy the last 16 bytes (four floats) from the incoming point into color data
                 int textureIndex = SplatIndexToTextureIndex((uint) i);
                 float3 dc0 = new float3(
                     System.BitConverter.ToSingle(data.data, inIdx + 52),
@@ -502,13 +502,8 @@ namespace RSL.Sensors.Lidar
                 dc0 = GaussianUtils.SH0ToColor(dc0);
                 opacity = GaussianUtils.Sigmoid(opacity);
                 color[textureIndex] = new float4(dc0.x, dc0.y, dc0.z, opacity);
-                // bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 56));
-                // if (bytesToCopy > 0)
-                // {
-                //     System.Buffer.BlockCopy(data.data, inIdx + 56, outData.color, SplatIndexToTextureIndex(i), bytesToCopy);
-                // }
-                // Copy the next 16 bytes (four floats) from the incoming point into rotation data
-                            
+
+                // Copy the 16 bytes (four floats) starting from offset 24 of the incoming point into rotation data
                 float w = System.BitConverter.ToSingle(data.data, inIdx + 24);
                 float x = System.BitConverter.ToSingle(data.data, inIdx + 28);
                 float y = System.BitConverter.ToSingle(data.data, inIdx + 32);
@@ -522,10 +517,10 @@ namespace RSL.Sensors.Lidar
                 var qq = GaussianUtils.NormalizeSwizzleRotation(rot);
                 qq = GaussianUtils.PackSmallest3Rotation(qq);
                 uint encoded = EncodeQuatToNorm10(qq);
-                byte[] otherData = System.BitConverter.GetBytes(encoded); // little-endian Array.Copy(bytes, 0, outData.other, vector4Idx, 4);
+                byte[] otherData = System.BitConverter.GetBytes(encoded); // little-endian
                 System.Buffer.BlockCopy(otherData, 0, outData.other, vector4Idx, 4);
-                // System.Buffer.BlockCopy(data.data, inIdx + 28, outData.rotation, vector4Idx, bytesToCopy);
-                // Copy the next 12 bytes (three floats) from the incoming point into scale data
+
+                // Copy the 12 bytes (three floats) starting from offset 12 of the incoming point into scale data
                 bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 12));
                 if (bytesToCopy > 0)
                 {
@@ -543,7 +538,8 @@ namespace RSL.Sensors.Lidar
                 System.Buffer.BlockCopy(sxBytes, 0, outData.other, vector4Idx + 4, 4);
                 System.Buffer.BlockCopy(syBytes, 0, outData.other, vector4Idx + 8, 4);
                 System.Buffer.BlockCopy(szBytes, 0, outData.other, vector4Idx + 12, 4);
-                // Copy the next 12 bytes (three floats) from the incoming point into normal data
+
+                // Copy the 12 bytes (three floats) from offset 40 of the incoming point into normal data
                 bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 40));
                 if (bytesToCopy > 0)
                 {
@@ -560,12 +556,11 @@ namespace RSL.Sensors.Lidar
                     System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.x), 0, outData.color, dstIdx + 0, 4);
                     System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.y), 0, outData.color, dstIdx + 4, 4);
                     System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.z), 0, outData.color, dstIdx + 8, 4);
-                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.w), 0, outData.color, dstIdx + 12, 4);                dstIdx += 16;
+                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.w), 0, outData.color, dstIdx + 12, 4);
+                    dstIdx += 16;
                 }
             }
 
-            // UnityEngine.Debug.Log($"Splat dc range: min({min_dc.x}, {min_dc.y}, {min_dc.z}, {min_dc.w}) max({max_dc.x}, {max_dc.y}, {max_dc.z}, {max_dc.w})");
-            // UnityEngine.Debug.Log($"Splat scale range: min({min_scale.x}, {min_scale.y}, {min_scale.z}) max({max_scale.x}, {max_scale.y}, {max_scale.z})");
             return outData;
         }
         

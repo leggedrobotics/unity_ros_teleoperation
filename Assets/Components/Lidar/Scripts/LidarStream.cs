@@ -370,11 +370,9 @@ namespace RSL.Sensors.Lidar
 
             int fields = pointCloud.fields.Length;
             uint point_step = pointCloud.point_step;
-            // Debug.Log("Pointcloud received");
 
             if (vizType == VizType.Splat)
             {
-                // Debug.Log("Splat Pointcloud received");
 
                 LidarUtils.SplatData data = LidarUtils.ExtractSplat(pointCloud, displayPts, vizType, out _numPts);
 
@@ -387,8 +385,6 @@ namespace RSL.Sensors.Lidar
                 float3 boundsMin = float.PositiveInfinity;
                 float3 boundsMax = float.NegativeInfinity;
 
-                Debug.Log("Splat Pointcloud setting bounds");
-
                 for (int i = 0; i < data.numPts; ++i)
                 {
                     float posX = System.BitConverter.ToSingle(data.position, i);
@@ -399,15 +395,12 @@ namespace RSL.Sensors.Lidar
                     boundsMax = math.max(boundsMax, pos);
                 }
 
-                // Debug.Log("Splat Pointcloud calculated bounds");
                 asset.Initialize(data.numPts, m_FormatPos, m_FormatScale, m_FormatColor, m_FormatSH, boundsMin, boundsMax, null);
-                // Debug.Log("Splat Pointcloud initialize files");
 
                 asset.name = "myNewStreamedSplatAsset";
 
                 Hash128 hash = new Hash128((uint) data.numPts, _splat_counter++, 0, 0);
                 asset.SetDataHash(hash);
-                // Debug.Log("Splat Pointcloud hashed files");
 
                 TextAsset posData = new TextAsset(data.position);
                 TextAsset otherData = new TextAsset(data.other);
@@ -415,7 +408,6 @@ namespace RSL.Sensors.Lidar
                 byte[] shBytes = new byte[GaussianSplatAsset.CalcSHDataSize(data.numPts,m_FormatSH)];
                 TextAsset shData = new TextAsset(shBytes);
 
-                // Debug.Log("Splat Pointcloud setting asset files");
 
                 asset.SetAssetFiles(
                     null,
@@ -426,9 +418,6 @@ namespace RSL.Sensors.Lidar
                 
                 GaussianSplatRenderer renderer = splatRendererObj.GetComponent<GaussianSplatRenderer>();
                 renderer.m_Asset = asset;
-                // renderer.gameObject.SetActive(false);
-                // renderer.gameObject.SetActive(true);
-                // Debug.Log("Splat Pointcloud finished");
             } else {
                 _ptData.SetData(LidarUtils.ExtractData(pointCloud, displayPts, vizType, out _numPts));
             }
