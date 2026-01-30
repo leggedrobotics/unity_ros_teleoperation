@@ -7,6 +7,8 @@ using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Std;
 using RosMessageTypes.Geometry;
 
+using RSL.Sensors.Lidar;
+
 public class StampedPoseStream : SensorStream
 {
     public TMPro.TextMeshProUGUI topicText;

@@ -141,6 +141,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 220254560813935915, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 362584302416846514, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -193,6 +197,10 @@ PrefabInstance:
       propertyPath: m_FirstSelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 639842764}
+    - target: {fileID: 7714581337498724376, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -673,6 +681,10 @@ PrefabInstance:
     - target: {fileID: 5561919459492615839, guid: d3d12ed0ce6f192a08e712c95e1af292, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7174218900613135364, guid: d3d12ed0ce6f192a08e712c95e1af292, type: 3}
+      propertyPath: m_RequestedTrackingOriginMode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7549654130581481610, guid: d3d12ed0ce6f192a08e712c95e1af292, type: 3}
       propertyPath: m_Enabled

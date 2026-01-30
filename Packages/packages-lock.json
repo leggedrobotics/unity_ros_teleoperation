@@ -576,6 +576,17 @@
       "dependencies": {},
       "hash": "d741912bfeaad8da4fe0f258f4f3eefe1fe7b3f3"
     },
+    "org.nesnausk.gaussian-splatting": {
+      "version": "git@github.com:aras-p/UnityGaussianSplatting.git?path=/package#2c6fed37da67a217367261fcfcd3316d34c73e76",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.burst": "1.8.8",
+        "com.unity.collections": "2.1.4",
+        "com.unity.mathematics": "1.2.6"
+      },
+      "hash": "2c6fed37da67a217367261fcfcd3316d34c73e76"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
