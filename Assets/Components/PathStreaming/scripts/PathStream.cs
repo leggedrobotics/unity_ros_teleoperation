@@ -8,6 +8,7 @@ using RosMessageTypes.Std;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Nav;
 
+using RSL.Sensors.Lidar;
 
 public class PathStream : SensorStream
 {

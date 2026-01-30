@@ -12,6 +12,8 @@ using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
+using RSL.Sensors.Lidar;
+
 public class GridMapStream : SensorStream
 {
 
