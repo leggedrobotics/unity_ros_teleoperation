@@ -7,6 +7,8 @@
 [![Platform: Quest 3](https://img.shields.io/badge/platform-Quest%203-blueviolet?logo=oculus)]()
 [![Project Page](https://img.shields.io/badge/Project%20Page-rffr.leggedrobotics.com-blue?logo=internet)](https://rffr.leggedrobotics.com/works/xr/)
 
+**If you find this project helpful, please help us out by filling out this [short survey](https://docs.google.com/forms/d/e/1FAIpQLSf1JQycwO8uBzeW0IydjNP1DJ7T1BoQXaRozAfCMekRT0Yvvw/viewform?usp=dialog) to better direct our efforts.**
+
 This repo contains a series of components for Unity XR teleoperation with ROS integration. It is designed to be run on a Quest 3 VR headset, and support OpenXR, hand tracking, Unity input system, and is built with Unity 2022.3.12f1.
 
 For information on setting up Unity and opening this project [Unity Quickstart](docs/unity.md), and for Quest information see [Quest Quickstart](docs/quest.md). To install the git-hooks, and link this project to a Linux Unity Hub, run the `setup.sh` script. To side load apps to the Quest see [SideQuest Quickstart](docs/sidequest.md), and for streaming the app to a linux device see [our streaming script](https://github.com/leggedrobotics/quest-streaming).
