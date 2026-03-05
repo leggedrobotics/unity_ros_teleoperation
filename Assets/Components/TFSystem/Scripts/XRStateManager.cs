@@ -6,6 +6,7 @@ using System.ComponentModel;
 public class XRStateManager : MonoBehaviour
 {
     public GameObject anchorPrefab;
+    public bool SpawnAnchorPrefabForDebugging = false;
 
     private GameObject originAnchor;
 
@@ -41,16 +42,6 @@ public class XRStateManager : MonoBehaviour
             LocalizeOrigin();
         }
     }
-
-    public Transform target;
-    void TeleportToTarget()
-    {
-        XROrigin xrOrigin = FindObjectOfType<XROrigin>();
-        xrOrigin.MoveCameraToWorldLocation(target.position);
-        xrOrigin.MatchOriginUpCameraForward(target.up, target.forward);
-        Debug.Log("XR Origin repositioned to match target.");
-    }
-
     public async void CreateSpatialAnchor()
     {
         // Get controller pose in world space
@@ -86,7 +77,13 @@ public class XRStateManager : MonoBehaviour
         // xrOrigin = origin.gameObject;
         // Instantiate the prefab at the origin
         // originAnchor = Instantiate(anchorPrefab, xrOrigin.transform.position, xrOrigin.transform.rotation);
-        originAnchor = Instantiate(anchorPrefab, xrOrigin.transform.position, Quaternion.Inverse(xrOrigin.transform.rotation));
+        if (SpawnAnchorPrefabForDebugging)
+        {
+            originAnchor = Instantiate(anchorPrefab, xrOrigin.transform.position, Quaternion.Inverse(xrOrigin.transform.rotation));
+        } else {
+            originAnchor = new GameObject("OriginAnchor");
+            originAnchor.transform.SetPositionAndRotation(xrOrigin.transform.position, Quaternion.Inverse(xrOrigin.transform.rotation));
+        }
         // originAnchor.transform.eulerAngles = new Vector3(0, originAnchor.transform.eulerAngles.y, 0); // Keep only the yaw rotation to ensure the anchor is upright (otherwise bad things happen)
 
         // Add the anchor component
