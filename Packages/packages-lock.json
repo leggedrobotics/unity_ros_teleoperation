@@ -86,7 +86,7 @@
       "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
     },
     "com.meta.xr.sdk.core": {
-      "version": "83.0.4",
+      "version": "85.0.0",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
