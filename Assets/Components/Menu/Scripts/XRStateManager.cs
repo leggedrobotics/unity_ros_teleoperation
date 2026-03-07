@@ -7,12 +7,19 @@ namespace RSL.Core.Menu
 {
     public class XRStateManager : MonoBehaviour
     {
+        // Prefab object to be instantiated at each anchor position for debugging purposes
         public GameObject anchorPrefab;
+        // If true, the anchor prefab will be instantiated at the origin for debugging. Otherwise, an empty GameObject will be used as the anchor to avoid visual clutter.
         public bool SpawnAnchorPrefabForDebugging = false;
 
-        private GameObject originAnchor;
-
+        // Threshold distance to consider the anchor already close enough to the origin to skip re-centering (to avoid jitter when the anchor is already near the origin)
         public double originDistanceThreshold = 0.1; // Meters
+
+        // Reference to the XROrigin in the scene
+        public XROrigin xrOrigin;
+
+        // Reference to the anchor that holds the origin when first initialized
+        private GameObject originAnchor;
 
         void Start()
         {
@@ -96,8 +103,6 @@ namespace RSL.Core.Menu
 
             Debug.Log("Origin anchor created and localized at world origin.");
         }
-
-        public XROrigin xrOrigin;
 
         async void LocalizeOrigin()
         {
