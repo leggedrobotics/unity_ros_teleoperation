@@ -15,11 +15,20 @@ namespace RSL.Core.Menu
         // Threshold distance to consider the anchor already close enough to the origin to skip re-centering (to avoid jitter when the anchor is already near the origin)
         public double originDistanceThreshold = 0.1; // Meters
 
+        // Delay before creating the origin anchor on startup (to give system time to acquire tracking and stabilize the initial pose)
+        public int originAnchorDelay = 1000; // Milliseconds
+
         // Reference to the XROrigin in the scene
         public XROrigin xrOrigin;
 
         // Reference to the anchor that holds the origin when first initialized
         private GameObject originAnchor;
+
+        // Flag to prevent multiple simultaneous anchor creation attempts during startup
+        private bool creatingAnchor = false;
+
+        // Flag to track whether tracking has been acquired at least once (to avoid trying to create an anchor before tracking is available)
+        bool TrackingAcquired = false;
 
         void Start()
         {
@@ -33,7 +42,6 @@ namespace RSL.Core.Menu
             LocalizeOrigin();
         }
 
-        bool TrackingAcquired = false;
         void OnTrackingAcquired()
         {
             Debug.Log("Tracking acquired, creating anchor");
@@ -51,29 +59,7 @@ namespace RSL.Core.Menu
                 LocalizeOrigin();
             }
         }
-        public async void CreateSpatialAnchor()
-        {
-            // Get controller pose in world space
-            Vector3 pos = OVRInput.GetLocalControllerPosition(OVRInput.Controller.RTouch);
-            Quaternion rot = OVRInput.GetLocalControllerRotation(OVRInput.Controller.RTouch);
 
-            // Instantiate the prefab at the controller pose
-            GameObject go = Instantiate(anchorPrefab, pos, rot);
-
-            // Add the anchor component
-            OVRSpatialAnchor anchor = go.AddComponent<OVRSpatialAnchor>();
-
-            // IMPORTANT: Force the anchor to use the prefab's world pose
-            // anchor.transform.SetPositionAndRotation(pos, rot);
-
-            // // Wait for localization so it becomes world‑locked
-            // await anchor.WhenLocalizedAsync();
-
-            // Debug.Log("Anchor created and localized at controller position.");
-        }
-
-        // Flag to prevent multiple simultaneous anchor creation attempts during startup
-        private bool creatingAnchor = false;
         async void CreateOriginAnchor()
         {
             if (creatingAnchor)
@@ -81,11 +67,10 @@ namespace RSL.Core.Menu
                 return;
             }
             creatingAnchor = true;
-            await Task.Delay(3000);
-            // GameObject xrOrigin = FindObjectOfType<Unity.XR.CoreUtils.XROrigin>().gameObject;
-            // xrOrigin = origin.gameObject;
+            await Task.Delay(originAnchorDelay);
+            // OVRManager.display.RecenterPose(); // Recenter the pose because for some reason it's not correct the first time
+
             // Instantiate the prefab at the origin
-            // originAnchor = Instantiate(anchorPrefab, xrOrigin.transform.position, xrOrigin.transform.rotation);
             if (SpawnAnchorPrefabForDebugging)
             {
                 originAnchor = Instantiate(anchorPrefab, xrOrigin.transform.position, Quaternion.Inverse(xrOrigin.transform.rotation));
@@ -93,7 +78,6 @@ namespace RSL.Core.Menu
                 originAnchor = new GameObject("OriginAnchor");
                 originAnchor.transform.SetPositionAndRotation(xrOrigin.transform.position, Quaternion.Inverse(xrOrigin.transform.rotation));
             }
-            // originAnchor.transform.eulerAngles = new Vector3(0, originAnchor.transform.eulerAngles.y, 0); // Keep only the yaw rotation to ensure the anchor is upright (otherwise bad things happen)
 
             // Add the anchor component
             OVRSpatialAnchor anchor = originAnchor.AddComponent<OVRSpatialAnchor>();
@@ -101,14 +85,14 @@ namespace RSL.Core.Menu
             // Wait for localization so it becomes world‑locked
             await anchor.WhenLocalizedAsync();
 
-            Debug.Log("Origin anchor created and localized at world origin.");
+            // Debug.Log("Origin anchor created and localized at world origin.");
         }
 
         async void LocalizeOrigin()
         {
             if (originAnchor == null)
             {
-                Debug.LogWarning("Origin anchor not created yet");
+                // Debug.LogWarning("Origin anchor not created yet");
                 return;
             }
 
@@ -116,7 +100,7 @@ namespace RSL.Core.Menu
 
             if (anchor == null)
             {
-                Debug.LogWarning("Origin anchor component missing");
+                // Debug.LogWarning("Origin anchor component missing");
                 return;
             }
 
@@ -125,38 +109,27 @@ namespace RSL.Core.Menu
 
 
             float distanceToOrigin = Vector3.Distance(originAnchor.transform.position, Vector3.zero);
-            Debug.LogWarning("Anchor Distance " + originDistanceThreshold + " " + distanceToOrigin);
+            // Debug.LogWarning("Anchor Distance " + originDistanceThreshold + " " + distanceToOrigin);
 
 
             if (distanceToOrigin < originDistanceThreshold)
             {
-                Debug.LogWarning("Skipping because " + (distanceToOrigin < originDistanceThreshold));
+                // Debug.LogWarning("Skipping because " + (distanceToOrigin < originDistanceThreshold));
                 return;
             }
 
-            // GameObject xrOrigin = FindObjectOfType<Unity.XR.CoreUtils.XROrigin>().gameObject;
-            // xrOrigin.transform.SetPositionAndRotation(originAnchor.transform.position, originAnchor.transform.rotation);
-            // origin.position = originAnchor.transform.position;
-            // XROrigin xrOrigin = FindObjectOfType<XROrigin>();
-            Debug.Log($"Origin position: {xrOrigin.transform.position}");
+            // Debug.Log($"Origin position: {xrOrigin.transform.position}");
 
-
-            Quaternion anchorYaw = Quaternion.Euler(0, originAnchor.transform.rotation.eulerAngles.y, 0);
+            Quaternion anchorYaw = Quaternion.Euler(0, originAnchor.transform.rotation.eulerAngles.y, 0); // Keep only yaw rotation of the anchor to prevent unwanted tilting of the XR Origin
 
             Quaternion newOriginRotation = xrOrigin.transform.rotation * Quaternion.Inverse(anchorYaw);
-            // xrOrigin.transform.rotation = newOriginRotation;
-            // Vector3 newOriginPosition = xrOrigin.transform.position - originAnchor.transform.position;
-            // xrOrigin.transform.position = newOriginPosition;
             Vector3 newOriginPosition = Quaternion.Inverse(anchorYaw) * (xrOrigin.transform.position - originAnchor.transform.position);
-            Debug.LogWarning("Anchor rotation: " + originAnchor.transform.rotation.eulerAngles);
+            // Debug.LogWarning("Anchor rotation: " + originAnchor.transform.rotation.eulerAngles);
 
-            // xrOrigin.transform.rotation = newOriginRotation;
             xrOrigin.transform.SetPositionAndRotation(newOriginPosition, newOriginRotation);
-            Debug.LogWarning("New Anchor rotation: " + originAnchor.transform.rotation.eulerAngles);
+            // Debug.LogWarning("New Anchor rotation: " + originAnchor.transform.rotation.eulerAngles);
 
-            // xrOrigin.MoveCameraToWorldLocation(-originAnchor.transform.position);
-            // xrOrigin.MatchOriginUpCameraForward(originAnchor.transform.up, originAnchor.transform.forward);
-            Debug.Log("XR Origin repositioned to match origin anchor at " + originAnchor.transform.position);
+            // Debug.Log("XR Origin repositioned to match origin anchor at " + originAnchor.transform.position);
         }
     }
 } // namespace RSL.Core.Menu
