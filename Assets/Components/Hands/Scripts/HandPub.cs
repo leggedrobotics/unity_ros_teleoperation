@@ -73,6 +73,9 @@ public class HandPub : MonoBehaviour
         {
             _publishing = PlayerPrefs.GetInt("handPublishing") == 1;
             _img.sprite = _publishing ? enableIcon : disableIcon;
+        } else {
+            _publishing = true;
+            _img.sprite = enableIcon;
         }
 
         var _handSubsystem = new List<XRHandSubsystem>();
