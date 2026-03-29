@@ -10,6 +10,7 @@
     "com.leggedrobotics.ros.robots.hands.pysonic": "git@github.com:leggedrobotics/unity_ros_robots.git?path=PsyonicAbilityHand",
     "com.leggedrobotics.ros.robots.spot": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Spot",
     "com.leggedrobotics.ros.robots.unitree.b2w": "git@github.com:leggedrobotics/unity_ros_robots.git?path=B2W",
+    "com.meta.xr.sdk.core": "85.0.0",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.feature.development": "1.0.2",
     "com.unity.formats.fbx": "5.1.5",
