@@ -1,19 +1,20 @@
 
 # Unity ROS Teleoperation Project
-[![Unity 2022.3.12f1](https://img.shields.io/badge/Unity-2022.3.12f1-blue?logo=unity)](https://unity.com/releases/editor/whats-new/2022.3.12f1)
-[![Version 0.1.1](https://img.shields.io/badge/version-0.1.0-green)]()
+[![Unity 6000.2.15f1](https://img.shields.io/badge/Unity-6000.2.15f1-blue?logo=unity)](https://unity.com/releases/editor/whats-new/6000.2.15f1)
+[![Version 0.2.0](https://img.shields.io/badge/version-0.2.0-green)]()
 [![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD--3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Platform: Linux x64](https://img.shields.io/badge/platform-Linux%20x64-lightgrey?logo=linux)]()
 [![Platform: Quest 3](https://img.shields.io/badge/platform-Quest%203-blueviolet?logo=oculus)]()
 [![Project Page](https://img.shields.io/badge/Project%20Page-rffr.leggedrobotics.com-blue?logo=internet)](https://rffr.leggedrobotics.com/works/xr/)
+[![Survey](https://img.shields.io/badge/Survey-Feedback%20Form-orange?logo=google-forms)](https://docs.google.com/forms/d/e/1FAIpQLSf1JQycwO8uBzeW0IydjNP1DJ7T1BoQXaRozAfCMekRT0Yvvw/viewform)
 
-This repo contains a series of components for Unity XR teleoperation with ROS integration. It is designed to be run on a Quest 3 VR headset, and support OpenXR, hand tracking, Unity input system, and is built with Unity 2022.3.12f1.
+This repo contains a series of components for Unity XR teleoperation with ROS integration. It is designed to be run on a Quest 3 VR headset, and support OpenXR, hand tracking, Unity input system, and is built with Unity 6000.2.15f1. _Newer versions of Unity no longer work on ROS 1 versions of Ubuntu, so this will be the latest offically supported version of Unity for ROS 1.
 
 For information on setting up Unity and opening this project [Unity Quickstart](docs/unity.md), and for Quest information see [Quest Quickstart](docs/quest.md). To install the git-hooks, and link this project to a Linux Unity Hub, run the `setup.sh` script. To side load apps to the Quest see [SideQuest Quickstart](docs/sidequest.md), and for streaming the app to a linux device see [our streaming script](https://github.com/leggedrobotics/quest-streaming).
 
 
 ## Quickstart
-On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS-TCP-Endpoint) needs to be run somewhere on the ROS network (For ROS 2 systems, make sure to switch to the `main-ros2` branch). This node is pretty lightweight so it can be run directly on a robot. Once the node is running the device running this app needs to connect to the ROS network, and the IP of the device running the TCP Endpoint needs to be set in the menu (see [Menu](Assets/Components/Menu) for more information). If everything works, the menu should turn green, and data should be streaming between the app and ROS. For custom robots, check out the documentation on [adding new robot models](Assets/Components/Robots/). If you are interested in contributing to the project, check out the [contributing guidelines](docs/contributing.md).
+On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS-TCP-Endpoint) needs to be run somewhere on the ROS network (For ROS 2 systems, make sure to switch to the `main-ros2` branch, although the current Unity app supports both versions of ROS out of the box). This node is pretty lightweight so it can be run directly on a robot. Once the node is running the device running this app needs to connect to the ROS network, and the IP of the device running the TCP Endpoint needs to be set in the menu (see [Menu](Assets/Components/Menu) for more information). If everything works, the menu should turn green, and data should be streaming between the app and ROS. For custom robots, check out the documentation on [adding new robot models](Assets/Components/Robots/). If you are interested in contributing to the project, check out the [contributing guidelines](docs/contributing.md).
 
 
 ## Components
@@ -46,6 +47,15 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 ---
 
 ## Minor Version History
+
+### 0.2.0
+- Bumped to Unity 6.2 for improved OpenXR and Quest 3 support (note this is the last version of Unity that will support ROS 1 on Ubuntu 20.04)
+- Added Gaussian Splatting as an option for PointCloud messages
+- New Robot manager that moves robot models to external repos (see [unity_ros_robots](https://github.com/leggedrobotics/unity_ros_robots) for more info)
+- Added support for spatial anchors ensuring persistent localization and mapping across sessions
+- Improved package naming within the app for cross package imports
+- Added git hooks for easier setup and contribution
+
 
 ### 0.1.1
 - Added setup scripts and git hooks for easier project setup
