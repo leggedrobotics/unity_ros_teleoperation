@@ -6,4 +6,8 @@
 
 This component uses shaders to quickly and efficently render pointcloud 2 methods. There is a dropdown in the inspector for `Viz Type` which allows you to select which type of pointcloud you want to view. The main difference is that `Lidar` will look for an intensity field and render colors based on that, while the `RGB` will use the colors from the RGB field. For dense pointclouds, it can be helpful to downsample the number of points rendered, this can be done via the `Display Pts` field which has a delegate for dynamically changing this value in runtime.
 
+This component also contains the `Splat` viz type, which will render pointcloud 2 data with the necessary fields (Splat Format: x, y, z, rgb, scalex, scaley, scalez, rot0, rot1, rot2, rot3, nx, ny, nz, fc_dc_0, fc_dc_1, fc_dc_2, opacity) as live Gaussian splats.
+
+![Splat video](/docs/images/HeadsetSplatStreaming.gif)
+
 ![Lidar Inspector](/docs/images/lidar_inspector.png)
