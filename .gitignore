@@ -10,6 +10,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
+# for security for now we also remove the keystore
+*.keystore
+
 # Dont include splat files
 *.splat
 
