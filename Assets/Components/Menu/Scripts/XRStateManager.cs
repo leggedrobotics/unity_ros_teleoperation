@@ -52,7 +52,7 @@ namespace RSL.Core.Menu
         {
             if (originAnchor == null || !originAnchor.TryGetComponent<OVRSpatialAnchor>(out _))
             {
-                Debug.Log("No anchor created yet, saving position");
+                // Debug.Log("No anchor created yet, saving position");
                 if (TrackingAcquired) CreateOriginAnchor();
             } else
             {
