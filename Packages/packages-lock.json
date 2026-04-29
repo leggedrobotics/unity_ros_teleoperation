@@ -295,14 +295,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "65aca1b443e39dec3c2cae1c39af41d13a6dd305"
+      "hash": "53ab8a3ea33748e4a488c4b098f409f9e0ecfb0f"
     },
     "com.unity.robotics.visualizations": {
       "version": "https://github.com/leggedrobotics/ROS-TCP-Connector.git?path=/com.unity.robotics.visualizations",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "65aca1b443e39dec3c2cae1c39af41d13a6dd305"
+      "hash": "53ab8a3ea33748e4a488c4b098f409f9e0ecfb0f"
     },
     "com.unity.searcher": {
       "version": "4.9.3",
