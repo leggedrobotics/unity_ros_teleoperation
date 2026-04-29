@@ -1,0 +1,31 @@
+{
+    "name": "TiltFive",
+    "references": [
+        "Unity.InputSystem"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.inputsystem",
+            "expression": "1.0",
+            "define": "INPUTSYSTEM_AVAILABLE"
+        },
+        {
+            "name": "com.unity.render-pipelines.core",
+            "expression": "1.0",
+            "define": "TILT_FIVE_SRP"
+        },
+        {
+            "name": "com.tiltfive.sdk",
+            "expression": "1.0",
+            "define": "TILT_FIVE_PACKAGE"
+        }
+    ],
+    "noEngineReferences": false
+}

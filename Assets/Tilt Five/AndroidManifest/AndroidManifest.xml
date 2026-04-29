@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.unity3d.player"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--━━ [Example Overridden main manifest for Tilt Five]━━──>
+        If you already have a custom manifest:
+         * Include/merge the <queries> element below
+         * Ensure your <activity> refers to an activity implementing the TiltFive Android support code
+           (e.g. "class ...extends UnityPlayerActivity implements TiltFiveActivityInterface"),
+           see SimpleTiltFiveUnityPlayerActivity for an example implementation.
+    <──━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━-->
+    <queries>
+        <package android:name="com.tiltfive.service" />
+    </queries>
+    
+    <application>
+        <activity android:name="com.tiltfive.client.SimpleTiltFiveUnityPlayerActivity"
+                  android:theme="@style/UnityThemeSelector">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+        </activity>
+    </application>
+</manifest>

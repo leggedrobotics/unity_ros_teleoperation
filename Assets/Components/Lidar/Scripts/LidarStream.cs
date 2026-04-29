@@ -53,6 +53,14 @@ namespace RSL.Sensors.Lidar
             {
                 myScript.OnColorSelect(2);
             }
+            if (GUILayout.Button("Set mode to Lidar"))
+            {
+                myScript.OnVizTypeSelect(0);
+            }
+            if (GUILayout.Button("Set mode to Splat"))
+            {
+                myScript.OnVizTypeSelect(3);
+            }
             if (GUILayout.Button("Clear"))
             {
                 myScript.Clear();

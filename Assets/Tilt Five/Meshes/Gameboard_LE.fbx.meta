@@ -1,0 +1,155 @@
+fileFormatVersion: 2
+guid: 7de95f897cb041f180763a6ad2a398a1
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Border
+    100004: Object_1
+    100006: Object_2
+    100008: Retro
+    100010: Border_LE
+    100012: Surface_LE
+    100014: Border_Flat
+    100016: Border_Tilted
+    100018: Flat_XE_Gameboard
+    100020: LE_Gameboard
+    100022: Surface_Flat
+    100024: Surface_Tilted
+    100026: Tilted_XE_Gameboard
+    400000: //RootNode
+    400002: Border
+    400004: Object_1
+    400006: Object_2
+    400008: Retro
+    400010: Border_LE
+    400012: Surface_LE
+    400014: Border_Flat
+    400016: Border_Tilted
+    400018: Flat_XE_Gameboard
+    400020: LE_Gameboard
+    400022: Surface_Flat
+    400024: Surface_Tilted
+    400026: Tilted_XE_Gameboard
+    2100000: Border Material
+    2100002: Surface Material
+    2300000: Object_1
+    2300002: Object_2
+    2300004: Border_LE
+    2300006: Surface_LE
+    2300008: Border_Flat
+    2300010: Border_Tilted
+    2300012: Surface_Flat
+    2300014: Surface_Tilted
+    3300000: Object_1
+    3300002: Object_2
+    3300004: Border_LE
+    3300006: Surface_LE
+    3300008: Border_Flat
+    3300010: Border_Tilted
+    3300012: Surface_Flat
+    3300014: Surface_Tilted
+    4300000: Object_1
+    4300002: Object_2
+    4300004: Border_LE
+    4300006: Surface_LE
+    4300008: Border_Tilted
+    4300010: Surface_Tilted
+    4300012: Border_Flat
+    4300014: Surface_Flat
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_52
+    second: {fileID: 2100000, guid: 5afe2cfffeb3e3243aad7092c0556ddd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material_53
+    second: {fileID: 2100000, guid: 3d4bb628f732a9941868b9d688a935fc, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

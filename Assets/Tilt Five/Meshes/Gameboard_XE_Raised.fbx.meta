@@ -1,0 +1,137 @@
+fileFormatVersion: 2
+guid: 7a5234187bb449a4a909054b23497ee3
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: Tilted XE Gameboard Retro
+    100004: Tilted XE Gameboard
+    100006: Border_Tilted
+    100008: Surface_Tilted
+    100010: Border_Raised
+    100012: Surface_Raised
+    400000: //RootNode
+    400002: Tilted XE Gameboard Retro
+    400004: Tilted XE Gameboard
+    400006: Border_Tilted
+    400008: Surface_Tilted
+    400010: Border_Raised
+    400012: Surface_Raised
+    2100000: Border Material
+    2100002: Surface Material
+    2300000: //RootNode
+    2300002: Tilted XE Gameboard Retro
+    2300004: Tilted XE Gameboard
+    2300006: Border_Tilted
+    2300008: Surface_Tilted
+    2300010: Border_Raised
+    2300012: Surface_Raised
+    3300000: //RootNode
+    3300002: Tilted XE Gameboard Retro
+    3300004: Tilted XE Gameboard
+    3300006: Border_Tilted
+    3300008: Surface_Tilted
+    3300010: Border_Raised
+    3300012: Surface_Raised
+    4300000: Tilted XE Gameboard
+    4300002: Tilted XE Gameboard Retro
+    4300004: Border_Tilted
+    4300006: Surface_Tilted
+    4300008: Border_Raised
+    4300010: Surface_Raised
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Border Material
+    second: {fileID: 2100000, guid: 5afe2cfffeb3e3243aad7092c0556ddd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Surface Material
+    second: {fileID: 2100000, guid: 3d4bb628f732a9941868b9d688a935fc, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

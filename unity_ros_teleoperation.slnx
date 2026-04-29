@@ -1,7 +1,9 @@
 ﻿<Solution>
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.Hands.csproj" />
+  <Project Path="TiltFive.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.StarterAssets.csproj" />
+  <Project Path="TiltFiveEditor.csproj" />
   <Project Path="Unity.XR.Interaction.Toolkit.Samples.ARStarterAssets.csproj" />
   <Project Path="Bhaptics.SDK2.csproj" />
   <Project Path="Unity.PlayerPrefsEditor.Editor.csproj" />
