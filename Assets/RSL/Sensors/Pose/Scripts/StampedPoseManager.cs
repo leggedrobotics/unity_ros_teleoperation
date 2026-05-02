@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace RSL.Sensors.PoseStreaming
+namespace RSL.Sensors.Pose
 {
     #if UNITY_EDITOR
     using UnityEditor;
