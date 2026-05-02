@@ -10,208 +10,211 @@ using Bhaptics.SDK2;
 using UnityEngine.XR.Hands.Samples.VisualizerSample;
 using RSL.Core.VRDebug;
 
-public class HandManager : MonoBehaviour
+namespace RSL.Core.Haptics
 {
-
-    public static HandManager Instance { get; private set;}
-
-    public InputActionReference leftHaptic;
-    public InputActionReference rightHaptic;
-
-    public Material leftHandMat;
-    public Material rightHandMat;
-    public Color defaultColor = Color.black;
-    public Color activeColor = Color.white;
-    public Gradient hapticColor;
-
-    public float duration = 0.1f;
-    public Image leftHandImg;
-    public Image rightHandImg;
-
-    private bool started = false;
-    private long lastTime = 0;
-
-    private bool _hasLeft;
-    private bool _hasRight;
-
-    private int[] leftHand;
-    private int[] rightHand;
-
-    private XRController leftController;
-    private XRController rightController;
-
-    private HandVisualizer _handVisualizer;
-
-    private void Awake()
+    public class HandManager : MonoBehaviour
     {
-        if(Instance != null && Instance != this)
-            Destroy(this);
-        else
-            Instance = this;
 
-        leftHand = new int[6];
-        rightHand = new int[6];
+        public static HandManager Instance { get; private set;}
 
-        _handVisualizer = GameObject.FindObjectOfType<HandVisualizer>();
-        if(_handVisualizer != null)
+        public InputActionReference leftHaptic;
+        public InputActionReference rightHaptic;
+
+        public Material leftHandMat;
+        public Material rightHandMat;
+        public Color defaultColor = Color.black;
+        public Color activeColor = Color.white;
+        public Gradient hapticColor;
+
+        public float duration = 0.1f;
+        public Image leftHandImg;
+        public Image rightHandImg;
+
+        private bool started = false;
+        private long lastTime = 0;
+
+        private bool _hasLeft;
+        private bool _hasRight;
+
+        private int[] leftHand;
+        private int[] rightHand;
+
+        private XRController leftController;
+        private XRController rightController;
+
+        private HandVisualizer _handVisualizer;
+
+        private void Awake()
         {
-            _handVisualizer.debugDrawJoints = false;
-        }
-    }
+            if(Instance != null && Instance != this)
+                Destroy(this);
+            else
+                Instance = this;
 
-    public void CheckDevices()
-    {
-        List<HapticDevice> devices = BhapticsLibrary.GetDevices();
+            leftHand = new int[6];
+            rightHand = new int[6];
 
-        leftHandImg.color = Color.red;
-        rightHandImg.color = Color.red;
-        _hasLeft = false;
-        _hasRight = false;
-
-
-        foreach (HapticDevice device in devices)
-        {
-            if (device.DeviceName.Contains("(L)") && device.IsConnected)
+            _handVisualizer = GameObject.FindObjectOfType<HandVisualizer>();
+            if(_handVisualizer != null)
             {
-                _hasLeft = true;
-                leftHandImg.color = Color.green;
-            }
-            if (device.DeviceName.Contains("(R)") && device.IsConnected)
-            {
-                _hasRight = true;
-                rightHandImg.color = Color.green;
-            }
-            if(!started)
-            {
-                Debug.Log(device.DeviceName + " is connected: " + device.IsConnected);
+                _handVisualizer.debugDrawJoints = false;
             }
         }
 
-        started = true;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        CheckDevices();
-    }
+        public void CheckDevices()
+        {
+            List<HapticDevice> devices = BhapticsLibrary.GetDevices();
 
-    // Update is called once per frame
-    void Update()
-    {
-        if(Time.time - lastTime > duration*2)
+            leftHandImg.color = Color.red;
+            rightHandImg.color = Color.red;
+            _hasLeft = false;
+            _hasRight = false;
+
+
+            foreach (HapticDevice device in devices)
+            {
+                if (device.DeviceName.Contains("(L)") && device.IsConnected)
+                {
+                    _hasLeft = true;
+                    leftHandImg.color = Color.green;
+                }
+                if (device.DeviceName.Contains("(R)") && device.IsConnected)
+                {
+                    _hasRight = true;
+                    rightHandImg.color = Color.green;
+                }
+                if(!started)
+                {
+                    Debug.Log(device.DeviceName + " is connected: " + device.IsConnected);
+                }
+            }
+
+            started = true;
+        }
+        // Start is called before the first frame update
+        void Start()
+        {
             CheckDevices();
-        if(Time.time - lastTime > duration)
+        }
+
+        // Update is called once per frame
+        void Update()
         {
-            lastTime = (long)Time.time;
-
-            float maxRight = Mathf.Max(rightHand)/100f;
-            float maxLeft = Mathf.Max(leftHand)/100f;
-
-            if(DebugLogger.active){
-                leftHandImg.color = DebugLogger.debugGradient.Evaluate(maxLeft);
-                rightHandImg.color = DebugLogger.debugGradient.Evaluate(maxRight);               
-            }
-
-            if(maxRight > 0)
+            if(Time.time - lastTime > duration*2)
+                CheckDevices();
+            if(Time.time - lastTime > duration)
             {
-                OpenXRInput.SendHapticImpulse(rightHaptic, maxRight, duration, UnityEngine.InputSystem.XR.XRController.rightHand);
+                lastTime = (long)Time.time;
+
+                float maxRight = Mathf.Max(rightHand)/100f;
+                float maxLeft = Mathf.Max(leftHand)/100f;
+
+                if(DebugLogger.active){
+                    leftHandImg.color = DebugLogger.debugGradient.Evaluate(maxLeft);
+                    rightHandImg.color = DebugLogger.debugGradient.Evaluate(maxRight);               
+                }
+
+                if(maxRight > 0)
+                {
+                    OpenXRInput.SendHapticImpulse(rightHaptic, maxRight, duration, UnityEngine.InputSystem.XR.XRController.rightHand);
+                }
+                if(maxLeft > 0)
+                {
+                    OpenXRInput.SendHapticImpulse(leftHaptic, maxLeft, duration, UnityEngine.InputSystem.XR.XRController.leftHand);
+                }
+                ColorFingers(true, rightHand);
+                ColorFingers(false, leftHand);
+
+
+
+
+                if(_hasRight)
+                {
+                    BhapticsLibrary.PlayMotors(
+                        (int)Bhaptics.SDK2.PositionType.GloveR,
+                        rightHand,
+                        (int)(1000*duration)
+                    );
+                }
+                if(_hasLeft)
+                {
+                    BhapticsLibrary.PlayMotors(
+                        (int)Bhaptics.SDK2.PositionType.GloveL,
+                        leftHand,
+                        (int)(1000*duration)
+                    );
+                }
             }
-            if(maxLeft > 0)
+            
+            
+        }
+
+        public void UpdateValue(bool isRight, int index, int value)
+        {
+            // Just in case...
+            value = Mathf.Clamp(value, 0, 100);
+
+            if(isRight)
             {
-                OpenXRInput.SendHapticImpulse(leftHaptic, maxLeft, duration, UnityEngine.InputSystem.XR.XRController.leftHand);
+                rightHand[index] = value;
             }
-            ColorFingers(true, rightHand);
-            ColorFingers(false, leftHand);
-
-
-
-
-            if(_hasRight)
+            else
             {
-                BhapticsLibrary.PlayMotors(
-                    (int)Bhaptics.SDK2.PositionType.GloveR,
-                    rightHand,
-                    (int)(1000*duration)
-                );
+                leftHand[index] = value;
             }
-            if(_hasLeft)
+        }
+
+        public void UpdateValues(bool isRight, int[] values)
+        {
+            if(isRight)
             {
-                BhapticsLibrary.PlayMotors(
-                    (int)Bhaptics.SDK2.PositionType.GloveL,
-                    leftHand,
-                    (int)(1000*duration)
-                );
+                rightHand = values;
+            }
+            else
+            {
+                leftHand = values;
             }
         }
-        
-        
-    }
 
-    public void UpdateValue(bool isRight, int index, int value)
-    {
-        // Just in case...
-        value = Mathf.Clamp(value, 0, 100);
+        public void UpdateValue1D(bool isRight, int index, float value)
+        {
+            // This mode doesnt support only sending force to the palm
+            if(index == 5) return;
+            
+            // Value here represents the position between this finger and the palm, so convert to forces for each
+            int fingerForce = (int)(100 * value);
+            int palmForce = 100 - fingerForce;
 
-        if(isRight)
-        {
-            rightHand[index] = value;
-        }
-        else
-        {
-            leftHand[index] = value;
-        }
-    }
+            if(isRight)
+            {
+                rightHand[index] = fingerForce;
+                rightHand[5] = (palmForce + rightHand[5]) / 2;
+            }
+            else
+            {
+                leftHand[index] = fingerForce;
+                leftHand[5] = (palmForce + leftHand[5]) / 2;
+            }
 
-    public void UpdateValues(bool isRight, int[] values)
-    {
-        if(isRight)
-        {
-            rightHand = values;
-        }
-        else
-        {
-            leftHand = values;
-        }
-    }
-
-    public void UpdateValue1D(bool isRight, int index, float value)
-    {
-        // This mode doesnt support only sending force to the palm
-        if(index == 5) return;
-        
-        // Value here represents the position between this finger and the palm, so convert to forces for each
-        int fingerForce = (int)(100 * value);
-        int palmForce = 100 - fingerForce;
-
-        if(isRight)
-        {
-            rightHand[index] = fingerForce;
-            rightHand[5] = (palmForce + rightHand[5]) / 2;
-        }
-        else
-        {
-            leftHand[index] = fingerForce;
-            leftHand[5] = (palmForce + leftHand[5]) / 2;
         }
 
-    }
-
-    public void ColorFingers(bool isRight, int[] values)
-    {
-        Material mat = isRight ? rightHandMat : leftHandMat;
-
-        mat.SetColor("_ThumbColor", values[0]==0 ? defaultColor : hapticColor.Evaluate(values[0]/100f));
-        for(int i=1; i<5; i++)
+        public void ColorFingers(bool isRight, int[] values)
         {
-            mat.SetColor("_FingerColor_" + i, values[i]==0 ? defaultColor : hapticColor.Evaluate(values[i]/100f));
+            Material mat = isRight ? rightHandMat : leftHandMat;
+
+            mat.SetColor("_ThumbColor", values[0]==0 ? defaultColor : hapticColor.Evaluate(values[0]/100f));
+            for(int i=1; i<5; i++)
+            {
+                mat.SetColor("_FingerColor_" + i, values[i]==0 ? defaultColor : hapticColor.Evaluate(values[i]/100f));
+            }
         }
-    }
 
-    public void ToggleSkeleton()
-    {
-        if(_handVisualizer != null)
+        public void ToggleSkeleton()
         {
-            _handVisualizer.debugDrawJoints = !_handVisualizer.debugDrawJoints;
+            if(_handVisualizer != null)
+            {
+                _handVisualizer.debugDrawJoints = !_handVisualizer.debugDrawJoints;
+            }
         }
     }
 }

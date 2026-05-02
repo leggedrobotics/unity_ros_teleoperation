@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using RSL.Core.PosePublisher;
+using RSL.Telemetry.PosePublisher;
 
 namespace RSL.Core.Menu
 {
@@ -63,7 +63,7 @@ namespace RSL.Core.Menu
         private bool _lockedPose = true;
         private bool _fixedPosition = false;
 
-        private PosePublisher.PosePublisher _posePublisher;
+        private PosePublisher _posePublisher;
         private JoystickManager _joystickManager;
         // private Streamer _streamer;
         void Start()
@@ -77,7 +77,7 @@ namespace RSL.Core.Menu
             _joystickManager = GetComponent<JoystickManager>();
             _joystickManager.SetEnabled(true);
 
-            _posePublisher = GetComponent<PosePublisher.PosePublisher>();
+            _posePublisher = GetComponent<PosePublisher>();
             _posePublisher.SetEnabled(false);
 
         }

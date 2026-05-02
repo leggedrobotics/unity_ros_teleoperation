@@ -6,7 +6,7 @@ using RosMessageTypes.Geometry;
 using UnityEngine.InputSystem;
 using RosMessageTypes.Sensor;
 
-namespace RSL.Core.PosePublisher
+namespace RSL.Telemetry.PosePublisher
 {
     public class JoystickManager : MonoBehaviour
     {
