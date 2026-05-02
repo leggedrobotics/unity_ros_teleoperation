@@ -3,46 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TempController : MonoBehaviour
+namespace RSL.Core.Interaction
 {
-    public float speed = 10.0f;
-    public float rotationSpeed = 100.0f;
-    public Camera camera;
-    
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class TempController : MonoBehaviour
     {
-        Cursor.lockState = CursorLockMode.Locked;
+        public float speed = 10.0f;
+        public float rotationSpeed = 100.0f;
+        public Camera camera;
         
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        // unlock the cursor
-        if (Keyboard.current.escapeKey.isPressed)
+
+        // Start is called before the first frame update
+        void Start()
         {
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Locked;
+            
         }
 
-        // input from keyboard and mouse
-        Vector2 move = Keyboard.current.wKey.isPressed ? new Vector2(0, 1) : Keyboard.current.sKey.isPressed ? new Vector2(0, -1) : Vector2.zero;
-        move += Keyboard.current.aKey.isPressed ? new Vector2(-1, 0) : Keyboard.current.dKey.isPressed ? new Vector2(1, 0) : Vector2.zero;
-        Vector2 look = Mouse.current.delta.ReadValue();
-        
+        // Update is called once per frame
+        void Update()
+        {
+            // unlock the cursor
+            if (Keyboard.current.escapeKey.isPressed)
+            {
+                Cursor.lockState = CursorLockMode.None;
+            }
 
-        // move the player
-        transform.position += transform.forward * move.y * speed * Time.deltaTime;
-        transform.position += transform.right * move.x * speed * Time.deltaTime;
+            // input from keyboard and mouse
+            Vector2 move = Keyboard.current.wKey.isPressed ? new Vector2(0, 1) : Keyboard.current.sKey.isPressed ? new Vector2(0, -1) : Vector2.zero;
+            move += Keyboard.current.aKey.isPressed ? new Vector2(-1, 0) : Keyboard.current.dKey.isPressed ? new Vector2(1, 0) : Vector2.zero;
+            Vector2 look = Mouse.current.delta.ReadValue();
+            
 
-        // rotate the player
-        transform.Rotate(new Vector3(0, look.x * rotationSpeed * Time.deltaTime, 0));
+            // move the player
+            transform.position += transform.forward * move.y * speed * Time.deltaTime;
+            transform.position += transform.right * move.x * speed * Time.deltaTime;
 
-        // rotate the camera
-        camera.transform.Rotate(new Vector3(-look.y * rotationSpeed * Time.deltaTime, 0, 0));
+            // rotate the player
+            transform.Rotate(new Vector3(0, look.x * rotationSpeed * Time.deltaTime, 0));
 
-        // keep the camera from rotating too far
+            // rotate the camera
+            camera.transform.Rotate(new Vector3(-look.y * rotationSpeed * Time.deltaTime, 0, 0));
+
+            // keep the camera from rotating too far
+        }
     }
 }
