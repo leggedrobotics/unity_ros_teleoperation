@@ -9,7 +9,7 @@ using RosMessageTypes.Geometry;
 
 using RSL.Sensors.Lidar;
 
-namespace RSL.Sensors.PoseStreaming
+namespace RSL.Sensors.Pose
 {
     public class StampedPoseStream : RSL.Core.SensorStream
     {
