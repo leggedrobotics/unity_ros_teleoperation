@@ -8,7 +8,7 @@ using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine.XR.Interaction.Toolkit;
 using RosMessageTypes.Behaviortree;
 
-namespace RSL.Core.PosePublisher
+namespace RSL.Telemetry.PosePublisher
 {
     #if UNITY_EDITOR
     using UnityEditor;

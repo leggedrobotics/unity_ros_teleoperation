@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.EventSystems;
-using RSL.Core.PosePublisher;
+using RSL.Telemetry.PosePublisher;
 
 namespace RSL.Core.Menu
 {
@@ -20,7 +20,7 @@ namespace RSL.Core.Menu
         void Start()
         {
             // Find pose publisher in scene
-            PosePublisher.PosePublisher publisher = FindObjectOfType<PosePublisher.PosePublisher>();
+            PosePublisher publisher = FindObjectOfType<PosePublisher>();
             if (publisher != null)
             {
                 // Subscribe to its events

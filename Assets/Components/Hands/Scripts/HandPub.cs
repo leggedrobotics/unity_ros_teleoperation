@@ -12,7 +12,7 @@ using TMPro;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-namespace RSL.Sensors.Hands
+namespace RSL.Telemetry.Hands
 {
     public class HandPub : MonoBehaviour
     {
