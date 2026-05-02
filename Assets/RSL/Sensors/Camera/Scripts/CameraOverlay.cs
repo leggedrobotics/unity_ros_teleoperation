@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Sensor;
 
-namespace RSL.Core.CameraOverlay
+namespace RSL.Sensors.Camera
 {
     public class CameraOverlay : MonoBehaviour
     {
@@ -26,7 +26,7 @@ namespace RSL.Core.CameraOverlay
         private MeshRenderer _meshRenderer;
         private Texture2D _texture2D;
         private byte[] _imageData;
-        private Camera _camera;
+        private UnityEngine.Camera _camera;
 
         public RawImage uiImage;
 
@@ -36,7 +36,7 @@ namespace RSL.Core.CameraOverlay
         // Start is called before the first frame update
         void Start()
         {
-            _camera = Camera.main;
+            _camera = UnityEngine.Camera.main;
 
             // depthCam.depthTextureMode = DepthTextureMode.Depth;
             // depthCam.targetTexture = renderTexture;
