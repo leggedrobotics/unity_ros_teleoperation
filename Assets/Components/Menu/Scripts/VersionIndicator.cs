@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VersionIndicator : MonoBehaviour
+namespace RSL.Core.Menu
 {
-    private TMPro.TextMeshProUGUI _text;
-
-    void Start()
+    public class VersionIndicator : MonoBehaviour
     {
-        _text = GetComponent<TMPro.TextMeshProUGUI>();
-        _text.text = "v" + Application.version;
-    }
+        private TMPro.TextMeshProUGUI _text;
 
-    public void ToggleVisible()
-    {
-        _text.enabled = !_text.enabled;
+        void Start()
+        {
+            _text = GetComponent<TMPro.TextMeshProUGUI>();
+            _text.text = "v" + Application.version;
+        }
+
+        public void ToggleVisible()
+        {
+            _text.enabled = !_text.enabled;
+        }
     }
 }

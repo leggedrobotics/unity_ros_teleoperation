@@ -11,7 +11,7 @@ namespace RSL.Sensors.Lidar
     using UnityEditor;
 
     [CustomEditor(typeof(LidarManager))]
-    public class LidarManagerEditor : SensorManagerEditor
+    public class LidarManagerEditor : RSL.Core.SensorManagerEditor
     {
         public override void OnInspectorGUI()
         {
@@ -24,7 +24,7 @@ namespace RSL.Sensors.Lidar
 
     #endif
 
-    public class LidarManager : SensorManager
+    public class LidarManager : RSL.Core.SensorManager
     {
         // public LidarStream lidarStreamer;
         // public LidarStream rgbdStreamer;

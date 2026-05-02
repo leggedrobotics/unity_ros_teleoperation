@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearSettings : MonoBehaviour
+namespace RSL.Core.Menu
 {
-    public void ClearAllSettings()
+    public class ClearSettings : MonoBehaviour
     {
-        foreach (var key in PlayerPrefs.GetString("PlayerPrefsKeys", "").Split(','))
+        public void ClearAllSettings()
         {
-            if (key != "ips" && key != "ip" && key != "port")
+            foreach (var key in PlayerPrefs.GetString("PlayerPrefsKeys", "").Split(','))
             {
-            PlayerPrefs.DeleteKey(key);
+                if (key != "ips" && key != "ip" && key != "port")
+                {
+                PlayerPrefs.DeleteKey(key);
+                }
             }
+            PlayerPrefs.Save();
+            Debug.Log("Cleared all settings");
         }
-        PlayerPrefs.Save();
-        Debug.Log("Cleared all settings");
     }
 }

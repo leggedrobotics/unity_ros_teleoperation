@@ -4,37 +4,40 @@ using UnityEngine;
 using System.Net;
 using Unity.Robotics.ROSTCPConnector;
 
-public class GetIpAddress : MonoBehaviour
+namespace RSL.Core.Menu
 {
-    private TMPro.TextMeshProUGUI _text;
-
-    private string _ipAddress;
-
-    private ROSConnection _ros;
-
-    void Start()
+    public class GetIpAddress : MonoBehaviour
     {
-        _text = GetComponent<TMPro.TextMeshProUGUI>();
-        _ros = ROSConnection.GetOrCreateInstance();
-        _ipAddress = GetLocalIPv4();
-        _text.text = _ros.rosVersion.ToString() + " : " + _ipAddress;
-    }
+        private TMPro.TextMeshProUGUI _text;
 
-    public string GetLocalIPv4()
-    {
-        return Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
-    }
+        private string _ipAddress;
 
-    public void Update()
-    {
-        if (_text.enabled)
+        private ROSConnection _ros;
+
+        void Start()
         {
+            _text = GetComponent<TMPro.TextMeshProUGUI>();
+            _ros = ROSConnection.GetOrCreateInstance();
+            _ipAddress = GetLocalIPv4();
             _text.text = _ros.rosVersion.ToString() + " : " + _ipAddress;
         }
-    }
 
-    public void ToggleVisible()
-    {
-        _text.enabled = !_text.enabled;
+        public string GetLocalIPv4()
+        {
+            return Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
+        }
+
+        public void Update()
+        {
+            if (_text.enabled)
+            {
+                _text.text = _ros.rosVersion.ToString() + " : " + _ipAddress;
+            }
+        }
+
+        public void ToggleVisible()
+        {
+            _text.enabled = !_text.enabled;
+        }
     }
 }

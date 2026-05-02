@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-
-class PathManagerEditor : SensorManagerEditor
+namespace RSL.Sensors.Path
 {
-    public override void OnInspectorGUI()
+    #if UNITY_EDITOR
+    using UnityEditor;
+
+    class PathManagerEditor : RSL.Core.SensorManagerEditor
     {
-        base.OnInspectorGUI();
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+        }
     }
-}
-#endif
+    #endif
 
 
-public class PathManager : SensorManager
-{
+    public class PathManager : RSL.Core.SensorManager
+    {
+    }
 }

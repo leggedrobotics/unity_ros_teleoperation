@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Quit : MonoBehaviour
+namespace RSL.Core.Menu
 {
-    
-    public void QuitGame()
+    public class Quit : MonoBehaviour
     {
-        Debug.Log("Quit Game");
-        Application.Quit();
         
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+        public void QuitGame()
+        {
+            Debug.Log("Quit Game");
+            Application.Quit();
+            
+            #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+            #endif
+        }
     }
 }

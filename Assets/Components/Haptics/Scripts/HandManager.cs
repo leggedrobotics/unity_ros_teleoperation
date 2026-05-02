@@ -8,7 +8,7 @@ using UnityEngine.InputSystem.XR;
 
 using Bhaptics.SDK2;
 using UnityEngine.XR.Hands.Samples.VisualizerSample;
-
+using RSL.Core.VRDebug;
 
 public class HandManager : MonoBehaviour
 {

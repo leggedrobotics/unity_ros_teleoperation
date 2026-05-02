@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-#if UNITY_EDITOR
-using UnityEditor;
-
-[CustomEditor(typeof(StampedPoseManager))]
-public class StampedPoseManagerEditor : SensorManagerEditor
+namespace RSL.Sensors.PoseStreaming
 {
-    public override void OnInspectorGUI()
+    #if UNITY_EDITOR
+    using UnityEditor;
+
+    [CustomEditor(typeof(StampedPoseManager))]
+    public class StampedPoseManagerEditor : RSL.Core.SensorManagerEditor
     {
-        base.OnInspectorGUI();
-        StampedPoseManager stampedPoseManager = (StampedPoseManager)target;
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            StampedPoseManager stampedPoseManager = (StampedPoseManager)target;
+        }
     }
-}
-#endif
+    #endif
 
-public class StampedPoseManager : SensorManager
-{
-    
+    public class StampedPoseManager : RSL.Core.SensorManager
+    {
+        
+    }
 }
