@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
-public class PassthroughToggle : MonoBehaviour
+namespace RSL.Core.Menu
 {
-    private ARCameraManager arCameraManager;
-    void Start()
+    public class PassthroughToggle : MonoBehaviour
     {
-        arCameraManager = FindObjectOfType<ARCameraManager>();
-        if (arCameraManager == null)
+        private ARCameraManager arCameraManager;
+        void Start()
         {
-            Debug.LogWarning("ARCameraManager not found in the scene.");
+            arCameraManager = FindObjectOfType<ARCameraManager>();
+            if (arCameraManager == null)
+            {
+                Debug.LogWarning("ARCameraManager not found in the scene.");
+            }
         }
-    }
 
-    public void SetPassthroughEnabled(int disabled)
-    {
-        if (arCameraManager != null)
+        public void SetPassthroughEnabled(int disabled)
         {
-            arCameraManager.enabled = disabled == 0;
+            if (arCameraManager != null)
+            {
+                arCameraManager.enabled = disabled == 0;
+            }
         }
     }
 }

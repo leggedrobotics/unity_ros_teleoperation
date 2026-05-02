@@ -4,7 +4,10 @@ using UnityEngine;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
 
-public interface IMarkerViz
+namespace RSL.Sensors.Markers
 {
-    public void SetData(PoseMsg pose, Vector3Msg scale, ColorRGBAMsg[] colors, PointMsg[] points);
+    public interface IMarkerViz
+    {
+        public void SetData(PoseMsg pose, Vector3Msg scale, ColorRGBAMsg[] colors, PointMsg[] points);
+    }
 }

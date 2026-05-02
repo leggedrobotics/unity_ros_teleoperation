@@ -2,20 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-[CustomEditor(typeof(MarkerManager))]
-public class MarkerManagerEditor : SensorManagerEditor
+namespace RSL.Sensors.Markers
 {
-    public override void OnInspectorGUI()
+    #if UNITY_EDITOR
+    using UnityEditor;
+    [CustomEditor(typeof(MarkerManager))]
+    public class MarkerManagerEditor : RSL.Core.SensorManagerEditor
     {
-        base.OnInspectorGUI();
-        MarkerManager markerManager = (MarkerManager)target;
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            MarkerManager markerManager = (MarkerManager)target;
+        }
     }
-}
-#endif
+    #endif
 
-public class MarkerManager : SensorManager
-{
-    public GameObject[] vizPrefabs;
+    public class MarkerManager : RSL.Core.SensorManager
+    {
+        public GameObject[] vizPrefabs;
+    }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace CircularBuffer
+namespace RSL.Sensors.Audio
 {
     public class CircularBuffer<T>
     {

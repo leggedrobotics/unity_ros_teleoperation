@@ -2,39 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-
-[CustomEditor(typeof(ProfileManager))]
-public class ProfileManagerEditor : Editor
+namespace RSL.Core.Menu
 {
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+    #if UNITY_EDITOR
+    using UnityEditor;
 
-        ProfileManager myScript = (ProfileManager)target;
-        if (GUILayout.Button("Clear Settings"))
+    [CustomEditor(typeof(ProfileManager))]
+    public class ProfileManagerEditor : Editor
+    {
+        public override void OnInspectorGUI()
         {
-            myScript.ClearSettings();
+            DrawDefaultInspector();
+
+            ProfileManager myScript = (ProfileManager)target;
+            if (GUILayout.Button("Clear Settings"))
+            {
+                myScript.ClearSettings();
+            }
         }
     }
-}
-#endif
+    #endif
 
-public class ProfileManager : MonoBehaviour
-{
-    void Start()
+    public class ProfileManager : MonoBehaviour
     {
-        
-    }
+        void Start()
+        {
+            
+        }
 
-    void Update()
-    {
-        
-    }
+        void Update()
+        {
+            
+        }
 
-    public void ClearSettings()
-    {
-        PlayerPrefs.DeleteAll();
+        public void ClearSettings()
+        {
+            PlayerPrefs.DeleteAll();
+        }
     }
 }

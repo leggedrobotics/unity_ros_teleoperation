@@ -2,19 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-[CustomEditor(typeof(GridMapManager))]
-public class GridMapManagerEditor : SensorManagerEditor
+namespace RSL.Sensors.GridMap
 {
-    public override void OnInspectorGUI()
+    #if UNITY_EDITOR
+    using UnityEditor;
+    [CustomEditor(typeof(GridMapManager))]
+    public class GridMapManagerEditor : RSL.Core.SensorManagerEditor
     {
-        base.OnInspectorGUI();
-        GridMapManager gridMapManager = (GridMapManager)target;
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            GridMapManager gridMapManager = (GridMapManager)target;
+        }
     }
-}
-#endif
+    #endif
 
-public class GridMapManager : SensorManager
-{
+    public class GridMapManager : RSL.Core.SensorManager
+    {
+    }
 }

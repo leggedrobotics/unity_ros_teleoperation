@@ -104,7 +104,7 @@ namespace RSL.Sensors.Lidar
     }
 
 
-    public class LidarStream : SensorStream
+    public class LidarStream : RSL.Core.SensorStream
     {
         public Material point_material;
 

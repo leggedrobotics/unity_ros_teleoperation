@@ -6,168 +6,171 @@ using RosMessageTypes.Voxblox;
 using System;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 
-#if UNITY_EDITOR
-using UnityEditor;
-
-[CustomEditor(typeof(VoxbloxMesh))]
-public class VoxbloxMeshEditor: Editor
+namespace RSL.Core.VoxBlox
 {
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+    #if UNITY_EDITOR
+    using UnityEditor;
 
-        VoxbloxMesh myScript = (VoxbloxMesh)target;
-        if(GUILayout.Button("Clear"))
+    [CustomEditor(typeof(VoxbloxMesh))]
+    public class VoxbloxMeshEditor: Editor
+    {
+        public override void OnInspectorGUI()
         {
-            myScript.Clear();
+            DrawDefaultInspector();
+
+            VoxbloxMesh myScript = (VoxbloxMesh)target;
+            if(GUILayout.Button("Clear"))
+            {
+                myScript.Clear();
+            }
         }
     }
-}
-#endif
+    #endif
 
-public class VoxbloxMesh : MonoBehaviour
-{
-    public string topic = "/voxblox_node/mesh";
-    public Material material;
-    private ROSConnection _ros;
-    public bool debug = false;
-    public float size = 0.5f;
-    private Dictionary<Tuple<long, long, long>, GameObject> blocks;
-
-    public GameObject _parent;
-
-    public bool _enabled = true;
-
-
-    void Start()
+    public class VoxbloxMesh : MonoBehaviour
     {
+        public string topic = "/voxblox_node/mesh";
+        public Material material;
+        private ROSConnection _ros;
+        public bool debug = false;
+        public float size = 0.5f;
+        private Dictionary<Tuple<long, long, long>, GameObject> blocks;
 
-        blocks = new Dictionary<Tuple<long, long, long>, GameObject>();
+        public GameObject _parent;
 
-        _ros = ROSConnection.GetOrCreateInstance();
-        _ros.Subscribe<MeshMsg>(topic, UpdateMesh);
-    }
+        public bool _enabled = true;
 
-    void UpdatePose(string frame)
-    {
-        _parent = GameObject.Find(frame);
-        if(_parent == null) return;
 
-        transform.parent = _parent.transform;
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-    }
-
-    void UpdateMesh(MeshMsg tmpMesh)
-    {
-        // Debug.Log("Updating mesh: " + tmpMesh.mesh_blocks.Length + " blocks.");
-
-        MeshBlockMsg[] meshBlocks = tmpMesh.mesh_blocks;
-        float block_edge_length = tmpMesh.block_edge_length;
-
-        float point_conv_factor = 2f/System.UInt16.MaxValue;
-
-        if(_parent == null || _parent.name != tmpMesh.header.frame_id)
+        void Start()
         {
-            UpdatePose(tmpMesh.header.frame_id);
+
+            blocks = new Dictionary<Tuple<long, long, long>, GameObject>();
+
+            _ros = ROSConnection.GetOrCreateInstance();
+            _ros.Subscribe<MeshMsg>(topic, UpdateMesh);
         }
 
-
-        bool hasColor = false;
-        string blocksStr = "";
-
-        Mesh mesh;
-
-        for(int j=0; j<meshBlocks.Length; j++)
+        void UpdatePose(string frame)
         {
-            MeshBlockMsg block = meshBlocks[j];
-            hasColor = block.r.Length == block.x.Length;
-            Color color;
-            
-            List<Vector3> vertices = new List<Vector3>();
-            List<int> triangles = new List<int>();
-            List<Color> colors = new List<Color>();
-            int vertexCount = 0;
+            _parent = GameObject.Find(frame);
+            if(_parent == null) return;
 
-            Tuple<long, long, long> index = new Tuple<long, long, long>(block.index[0], block.index[1], block.index[2]);
+            transform.parent = _parent.transform;
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+        }
 
-            if(!blocks.ContainsKey(index))
+        void UpdateMesh(MeshMsg tmpMesh)
+        {
+            // Debug.Log("Updating mesh: " + tmpMesh.mesh_blocks.Length + " blocks.");
+
+            MeshBlockMsg[] meshBlocks = tmpMesh.mesh_blocks;
+            float block_edge_length = tmpMesh.block_edge_length;
+
+            float point_conv_factor = 2f/System.UInt16.MaxValue;
+
+            if(_parent == null || _parent.name != tmpMesh.header.frame_id)
             {
-                GameObject blockObj = new GameObject("Block " + index.Item1 + " " + index.Item2 + " " + index.Item3);
-                blockObj.transform.parent = transform;
-                blockObj.transform.localPosition = Vector3.zero;
-                blockObj.transform.localRotation = Quaternion.identity;
-                blockObj.transform.localScale = Vector3.one;
-                blocks.Add(index, blockObj);
-
-                mesh = new Mesh();
-                blockObj.AddComponent<MeshFilter>().mesh = mesh;
-                blockObj.AddComponent<MeshRenderer>().material = material;
-                MeshCollider collider = blockObj.AddComponent<MeshCollider>();
-                collider.sharedMesh = mesh;
-                collider.convex = true;
-
-            } else
-            {
-                mesh = blocks[index].GetComponent<MeshFilter>().mesh;
+                UpdatePose(tmpMesh.header.frame_id);
             }
 
-            mesh.Clear();
 
+            bool hasColor = false;
+            string blocksStr = "";
 
-            for(int i=0; i<block.x.Length; i++)
+            Mesh mesh;
+
+            for(int j=0; j<meshBlocks.Length; j++)
             {
-                float x = ((float)block.x[i] * point_conv_factor + (float)block.index[0]) * block_edge_length;
-                float y = ((float)block.y[i] * point_conv_factor + (float)block.index[1]) * block_edge_length;
-                float z = ((float)block.z[i] * point_conv_factor + (float)block.index[2]) * block_edge_length;
+                MeshBlockMsg block = meshBlocks[j];
+                hasColor = block.r.Length == block.x.Length;
+                Color color;
+                
+                List<Vector3> vertices = new List<Vector3>();
+                List<int> triangles = new List<int>();
+                List<Color> colors = new List<Color>();
+                int vertexCount = 0;
 
-                // switch between ros and unity coordinates
-                Vector3 pos = new Vector3<FLU>(x, y, z).toUnity;
+                Tuple<long, long, long> index = new Tuple<long, long, long>(block.index[0], block.index[1], block.index[2]);
 
-                vertices.Add(pos);
-
-                if(debug)
+                if(!blocks.ContainsKey(index))
                 {
-                    Debug.DrawRay(pos, Vector3.up*size, Color.red,20f);
-                }
+                    GameObject blockObj = new GameObject("Block " + index.Item1 + " " + index.Item2 + " " + index.Item3);
+                    blockObj.transform.parent = transform;
+                    blockObj.transform.localPosition = Vector3.zero;
+                    blockObj.transform.localRotation = Quaternion.identity;
+                    blockObj.transform.localScale = Vector3.one;
+                    blocks.Add(index, blockObj);
 
-                if(hasColor)
-                {
-                    color = new Color(block.r[i]/255f, block.g[i]/255f, block.b[i]/255f);
+                    mesh = new Mesh();
+                    blockObj.AddComponent<MeshFilter>().mesh = mesh;
+                    blockObj.AddComponent<MeshRenderer>().material = material;
+                    MeshCollider collider = blockObj.AddComponent<MeshCollider>();
+                    collider.sharedMesh = mesh;
+                    collider.convex = true;
+
                 } else
                 {
-                    color = new Color(.5f, .5f, .5f);
+                    mesh = blocks[index].GetComponent<MeshFilter>().mesh;
                 }
-                colors.Add(color);
 
-                triangles.Add(vertexCount);
-                vertexCount++;
+                mesh.Clear();
+
+
+                for(int i=0; i<block.x.Length; i++)
+                {
+                    float x = ((float)block.x[i] * point_conv_factor + (float)block.index[0]) * block_edge_length;
+                    float y = ((float)block.y[i] * point_conv_factor + (float)block.index[1]) * block_edge_length;
+                    float z = ((float)block.z[i] * point_conv_factor + (float)block.index[2]) * block_edge_length;
+
+                    // switch between ros and unity coordinates
+                    Vector3 pos = new Vector3<FLU>(x, y, z).toUnity;
+
+                    vertices.Add(pos);
+
+                    if(debug)
+                    {
+                        Debug.DrawRay(pos, Vector3.up*size, Color.red,20f);
+                    }
+
+                    if(hasColor)
+                    {
+                        color = new Color(block.r[i]/255f, block.g[i]/255f, block.b[i]/255f);
+                    } else
+                    {
+                        color = new Color(.5f, .5f, .5f);
+                    }
+                    colors.Add(color);
+
+                    triangles.Add(vertexCount);
+                    vertexCount++;
+                }
+                mesh.vertices = vertices.ToArray();
+                mesh.triangles = triangles.ToArray();
+                mesh.colors = colors.ToArray();
+                mesh.RecalculateNormals();
+                mesh.RecalculateBounds();
             }
-            mesh.vertices = vertices.ToArray();
-            mesh.triangles = triangles.ToArray();
-            mesh.colors = colors.ToArray();
-            mesh.RecalculateNormals();
-            mesh.RecalculateBounds();
+
         }
 
-    }
-
-    public void ToggleEnabled()
-    {
-        _enabled = !_enabled;
-        foreach (Transform child in transform)
+        public void ToggleEnabled()
         {
-            child.gameObject.SetActive(_enabled);
+            _enabled = !_enabled;
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(_enabled);
+            }
         }
-    }
 
-    public void Clear()
-    {
-        foreach (Transform child in transform)
+        public void Clear()
         {
-            Destroy(child.gameObject);
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
+            }
+            blocks.Clear();
         }
-        blocks.Clear();
-    }
 
+    }
 }
