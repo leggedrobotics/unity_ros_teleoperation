@@ -5,7 +5,7 @@ using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Std;
 using TMPro;
 
-namespace RSL.Sensors.ServiceCaller
+namespace RSL.Sensors.Service
 {
     #if UNITY_EDITOR
     using UnityEditor;

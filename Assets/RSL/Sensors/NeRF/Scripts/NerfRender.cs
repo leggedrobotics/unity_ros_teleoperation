@@ -9,7 +9,7 @@ using RosMessageTypes.Std;
 using RosMessageTypes.Sensor;
 using TMPro;
 
-namespace RSL.Sensors.NeRFViewer
+namespace RSL.Sensors.NeRF
 {
     #if UNITY_EDITOR
     using UnityEditor;

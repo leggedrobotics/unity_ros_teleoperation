@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.EventSystems;
-using RSL.Telemetry.PosePublisher;
+using RSL.Telemetry.Pose;
 
 namespace RSL.Core.Menu
 {
