@@ -226,7 +226,7 @@ namespace RSL.Telemetry.Hands
                         Debug.LogError("Null tracking data!" + jointID);
                         continue;
                     }
-                    if(trackingData.TryGetPose(out Pose pose))
+                    if(trackingData.TryGetPose(out UnityEngine.Pose pose))
                     {
                         if(points[i] == null)
                             points[i] = new Point32Msg();

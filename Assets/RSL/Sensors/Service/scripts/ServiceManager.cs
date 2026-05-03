@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RSL.Sensors.ServiceCaller
+namespace RSL.Sensors.Service
 {
     #if UNITY_EDITOR
     using UnityEditor;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-namespace RSL.Sensors.NeRFViewer
+namespace RSL.Sensors.NeRF
 {
     #if UNITY_EDITOR
     using UnityEditor;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using RSL.Telemetry.PosePublisher;
+using RSL.Telemetry.Pose;
 
 namespace RSL.Core.Menu
 {

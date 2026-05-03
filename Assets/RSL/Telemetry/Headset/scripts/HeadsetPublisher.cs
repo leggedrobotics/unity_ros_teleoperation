@@ -9,7 +9,7 @@ using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using TMPro;
 
-namespace RSL.Telemetry.HeadsetPublisher
+namespace RSL.Telemetry.Headset
 {
     public class HeadsetPublisher : MonoBehaviour
     {
