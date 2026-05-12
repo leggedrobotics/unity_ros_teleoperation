@@ -1,0 +1,345 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1770150239514932
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4858807375538342}
+  - component: {fileID: 114865344359803568}
+  - component: {fileID: 81430364140143098}
+  - component: {fileID: 4572898447849137938}
+  - component: {fileID: 7920822893500534720}
+  - component: {fileID: 3801399852314700430}
+  m_Layer: 0
+  m_Name: Hologram Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4858807375538342
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770150239514932}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114865344359803568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770150239514932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d8741a64bf406d4d837e88bbb59fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lastSavedVersion:
+    major: 0
+    minor: 0
+    patch: -1
+  forceDisplayIndex: 1
+  targetDisplay: 0
+  targetLKG: LKG-PORT-
+  emulatedDevice: 4
+  preview2D: 0
+  showHologramPreview: 0
+  urpPostProcessing: 1
+  quiltTexture: {fileID: 0}
+  useQuiltAsset: 0
+  automaticQuiltPreset: 1
+  quiltPreset:
+    deviceType: 4
+    useCustom: 0
+    customSettings:
+      quiltWidth: 3360
+      quiltHeight: 3360
+      columns: 8
+      rows: 6
+      renderAspect: 0.75
+      tileCount: 48
+  renderStack:
+    filterMode: 2
+    antiAliasingStrength: 1
+    steps:
+    - isEnabled: 1
+      renderType: 0
+      quiltTexture: {fileID: 0}
+      quiltSettings:
+        quiltWidth: 0
+        quiltHeight: 0
+        columns: 0
+        rows: 0
+        renderAspect: 0
+        tileCount: 0
+      texture: {fileID: 0}
+      postProcessCamera: {fileID: 0}
+  cameraProperties:
+    hologramCamera: {fileID: 114865344359803568}
+  gizmos:
+    hologramCamera: {fileID: 114865344359803568}
+  events:
+    hologramCamera: {fileID: 114865344359803568}
+  optimization:
+    hologramCamera: {fileID: 114865344359803568}
+  debugging:
+    hologramCamera: {fileID: 114865344359803568}
+  isEmulatingDevice: 1
+  lkgDisplay:
+    id: -1
+    calibration:
+      rawJson: 
+      configVersion: 
+      serial: 
+      pitch: 0
+      slope: 0
+      center: 0
+      fringe: 0
+      viewCone: 0
+      invView: 0
+      verticalAngle: 0
+      dpi: 0
+      screenW: 0
+      screenH: 0
+      flipImageX: 0
+      flipImageY: 0
+      flipSubp: 0
+      cellPatternMode: 0
+      subpixelCells: []
+    defaultQuilt:
+      quiltWidth: 0
+      quiltHeight: 0
+      columns: 0
+      rows: 0
+      renderAspect: 0
+      tileCount: 0
+    hardwareInfo:
+      hardwareVersion: 
+      hwid: 
+      index: 0
+      state: 
+      windowCoordX: 0
+      windowCoordY: 0
+  emulatedDeviceTemplate:
+    calibration:
+      rawJson: 
+      configVersion: 3.0
+      serial: LKG-PORT-
+      pitch: 52
+      slope: -7
+      center: 0.5
+      fringe: 0
+      viewCone: 40
+      invView: 1
+      verticalAngle: 0
+      dpi: 324
+      screenW: 1536
+      screenH: 2048
+      flipImageX: 0
+      flipImageY: 0
+      flipSubp: 0
+      cellPatternMode: 0
+      subpixelCells: []
+    defaultQuilt:
+      quiltWidth: 3360
+      quiltHeight: 3360
+      columns: 8
+      rows: 6
+      renderAspect: 0.75
+      tileCount: 48
+  transformMode: 0
+  nearClipFactor: 1.5
+  farClipFactor: 4
+  nearClipPlane: 0.01
+  farClipPlane: 45
+  focalPlane: 40.721733
+  size: 5
+  sizeMode: 0
+  clearFlags: 2
+  background: {r: 0, g: 0, b: 0, a: 1}
+  cullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  fov: 14
+  depth: 0
+  renderingPath: -1
+  useOcclusionCulling: 1
+  allowHDR: 0
+  allowMSAA: 1
+  allowDynamicResolution: 0
+  useFrustumTarget: 0
+  frustumTarget: {fileID: 0}
+  centerOffset: 0
+  horizontalFrustumOffset: 0
+  verticalFrustumOffset: 0
+  depthiness: 1
+  drawHandles: 1
+  frustumColor: {r: 0, g: 1, b: 0, a: 1}
+  middlePlaneColor: {r: 0.5882353, g: 0.19607843, b: 1, a: 1}
+  handleColor: {r: 0.29411766, g: 0.39215687, b: 1, a: 1}
+  onViewRendered:
+    m_PersistentCalls:
+      m_Calls: []
+  viewInterpolation: 0
+  reduceFlicker: 0
+  fillGaps: 0
+  blendViews: 0
+  showAllObjects: 0
+  onlyShowView: -1
+  onlyRenderOneView: 0
+  fallbackCameraTargetTexture: 0
+  manualCalibrationMode: 0
+  calibrationTextAsset: {fileID: 0}
+  manualCalibration:
+    rawJson: 
+    configVersion: 
+    serial: 
+    pitch: 0
+    slope: 0
+    center: 0
+    fringe: 0
+    viewCone: 0
+    invView: 0
+    verticalAngle: 0
+    dpi: 0
+    screenW: 0
+    screenH: 0
+    flipImageX: 0
+    flipImageY: 0
+    flipSubp: 0
+    cellPatternMode: 0
+    subpixelCells: []
+  overrideLenticularShader: {fileID: 0}
+--- !u!81 &81430364140143098
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770150239514932}
+  m_Enabled: 1
+--- !u!114 &4572898447849137938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770150239514932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d76772b6a1d47347875985d58d514c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fileName: Screenshot${take}
+  folderPath:
+    root: 0
+    value: Recordings
+    forceAssetFolder: 0
+  captureMode: 4
+  screenshotPreset: -1
+  recordingPreset: -1
+  startFrame: 0
+  endFrame: 30
+  startTime: 0
+  endTime: 1
+  recordOnStart: 0
+  exitPlayModeOnStop: 1
+  customRecordingSettings:
+    codec: 0
+    frameRate: 30
+    compression: 20
+    targetBitrateInMegabits: 60
+    cameraOverrideSettings:
+      quiltSettings:
+        quiltWidth: 3360
+        quiltHeight: 3360
+        columns: 8
+        rows: 6
+        renderAspect: 0.75
+        tileCount: 48
+      nearClipFactor: 0.5
+  customScreenshotSettings:
+    quiltSettings:
+      quiltWidth: 0
+      quiltHeight: 0
+      columns: 0
+      rows: 0
+      renderAspect: 0
+      tileCount: 0
+    nearClipFactor: 0.5
+  syncedVideoPlayer: {fileID: 0}
+  shortcuts:
+    screenshot2D: 102
+    screenshot3D: 103
+--- !u!20 &7920822893500534720
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770150239514932}
+  m_Enabled: 0
+  serializedVersion: 2
+  m_ClearFlags: 4
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_projectionMatrixMode: 0
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 38.221733
+  far clip plane: 60.721733
+  field of view: 14
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 0
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 0
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!114 &3801399852314700430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770150239514932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8afc7b8c7fdd3d047b6f41de3de76685, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quiltFilePath: 
+  blockTitle: 
+  blockDescription: 

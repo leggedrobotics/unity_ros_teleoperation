@@ -1,0 +1,31 @@
+{
+    "name": "LookingGlass.Editor",
+    "rootNamespace": "",
+    "references": [
+        "LookingGlass",
+        "FFmpegOut",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "2.0.0",
+            "define": "HAS_NEWTONSOFT_JSON"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "0",
+            "define": "HAS_URP"
+        }
+    ],
+    "noEngineReferences": false
+}

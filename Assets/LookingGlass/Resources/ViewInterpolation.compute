@@ -1,0 +1,168 @@
+//Copyright 2017-2021 Looking Glass Factory Inc.
+//All rights reserved.
+//Unauthorized copying or distribution of this file, and the source code contained herein, is strictly prohibited.
+
+#define TX 1
+#define TY 8 
+#define TZ 8
+
+//#UNITY_2020_1_OR_NEWER
+#pragma kernel QuiltInterpolationForward DIR 1.0
+#pragma kernel QuiltInterpolationBack DIR -1.0
+#pragma kernel QuiltInterpolationBackBlend DIR -1.0 BLEND_VIEWS
+#pragma kernel QuiltInterpolationForwardFlicker DIR 1.0
+#pragma kernel QuiltInterpolationBackFlicker DIR -1.0
+#pragma kernel QuiltInterpolationBackBlendFlicker DIR -1.0 BLEND_VIEWS
+#pragma kernel FillGaps DIR 1.0
+
+//#!UNITY_2020_1_OR_NEWER
+//#pragma kernel QuiltInterpolationForward DIR=1.0
+//#pragma kernel QuiltInterpolationBack DIR=-1.0
+//#pragma kernel QuiltInterpolationBackBlend DIR=-1.0 BLEND_VIEWS
+//#pragma kernel QuiltInterpolationForwardFlicker DIR=1.0
+//#pragma kernel QuiltInterpolationBackFlicker DIR=-1.0
+//#pragma kernel QuiltInterpolationBackBlendFlicker DIR=-1.0 BLEND_VIEWS
+//#pragma kernel FillGaps DIR=1.0
+
+
+shared RWTexture2D<float4> Result;
+shared RWTexture2D<float> ResultDepth;
+shared RWTexture2D<int> ResultDepthInt;
+// groupshared RWBuffer<uint> ResultDepthIntBuffer[65536];
+int textureWidth;
+SamplerState samplerPointClamp;
+float _NearClip;
+float _FarClip;
+float perspw;
+float focalDist;
+
+// quilt interp vars
+float4 viewSize;
+StructuredBuffer<int4> viewPositions;
+StructuredBuffer<float2> viewOffsets;
+StructuredBuffer<int2> baseViewPositions;
+int xpos;
+int xsize;
+
+int px;
+int spanSize;
+
+float LinearEyeDepth(float rawdepth) {
+    float x, y, z, w;
+#if SHADER_API_GLES3 // instead of UNITY_REVERSED_Z
+    x = -1.0 + _NearClip/ _FarClip;
+    y = 1;
+    z = x / _NearClip;
+    w = 1 / _NearClip;
+#else
+    x = 1.0 - _NearClip/ _FarClip;
+    y = _NearClip / _FarClip;
+    z = x / _NearClip;
+    w = y / _NearClip;
+#endif
+	return 1.0 / (z * rawdepth + w);
+}
+
+float Linear01Depth (float ed) {
+	return (ed - _NearClip) / (_FarClip - _NearClip);
+}
+
+void ReprojectQuiltView(
+	int2 coords,
+	int viewIndex,
+	int prevIndex
+)
+{
+	int2 baseCoords = baseViewPositions[prevIndex].xy + coords.xy;
+	float4 c = Result.Load(baseCoords.xy);
+	float d = ResultDepth.Load(baseCoords.xy);
+	float ed = LinearEyeDepth(d);
+	float viewAmt = abs(DIR * 0.5 + 0.5) * viewOffsets[viewIndex].y + abs(DIR * 0.5 - 0.5) * -(1.0 - viewOffsets[viewIndex].y);
+	float xoff = (ed - focalDist) * viewOffsets[viewIndex].x * viewAmt;
+	int2 writeCoords = viewPositions[viewIndex].xy + coords.xy;
+	writeCoords.x += int((xoff * viewSize.x) / (perspw * ed)); // times texture width
+
+	float oldDepth = ResultDepth.Load(writeCoords);
+#if defined(BLEND_VIEWS)
+	if (abs(oldDepth - d) < 0.02) { 
+		Result[writeCoords] = c * viewOffsets[viewIndex].y + Result.Load(writeCoords) * (1.0 - viewOffsets[viewIndex].y); 
+	} else 
+#endif
+	if (d > oldDepth &&
+		writeCoords.x > viewPositions[viewIndex].x &&
+		writeCoords.x < viewPositions[viewIndex].x + viewSize.x)
+	{
+		Result[writeCoords] = c; 
+		// Result[writeCoords] = float4(1,0,0,1); 
+		ResultDepth[writeCoords] = d; 
+	}
+}
+
+void Barrier() {
+	GroupMemoryBarrierWithGroupSync();
+}
+
+[numthreads(TX,TY,TZ)]
+void QuiltInterpolationForward (uint3 id : SV_DispatchThreadID) {
+	int x = px + id.x * spanSize;
+	if ((int)x > viewSize.x) return;
+	ReprojectQuiltView(int2(x, id.y), id.z, viewPositions[id.z].z);
+	Barrier();
+}
+
+[numthreads(TX,TY,TZ)]
+void QuiltInterpolationBack (uint3 id : SV_DispatchThreadID) {
+	int x = viewSize.x - 1 - px - id.x * spanSize;
+	if ((int)x < 0) return;
+	ReprojectQuiltView(int2(x, id.y), id.z, viewPositions[id.z].w);
+	Barrier();
+}
+
+[numthreads(TX,TY,TZ)]
+void QuiltInterpolationBackBlend (uint3 id : SV_DispatchThreadID) {
+	int x = viewSize.x - 1 - px - id.x * spanSize;
+	if ((int)x < 0) return;
+	ReprojectQuiltView(int2(x, id.y), id.z, viewPositions[id.z].w);
+	Barrier();
+}
+
+[numthreads(TX,TY,TZ)]
+void QuiltInterpolationForwardFlicker (uint3 id : SV_DispatchThreadID) {
+	ReprojectQuiltView(id.xy, id.z, viewPositions[id.z].z);
+	Barrier();
+}
+
+[numthreads(TX,TY,TZ)]
+void QuiltInterpolationBackFlicker (uint3 id : SV_DispatchThreadID) {
+	ReprojectQuiltView(id.xy, id.z, viewPositions[id.z].w);
+	Barrier();
+}
+
+[numthreads(TX,TY,TZ)]
+void QuiltInterpolationBackBlendFlicker (uint3 id : SV_DispatchThreadID) {
+	ReprojectQuiltView(id.xy, id.z, viewPositions[id.z].w);
+	Barrier();
+}
+
+[numthreads(TX,TY,TZ)]
+void FillGaps (uint3 id : SV_DispatchThreadID)
+{
+	int2 co = viewPositions[id.z].xy + id.xy;
+	for (int s = 1; s <= 2; s+=1) {
+		float farPortion = 0.1;
+		float d  = ResultDepth.Load(co.xy);
+		float dl = ResultDepth.Load(co.xy + int2(-s, 0));
+		float dr = ResultDepth.Load(co.xy + int2( s, 0));
+		if (abs(d - dl) > farPortion && abs(d - dr) > farPortion) {
+			Result[co.xy] = Result.Load(co.xy + int2(s, 0));
+			return;
+		}
+
+		dl = ResultDepth.Load(co.xy + int2( 0, s));
+		dr = ResultDepth.Load(co.xy + int2( 0,-s));
+		if (abs(d - dl) > farPortion && abs(d - dr) > farPortion) {
+			Result[co.xy] = Result.Load(co.xy + int2(0, s));
+			return;
+		}
+	}
+}

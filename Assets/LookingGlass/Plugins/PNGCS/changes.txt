@@ -1,0 +1,73 @@
+===========  HISTORY PngCs  http://code.google.com/p/pngcs/ ================
+
+15/Dec/2012:  1.1.4
+   - Two targers: .Net 4.5 with CLR DeflateStream (with our own Zlib wrapper), other with the old SharpZipLib (requires extra dll)
+     -- New namespace/folder Zlib 
+     -- Decoupled compression from implementation (SharpZipLib/.NetCLR)
+     -- Own implementations of CRC32 and Adler crcs.
+   - Small fixes:  bad namespace in internal PngInterlacer;  replaced crctest in pngreader by Adler32.
+
+8/Dec/2012:  1.1.3
+   - Interlaced PNG: full support for reading.
+   - Read/write can use INT or BYTE for sample storage now. The choice is explicit by the programmer
+      -- ImageLine have a "sampleType" and two buffers Scanline (integer) and ScanlineB (byte), only one is allocated
+      -- ReadRow/WriteRow methods can specify the concrete type: ReadRowInt/ReadRowByte WriteRowInt/WriteRowByte   
+   - packed formats (bit depth 1-2-4) can now be unpacked on the fly when reading/writing  See eg PngReader.SetUnpackedMode()s
+   - Several retouchings in PngReader. ReadRow can skip rows (getRow is deprecated now), and does it 
+    more efficiently (does not decode more than necessary)
+   - Read/Write can work with a set of lines: ReadRows WriteRows, returns a ImageLines object, which wraps a matrix
+      -- This is not a mere alias to a loop of ReadRow, and it's much efficient for interlaced PNG
+   - PngReader.ReadSkippingAllRows allows to skip entirely the pixel data, very efficiently
+   - Much extensive and robust tests:
+     -- added crctest and PngReaderTest to implement better tests (internal use only)
+     -- PngSuiteTest does a double mirror of each image an compares with original (even with interlaced)
+   - ImageLineHelper.Pal2rgb  (renamed, corrected, supports alpha if TRNS passed). Added to TestSuite
+   - Added getMetadata().GetPalette() getMetadata().CreateNewPalette()
+   - Corrected several issues with textual chunks (texts with null bytes, empty texts). Added test.
+   - Lots of polishing and reorganization of test/sample code in a single project
+
+21/Oct/2012:  1.0.96
+  - SetMaxXXX() methods now accept zero, meaning unlimited (eg  PngReader.setMaxTotalBytesRead(0) = no limit) 
+  - Added SampleCustomChunk, shows how to register a custom chunk for read and writing
+  - Small fixes and polishing
+    -- PNGChunkTIME bad format for output
+    -- PngWriter.init() not internally called when not passing row number
+
+14/Aug/2012:  1.0.95
+  - Defensive limits and related tuning in PngReader 
+   -- Added: MaxTotalBytesRead (200MB), MaxBytesMetadata (5MB), SkipChunkMaxSize (2MB) SkipChunkIds ( "fdAT" )
+   -- PngChunkSkipped : now skipped chunks are really skipped (never loaded in memory)  All skipped chunks end in ChunksLists as a PngChunkSkipped
+   -- Several related polishing in PngReader (ParseChunkAndAddToList() removed, ReadChunk() added)
+	 -- 'offset' added in chunks (mainly informational)
+	 -- 'offset' in PngReader: now a long (to support greater than 2GB files), updated and checked against MaxTotalBytesRead
+
+23/Jun/2012:  1.0.93
+  - PngReader.GetRow() allows non sequential reading  (useful for skipping lines)
+  - PngReader.End() is no longer deprecated but recommended (related to the previous)
+  - ImageLine.Pack()/ ImageLine.Unpack() was requiring/returning a buffer of length greater than cols*nchannels - fixed
+  - Added PngWriter.ComputeCompressionRatio()
+  
+15/Jun/2012:  1.0.92
+  - LICENCE change: now released under Apache License
+  - Replaced #ZipLib code for standalone assembly : ICSharpCode.SharpZipLib.dll
+  - General polishing, to better fit C# conventions and good practices. 
+  Quite a bit of changes in signatures (cases, specially), break backward compatibility.
+  - Trimmed unnecesary imports (Linq) and replace unnecesary dependendance on .Net 4.0. Now the target is .Net 2.0
+  - Documented all classes/methods (Pngcs.xml)
+  - Reorganized and added some sample projects (SampleCreateOrangeGradient) 
+  - Added Doxygen documentation
+
+10/June/2012: 1.0.91
+  - Major reorganization to put in sync with Java port: updated to PngJ v 0.91, with all Chunks and full PNGTestSuite
+  - Most public methods/properties naming complies with C# conventions now
+
+22/Sept/2011: Implemented functionality is on par with current PngJ, 
+some testing, optimizing and testing pending.
+
+21/Sept/2011: Added classes from SharpZipLib, basic reading and writing works
+
+Jan/2011: Basic port, aided by http://j2cstranslator.sourceforge.net/ (nice tool!)
+
+Hernan J. Gonzalez 
+hgonzalez@gmail.com  
+http://hjg.com.ar/

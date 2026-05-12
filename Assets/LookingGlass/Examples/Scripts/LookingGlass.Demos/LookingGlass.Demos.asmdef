@@ -1,0 +1,20 @@
+{
+    "name": "LookingGlass.Demos",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InputSystem",
+        "LookingGlass",
+        "Unity.Postprocessing.Runtime",
+        "NativeFilePicker.Runtime",
+        "NativeFilePicker.Editor"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

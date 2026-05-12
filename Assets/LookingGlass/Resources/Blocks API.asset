@@ -1,0 +1,1055 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccf793b7ca1cc645b9cd36d753b8e3c, type: 3}
+  m_Name: Blocks API
+  m_EditorClassIdentifier: 
+  url: https://blocks.glass/api/graphql
+  queries:
+  - displayName: GetUserData
+    type: 0
+    name: me
+    returnType: User
+    queryOptions:
+    - hologramFindById
+    - holograms
+    - myHolograms
+    - userFindById
+    - me
+    - users
+    fields:
+    - index: 0
+      name: id
+      type: Int
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: username
+        type: String
+      - name: displayName
+        type: String
+      - name: subId
+        type: String
+      - name: email
+        type: String
+      - name: picture
+        type: String
+      - name: role
+        type: Role
+      - name: createdAt
+        type: DateTime
+      - name: holograms
+        type: Hologram
+      hasChanged: 0
+    - index: 1
+      name: username
+      type: String
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: username
+        type: String
+      - name: displayName
+        type: String
+      - name: subId
+        type: String
+      - name: email
+        type: String
+      - name: picture
+        type: String
+      - name: role
+        type: Role
+      - name: createdAt
+        type: DateTime
+      - name: holograms
+        type: Hologram
+      hasChanged: 0
+    - index: 2
+      name: displayName
+      type: String
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: username
+        type: String
+      - name: displayName
+        type: String
+      - name: subId
+        type: String
+      - name: email
+        type: String
+      - name: picture
+        type: String
+      - name: role
+        type: Role
+      - name: createdAt
+        type: DateTime
+      - name: holograms
+        type: Hologram
+      hasChanged: 0
+    isComplete: 0
+    query: "query GetUserData {\n    me {\n        id\n        username\n       
+      displayName\n    }\n}"
+  - displayName: ListUserHolograms
+    type: 0
+    name: myHolograms
+    returnType: HologramConnection
+    queryOptions:
+    - hologramFindById
+    - holograms
+    - myHolograms
+    - playlist
+    - playlists
+    - userFindById
+    - me
+    - user
+    - users
+    fields:
+    - index: 0
+      name: edges
+      type: HologramEdge
+      parentIndices: 
+      hasSubField: 1
+      possibleFields:
+      - name: edges
+        type: HologramEdge
+      - name: pageInfo
+        type: PageInfo
+      - name: nodes
+        type: Hologram
+      hasChanged: 0
+    - index: 1
+      name: node
+      type: Hologram
+      parentIndices: 00000000
+      hasSubField: 1
+      possibleFields:
+      - name: cursor
+        type: String
+      - name: node
+        type: Hologram
+      hasChanged: 0
+    - index: 0
+      name: id
+      type: Int
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 2
+      name: title
+      type: String
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 3
+      name: description
+      type: String
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 7
+      name: aspectRatio
+      type: Float
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 8
+      name: quiltCols
+      type: Int
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 9
+      name: quiltRows
+      type: Int
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 10
+      name: quiltTileCount
+      type: Int
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 5
+      name: isPublished
+      type: Boolean
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 12
+      name: permalink
+      type: String
+      parentIndices: 0000000001000000
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    isComplete: 0
+    query: "query ListUserHolograms {\n    myHolograms {\n        edges {\n           
+      node {\n                id\n                title\n                description\n               
+      aspectRatio\n                quiltCols\n                quiltRows\n               
+      quiltTileCount\n                isPublished\n                permalink\n           
+      }\n        }\n    }\n}"
+  mutations:
+  - displayName: DeleteHolograms
+    type: 1
+    name: deleteHolograms
+    returnType: BatchPayload
+    queryOptions:
+    - createImageAsset
+    - createPlaylistItem
+    - createPlaylistItems
+    - createPlaylist
+    - createQuiltHologram
+    - deleteHologram
+    - deleteHolograms
+    - deletePlaylistItem
+    - deletePlaylistItems
+    - deletePlaylist
+    - replaceQuiltHologram
+    - updateQuiltHologram
+    - updatePlaylistItem
+    - updatePlaylist
+    - updateUser
+    fields:
+    - index: 0
+      name: count
+      type: Int
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: count
+        type: Int
+      hasChanged: 0
+    isComplete: 0
+    query: "mutation DeleteHolograms {\n    deleteHolograms(ids:[3645]) {\n       
+      count\n    }\n}"
+  - displayName: CreateQuiltHologram
+    type: 1
+    name: createQuiltHologram
+    returnType: Hologram
+    queryOptions:
+    - createImageAsset
+    - createPlaylistItem
+    - createPlaylistItems
+    - createPlaylist
+    - createQuiltHologram
+    - deleteHologram
+    - deleteHolograms
+    - deletePlaylistItem
+    - deletePlaylistItems
+    - deletePlaylist
+    - replaceQuiltHologram
+    - updateQuiltHologram
+    - updatePlaylistItem
+    - updatePlaylist
+    - updateUser
+    fields:
+    - index: 0
+      name: id
+      type: Int
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 2
+      name: title
+      type: String
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 3
+      name: description
+      type: String
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 7
+      name: aspectRatio
+      type: Float
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 8
+      name: quiltCols
+      type: Int
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 9
+      name: quiltRows
+      type: Int
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 10
+      name: quiltTileCount
+      type: Int
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 5
+      name: isPublished
+      type: Boolean
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    - index: 12
+      name: permalink
+      type: String
+      parentIndices: 
+      hasSubField: 0
+      possibleFields:
+      - name: id
+        type: Int
+      - name: uuid
+        type: String
+      - name: title
+        type: String
+      - name: description
+        type: String
+      - name: privacy
+        type: PrivacyType
+      - name: isPublished
+        type: Boolean
+      - name: type
+        type: HologramType
+      - name: aspectRatio
+        type: Float
+      - name: quiltCols
+        type: Int
+      - name: quiltRows
+        type: Int
+      - name: quiltTileCount
+        type: Int
+      - name: path
+        type: String
+      - name: permalink
+        type: String
+      - name: tweetMessage
+        type: String
+      - name: quiltAngleImages
+        type: ImageAsset
+      - name: thumbnail
+        type: ImageAsset
+      - name: previewGifAssets
+        type: ImageAsset
+      - name: previewVideoAssets
+        type: ImageAsset
+      - name: sourceImages
+        type: ImageAsset
+      - name: user
+        type: User
+      hasChanged: 0
+    isComplete: 0
+    query: 
+  subscriptions: []

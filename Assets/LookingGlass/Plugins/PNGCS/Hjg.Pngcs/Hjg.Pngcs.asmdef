@@ -1,0 +1,22 @@
+{
+    "name": "Hjg.Pngcs",
+    "rootNamespace": "Hjg.Pngcs",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "ICSharpCode.SharpZipLib.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "Unity",
+            "expression": "2018.4",
+            "define": "SHARPZIPLIB"
+        }
+    ],
+    "noEngineReferences": false
+}

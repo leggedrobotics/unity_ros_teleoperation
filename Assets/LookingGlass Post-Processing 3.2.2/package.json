@@ -1,0 +1,22 @@
+{
+  "name": "com.unity.postprocessing",
+  "version": "3.2.2",
+  "displayName": "Post Processing",
+  "unity": "2019.4",
+  "unityRelease": "19f1",
+  "description": "The post-processing stack (v2) comes with a collection of effects and image filters you can apply to your cameras to improve the visuals of your games.",
+  "dependencies": {
+    "com.unity.modules.physics": "1.0.0"
+  },
+  "upm": {
+    "changelog": "### Fixed\n- Fixed FXAA artefact when trying to preserve alpha channel output."
+  },
+  "upmCi": {
+    "footprint": "7e33f4ab7a0086cc729e37566f9020d7d44a5fd1"
+  },
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/Graphics.git",
+    "type": "git",
+    "revision": "815ce78463c7d3006fa97cd6e8898d91cb9c3ebf"
+  }
+}

@@ -1,0 +1,57 @@
+{
+    "robots": [
+        {
+            "id": "com.leggedrobotics.ros.robots.anymal.alma",
+            "name": "Alma l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/Alma/",
+            "dependencies": [
+                "com.leggedrobotics.ros.robots.anymal.d",
+                "com.leggedrobotics.ros.robots.dynaarm"
+            ]
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.anymal.d",
+            "name": "Anymal D l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/AnymalD/",
+            "dependencies": []
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.unitree.b2w",
+            "name": "B2W l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/B2W/",
+            "dependencies": []
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.dynaarm",
+            "name": "Dynaarm l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/Dynaarm/",
+            "dependencies": [
+                "com.leggedrobotics.ros.robots.hands.pysonic"
+            ]
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.franka.panda",
+            "name": "Franka Panda l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/FrankaPanda/",
+            "dependencies": []
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.fourier.gr2",
+            "name": "GR2 l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/Gr2/",
+            "dependencies": []
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.hands.pysonic",
+            "name": "Pysonic Hand l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/PsyonicAbilityHand/",
+            "dependencies": []
+        },
+        {
+            "id": "com.leggedrobotics.ros.robots.spot",
+            "name": "Spot l",
+            "url": "file:C:/Users/drago/Desktop/RSL/unity_ros_robots/Spot/",
+            "dependencies": []
+        }
+    ]
+}

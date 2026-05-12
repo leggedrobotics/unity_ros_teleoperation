@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: 4e29488e8f733a743a6023b5b0fd2c0c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - dmaPrefab: {fileID: 4378812392452353866, guid: 6f36e356df8ec4f68bd56b14e256eaed,
+      type: 3}
+  - hologramCamPrefab: {fileID: 1770150239514932, guid: 3019d4eebe2593e428d7b9ccb096ceda,
+      type: 3}
+  - displayPairCanvasPrefab: {fileID: 2735391258091099692, guid: 72e4bb76f4cb90047866b1105348c400,
+      type: 3}
+  - repairButtonPrefab: {fileID: 3751777709048184001, guid: 7475826df37507248be51a56b764b147,
+      type: 3}
+  - testPopupPrefab: {fileID: 2757021713883200056, guid: d08bb6dbd3dca264387e7f35c243a19f,
+      type: 3}
+  - calibratePopupPrefab: {fileID: 6354612271124452281, guid: 56cd8c472ad83eb43a543c3a4b02dd55,
+      type: 3}
+  - popUpsPrefab: {fileID: 5709255760690852371, guid: 8f251ce23248a7d4197dacf00ef546e1,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

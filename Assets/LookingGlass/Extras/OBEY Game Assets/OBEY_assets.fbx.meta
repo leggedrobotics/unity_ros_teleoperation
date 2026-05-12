@@ -1,0 +1,324 @@
+fileFormatVersion: 2
+guid: 53bb1e4d394723f418c4a982a8046fc3
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: back
+    100002: frontLegs
+    100004: head
+    100006: hip
+    100008: hypercubeBird
+    100010: //RootNode
+    100012: hypercubeDemoScene_LM
+    100014: ikHandle1
+    100016: locator1
+    100018: playerSkin
+    100020: rearLeg
+    100022: root
+    100024: shoulder
+    100026: SK_bird
+    100028: SK_birdRoot
+    100030: wingL
+    100032: wingR
+    100034: footPosition
+    400000: back
+    400002: frontLegs
+    400004: head
+    400006: hip
+    400008: hypercubeBird
+    400010: //RootNode
+    400012: hypercubeDemoScene_LM
+    400014: ikHandle1
+    400016: locator1
+    400018: playerSkin
+    400020: rearLeg
+    400022: root
+    400024: shoulder
+    400026: SK_bird
+    400028: SK_birdRoot
+    400030: wingL
+    400032: wingR
+    400034: footPosition
+    2300000: hypercubeDemoScene_LM
+    3300000: hypercubeDemoScene_LM
+    4300000: playerSkin
+    4300002: hypercubeDemoScene_LM
+    4300004: hypercubeBird
+    7400000: hop
+    7400002: idle
+    7400004: fly
+    9500000: //RootNode
+    13700000: hypercubeBird
+    13700002: playerSkin
+  externalObjects: {}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: hop
+      takeName: Take 001
+      firstFrame: 143
+      lastFrame: 162
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: footPosition
+        weight: 0
+      - path: hypercubeBird
+        weight: 0
+      - path: hypercubeDemoScene_LM
+        weight: 0
+      - path: ikHandle1
+        weight: 0
+      - path: locator1
+        weight: 0
+      - path: playerSkin
+        weight: 0
+      - path: root
+        weight: 1
+      - path: root/shoulder
+        weight: 1
+      - path: root/shoulder/back
+        weight: 1
+      - path: root/shoulder/back/hip
+        weight: 1
+      - path: root/shoulder/back/hip/rearLeg
+        weight: 1
+      - path: root/shoulder/frontLegs
+        weight: 1
+      - path: root/shoulder/head
+        weight: 1
+      - path: SK_bird
+        weight: 0
+      - path: SK_bird/SK_birdRoot
+        weight: 0
+      - path: SK_bird/SK_birdRoot/wingL
+        weight: 0
+      - path: SK_bird/SK_birdRoot/wingR
+        weight: 0
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: idle
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 10
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: footPosition
+        weight: 0
+      - path: hypercubeBird
+        weight: 0
+      - path: hypercubeDemoScene_LM
+        weight: 0
+      - path: ikHandle1
+        weight: 0
+      - path: locator1
+        weight: 0
+      - path: playerSkin
+        weight: 0
+      - path: root
+        weight: 1
+      - path: root/shoulder
+        weight: 1
+      - path: root/shoulder/back
+        weight: 1
+      - path: root/shoulder/back/hip
+        weight: 1
+      - path: root/shoulder/back/hip/rearLeg
+        weight: 1
+      - path: root/shoulder/frontLegs
+        weight: 1
+      - path: root/shoulder/head
+        weight: 1
+      - path: SK_bird
+        weight: 0
+      - path: SK_bird/SK_birdRoot
+        weight: 0
+      - path: SK_bird/SK_birdRoot/wingL
+        weight: 0
+      - path: SK_bird/SK_birdRoot/wingR
+        weight: 0
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: fly
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 135
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: footPosition
+        weight: 0
+      - path: hypercubeBird
+        weight: 0
+      - path: hypercubeDemoScene_LM
+        weight: 0
+      - path: ikHandle1
+        weight: 0
+      - path: locator1
+        weight: 0
+      - path: playerSkin
+        weight: 0
+      - path: root
+        weight: 0
+      - path: root/shoulder
+        weight: 0
+      - path: root/shoulder/back
+        weight: 0
+      - path: root/shoulder/back/hip
+        weight: 0
+      - path: root/shoulder/back/hip/rearLeg
+        weight: 0
+      - path: root/shoulder/frontLegs
+        weight: 0
+      - path: root/shoulder/head
+        weight: 0
+      - path: SK_bird
+        weight: 1
+      - path: SK_bird/SK_birdRoot
+        weight: 1
+      - path: SK_bird/SK_birdRoot/wingL
+        weight: 1
+      - path: SK_bird/SK_birdRoot/wingR
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 100
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 0
+    normalCalculationMode: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,20 @@
+{
+    "name": "GraphQLClient",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "2.0.0",
+            "define": "HAS_NEWTONSOFT_JSON"
+        }
+    ],
+    "noEngineReferences": false
+}

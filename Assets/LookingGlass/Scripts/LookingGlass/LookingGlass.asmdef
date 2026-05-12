@@ -1,0 +1,32 @@
+{
+    "name": "LookingGlass",
+    "rootNamespace": "",
+    "references": [
+        "Unity.InputSystem",
+        "FFmpegOut",
+        "Hjg.Pngcs",
+        "GraphQLClient",
+        "WebSocketSharp",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.nuget.newtonsoft-json",
+            "expression": "2.0.0",
+            "define": "HAS_NEWTONSOFT_JSON"
+        },
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "0",
+            "define": "HAS_URP"
+        }
+    ],
+    "noEngineReferences": false
+}
