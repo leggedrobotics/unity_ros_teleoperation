@@ -22,7 +22,7 @@ Shader "Unlit/ROS/Point"
             #pragma multi_compile_local COLOR_INTENSITY COLOR_RGB COLOR_Z
 
             #include "UnityCG.cginc"
-            #include "Assets/Components/Lidar/Materials/Shaders/PointHelper.cginc"
+            #include "Assets/RSL/Sensors/Lidar/Materials/Shaders/PointHelper.cginc"
 
 
             struct v2f

@@ -8,7 +8,7 @@ using Unity.Robotics.ROSTCPConnector;
 using Unity.Robotics.ROSTCPConnector.MessageGeneration;
 using UnityEngine.Rendering;
 
-namespace RSL.Core.VRStreamer
+namespace RSL.Telemetry.VRStreamer
 {
     public class Streamer : MonoBehaviour
     {

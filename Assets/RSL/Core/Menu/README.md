@@ -3,7 +3,7 @@
 # Menu
 ![Menu](/docs/images/menu.gif)
 
-The menu is main way of interacting with the system. It is a floating menu that can be summoned with the 'B' button the right controller and contains 4 submenus as well as status indicators for ROS connection. When the network connection is active the edges and robot icon will turn green. To toggle debug mode, click on the robot icon which will display the VR debug console (see [VR Debug](/Assets/Components/VRDebug)).
+The menu is main way of interacting with the system. It is a floating menu that can be summoned with the 'B' button the right controller and contains 4 submenus as well as status indicators for ROS connection. When the network connection is active the edges and robot icon will turn green. To toggle debug mode, click on the robot icon which will display the VR debug console (see [VR Debug](/Assets/RSL/Core/VRDebug)).
 
 ## PointClouds
 ![PointClouds](/docs/images/settings_pcl.jpg)
@@ -12,7 +12,7 @@ This menu contains controls for interaction with point cloud displays such as RG
 
 The trash icon at the bottom will destroy and clear both pointcloud displays. The circular button toggles display of LiDAR, and the 3D camera icon toggle display of the RGBD stream.
 
-For more info see [Lidar](/Assets/Components/Lidar)
+For more info see [Lidar](/Assets/RSL/Sensors/Lidar)
 
 ## General Settings
 ![General Settings](/docs/images/settings_general.jpg)

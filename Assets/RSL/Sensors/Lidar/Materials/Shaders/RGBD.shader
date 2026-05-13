@@ -14,7 +14,7 @@ Shader "Unlit/RGBD"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
-            #include "Assets/Components/Lidar/Materials/Shaders/PointHelper.cginc"
+            #include "Assets/RSL/Sensors/Lidar/Materials/Shaders/PointHelper.cginc"
 
 
             struct v2f
