@@ -133,6 +133,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
   m_Asset: {fileID: -944628639613478452, guid: 5b16108f72b004edeb9f2ea9971d0f94, type: 3}
   m_ActionId: 9755cad3-a692-4676-8101-0e6f8eb2801f
+--- !u!114 &119034747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: XRI LeftHand Interaction/Joystick
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 5b16108f72b004edeb9f2ea9971d0f94, type: 3}
+  m_ActionId: 6867ee80-bcbe-4826-980a-db0854430bfd
 --- !u!1 &209852604
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +194,7 @@ MonoBehaviour:
   anchorPrefab: {fileID: 3125165527598978782, guid: 779f5eab1277241d6b58ee2c44909b20, type: 3}
   SpawnAnchorPrefabForDebugging: 0
   originDistanceThreshold: 0.1
+  originAnchorDelay: 1000
   xrOrigin: {fileID: 1266845208}
 --- !u!1001 &615282063
 PrefabInstance:
@@ -189,6 +204,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 192765286603768030, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
+      propertyPath: alt
+      value: 
+      objectReference: {fileID: 1043079674}
+    - target: {fileID: 192765286603768030, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
+      propertyPath: joystickXY
+      value: 
+      objectReference: {fileID: 119034747}
+    - target: {fileID: 192765286603768030, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
+      propertyPath: joystickZR
+      value: 
+      objectReference: {fileID: 983887655}
     - target: {fileID: 220254560813935915, guid: 5cf25592f60364c4786f042aa1363c2a, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -530,6 +557,34 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d9be845c256ccbb5a4780c5dc1f98a4, type: 3}
+--- !u!114 &983887655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: XRI RightHand Interaction/Joystick
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 5b16108f72b004edeb9f2ea9971d0f94, type: 3}
+  m_ActionId: 4d33c7f7-0c2a-47e2-b5df-a7d6ab556fa3
+--- !u!114 &1043079674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
+  m_Name: XRI RightHand/Bbutton
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.InputActionReference
+  m_Asset: {fileID: -944628639613478452, guid: 5b16108f72b004edeb9f2ea9971d0f94, type: 3}
+  m_ActionId: 2ecd3cbe-81bd-4a8d-b8f2-0ccb7ddc6337
 --- !u!224 &1201662614 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8963289892577324459, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
@@ -800,8 +855,13 @@ MonoBehaviour:
   maxRenderScale: 1
   _headPoseRelativeOffsetRotation: {x: 0, y: 0, z: 0}
   _headPoseRelativeOffsetTranslation: {x: 0, y: 0, z: 0}
-  profilerTcpPort: 32419
-  expandMixedRealityCapturePropertySheet: 0
+  enableCoreMetricsRelease: 0
+  enableCoreMetricsDevelopment: 1
+  coreMetricVisibility:
+    visibleMemoryMetricStats: 0
+    visibleMemoryMetricGraphs: 0
+    visibleRenderMetricStats: 0
+    visibleRenderMetricGraphs: 0
   enableMixedReality: 0
   compositionMethod: 0
   extraHiddenLayers:
