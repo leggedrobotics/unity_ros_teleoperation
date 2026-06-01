@@ -21,27 +21,27 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 
 | Component | Description | Location | Preview |
 | --- | --- | --- | --- |
-| Audio Streamer | Implements bidirectional audio stream over ROS | [Assets/Components/AudioStreamer](Assets/Components/AudioStreamer) | ![](/docs/images/AudioStreamer.gif) |
-| Camera Viewer | Renders a ROS image stream to a floating image window | [Assets/Components/CameraView](Assets/Components/CameraView) | ![](/docs/images/images.gif) |
-| Grid Map | Renders a 2.5D grid map such as elevation maps from Anymal | [Assets/Components/GridMap](Assets/Components/GridMap) | ![](/docs/images/gridmap.gif) |
-| Hands | Hand tracking and pose publishing over ROS, compatible with Ability hand models | [Assets/Components/Hands](Assets/Components/Hands) | ![](/docs/images/hands.gif) |
-| Haptic | Bhaptic glove support  plus controller haptics | [Assets/Components/Haptics](Assets/Components/Haptics) | ![](/docs/images/haptics.png) | 
-| Headset Publisher | Publishes headset and hand poses on TF and Pose | [Assets/Components/HeadsetPublisher](Assets/Components/HeadsetPublisher) | ![](/docs/images/tf.gif) |
+| Audio Streamer | Implements bidirectional audio stream over ROS | [Assets/RSL/Sensors/Audio](Assets/RSL/Sensors/Audio) | ![](/docs/images/AudioStreamer.gif) |
+| Camera Viewer | Renders a ROS image stream to a floating image window | [Assets/RSL/Sensors/Camera](Assets/RSL/Sensors/Camera) | ![](/docs/images/images.gif) |
+| Grid Map | Renders a 2.5D grid map such as elevation maps from Anymal | [Assets/RSL/Sensors/GridMap](Assets/RSL/Sensors/GridMap) | ![](/docs/images/gridmap.gif) |
+| Hands | Hand tracking and pose publishing over ROS, compatible with Ability hand models | [Assets/RSL/Telemetry/Hands](Assets/RSL/Telemetry/Hands) | ![](/docs/images/hands.gif) |
+| Haptic | Bhaptic glove support  plus controller haptics | [Assets/Components/Haptics](Assets/RSL/Core/Haptics) | ![](/docs/images/haptics.png) | 
+| Headset Publisher | Publishes headset and hand poses on TF and Pose | [Assets/RSL/Telemetry/Headset](Assets/RSL/Telemetry/Headset) | ![](/docs/images/tf.gif) |
 | Lidar | GPU rendering for LiDAR and PointCloud2 point viz from ROS | [Assets/Components/Lidar](Assets/Components/Lidar) | ![](/docs/images/lidar.gif) |
-| Markers | Displays various ROS markers in the scene (supports points, cubes, spheres) | [Assets/Components/Markers](Assets/Components/Markers) | ![](/docs/images/markers.gif) |
-| Menu | Palm menu for interaction and toggling | [Assets/Components/Menu](Assets/Components/Menu) | ![](/docs/images/menu.gif) |
-| NeRFViewer | Handheld viewer for rendering NeRFs and scene interaction | [Assets/Components/NeRFViewer](Assets/Components/NeRFViewer) | ![](/docs/images/nerf.gif) |
-| PathStreamer | Displays nav paths with a line and series of arrows | [Assets/Components/PathStreaming](Assets/Components/PathStreaming) | ![](/docs/images/path.gif) |
-| PosePublisher | Publishes poses and Joystick commands for locomotion | [Assets/Components/PosePublisher](Assets/Components/PosePublisher) | ![](/docs/images/posegoals.gif) |
-| PoseStreamer | Displays stamped poses | [Assets/Components/PoseStreaming](Assets/Components/PoseStreaming) | ![](/docs/images/poses.gif) |
-| Robots | Robot model manager, holds the meshes, materials and the scripts to swap between Anymal, ALMA, Tytan, Standalone Dynaarm and Franka Panda | [Assets/Components/Robots](Assets/Components/Robots) | ![](/docs/images/robots.jpg) |
-| Service Caller | Creates a floating button that triggers an Empty service call when pressed | [Assets/Components/ServiceCaller](Assets/Components/ServiceCaller) | ![](/docs/images/service.png) |
-| Stereo | Stereo camera rendering, renders to each eye for human depth perception | [Assets/Components/StereoImage](Assets/Components/StereoImage) | ![](/docs/images/stereo.gif) |
-| TF | Updates for the Unity-ROS TF system for managing robots and reorientation including publishing headset and hands over TF | [Assets/Components/TFSystem](Assets/Components/TFSystem) | ![](/docs/images/tf.gif) |
-| TF Viz | Debug viewer to show currently streamed TF links | [Assets/Components/TFViz](Assets/Components/TFViz) | ![](/docs/images/tfdebug.gif) |
-| Voxblox | Voxel mesh rendering | [Assets/Components/VoxBlox](Assets/Components/VoxBlox) | ![](/docs/images/vox.gif) |
-| VR Debug | Debugging tools for VR, namely a console | [Assets/Components/VRDebug](Assets/Components/VRDebug) | ![](/docs/images/vr_console.jpg) |
-| VR Streamer | Streams a the VR view to a ROS topic (w/o AR view) | [Assets/Components/VRStreamer](Assets/Components/VRStreamer) | ![](/docs/images/streamer.jpg) |
+| Markers | Displays various ROS markers in the scene (supports points, cubes, spheres) | [Assets/RSL/Sensors/Markers](Assets/RSL/Sensors/Markers) | ![](/docs/images/markers.gif) |
+| Menu | Palm menu for interaction and toggling | [Assets/RSL/Core/Menu](Assets/RSL/Core/Menu) | ![](/docs/images/menu.gif) |
+| NeRFViewer | Handheld viewer for rendering NeRFs and scene interaction | [Assets/RSL/Sensors/NeRF](Assets/RSL/Sensors/NeRF) | ![](/docs/images/nerf.gif) |
+| PathStreamer | Displays nav paths with a line and series of arrows | [Assets/RSL/Sensors/Path](Assets/RSL/Sensors/Path) | ![](/docs/images/path.gif) |
+| PosePublisher | Publishes poses and Joystick commands for locomotion | [Assets/RSL/Telemetry/Pose](Assets/RSL/Telemetry/Pose) | ![](/docs/images/posegoals.gif) |
+| PoseStreamer | Displays stamped poses | [Assets/RSL/Sensors/Pose](Assets/RSL/Sensors/Pose) | ![](/docs/images/poses.gif) |
+| Robots | Robot model manager, holds the meshes, materials and the scripts to swap between Anymal, ALMA, Tytan, Standalone Dynaarm and Franka Panda | [Assets/RSL/Core/Robots](Assets/RSL/Core/Robots) | ![](/docs/images/robots.jpg) |
+| Service Caller | Creates a floating button that triggers an Empty service call when pressed | [Assets/RSL/Sensors/Service](Assets/RSL/Sensors/Service) | ![](/docs/images/service.png) |
+| Stereo | Stereo camera rendering, renders to each eye for human depth perception | [Assets/RSL/Sensors/Camera](Assets/RSL/Sensors/Camera) | ![](/docs/images/stereo.gif) |
+| TF | Updates for the Unity-ROS TF system for managing robots and reorientation including publishing headset and hands over TF | [Assets/RSL/Core/TF](Assets/RSL/Core/TF) | ![](/docs/images/tf.gif) |
+| TF Viz | Debug viewer to show currently streamed TF links | [Assets/RSL/Core/TF](Assets/RSL/Core/TF) | ![](/docs/images/tfdebug.gif) |
+| Voxblox | Voxel mesh rendering | [Assets/RSL/Core/VoxBlox](Assets/RSL/Core/VoxBlox) | ![](/docs/images/vox.gif) |
+| VR Debug | Debugging tools for VR, namely a console | [Assets/RSL/Core/VRDebug](Assets/RSL/Core/VRDebug) | ![](/docs/images/vr_console.jpg) |
+| VR Streamer | Streams the VR view to a ROS topic (w/o AR view) | [Assets/RSL/Telemetry/VRStreamer](Assets/RSL/Telemetry/VRStreamer) | ![](/docs/images/streamer.jpg) |
 
 
 ---
