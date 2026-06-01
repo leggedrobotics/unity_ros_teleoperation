@@ -25,9 +25,9 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 | Camera Viewer | Renders a ROS image stream to a floating image window | [Assets/RSL/Sensors/Camera](Assets/RSL/Sensors/Camera) | ![](/docs/images/images.gif) |
 | Grid Map | Renders a 2.5D grid map such as elevation maps from Anymal | [Assets/RSL/Sensors/GridMap](Assets/RSL/Sensors/GridMap) | ![](/docs/images/gridmap.gif) |
 | Hands | Hand tracking and pose publishing over ROS, compatible with Ability hand models | [Assets/RSL/Telemetry/Hands](Assets/RSL/Telemetry/Hands) | ![](/docs/images/hands.gif) |
-| Haptic | Bhaptic glove support  plus controller haptics | [Assets/Components/Haptics](Assets/RSL/Core/Haptics) | ![](/docs/images/haptics.png) | 
+| Haptic | Bhaptic glove support  plus controller haptics | [Assets/RSL/Core/Haptics](Assets/RSL/Core/Haptics) | ![](/docs/images/haptics.png) | 
 | Headset Publisher | Publishes headset and hand poses on TF and Pose | [Assets/RSL/Telemetry/Headset](Assets/RSL/Telemetry/Headset) | ![](/docs/images/tf.gif) |
-| Lidar | GPU rendering for LiDAR and PointCloud2 point viz from ROS | [Assets/Components/Lidar](Assets/Components/Lidar) | ![](/docs/images/lidar.gif) |
+| Lidar | GPU rendering for LiDAR and PointCloud2 point viz from ROS | [Assets/RSL/Sensors/Lidar](Assets/RSL/Sensors/Lidar) | ![](/docs/images/lidar.gif) |
 | Markers | Displays various ROS markers in the scene (supports points, cubes, spheres) | [Assets/RSL/Sensors/Markers](Assets/RSL/Sensors/Markers) | ![](/docs/images/markers.gif) |
 | Menu | Palm menu for interaction and toggling | [Assets/RSL/Core/Menu](Assets/RSL/Core/Menu) | ![](/docs/images/menu.gif) |
 | NeRFViewer | Handheld viewer for rendering NeRFs and scene interaction | [Assets/RSL/Sensors/NeRF](Assets/RSL/Sensors/NeRF) | ![](/docs/images/nerf.gif) |
