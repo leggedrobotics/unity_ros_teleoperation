@@ -4,11 +4,10 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-#if UNITY_EDITOR
-using UnityEditor;
-
 namespace RSL.Sensors.Camera
 {
+    #if UNITY_EDITOR
+    using UnityEditor;
     [CustomEditor(typeof(CameraManager))]
     public class CameraManagerEditor : RSL.Core.SensorManagerEditor
     {
