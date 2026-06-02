@@ -62,7 +62,7 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 ### 0.1.1
 - Added setup scripts and git hooks for easier project setup
 - Fixed some image rendering issues with Image Messages
-- Added passthrough togglle
+- Added passthrough toggle
 - Improved TF modes for Lidar
 - Added State buttons for toggles
 - Fixes for ROS 2
