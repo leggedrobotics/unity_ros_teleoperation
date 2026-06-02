@@ -1,5 +1,5 @@
 using Unity.XR.CoreUtils.Bindings;
-using UnityEngine.XR.Interaction.Toolkit.AffordanceSystem.State;
+
 using UnityEngine.XR.Interaction.Toolkit.Filtering;
 using UnityEngine.XR.Interaction.Toolkit.Utilities.Tweenables.Primitives;
 
@@ -32,8 +32,8 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.Hands
 
         readonly BindingsGroup m_BindingsGroup = new BindingsGroup();
 
-        IXRHoverInteractable m_HoverInteractable;
-        IXRInteractionStrengthInteractable m_InteractionStrengthInteractable;
+        UnityEngine.XR.Interaction.Toolkit.Interactables.IXRHoverInteractable m_HoverInteractable;
+        UnityEngine.XR.Interaction.Toolkit.Interactables.IXRInteractionStrengthInteractable m_InteractionStrengthInteractable;
         readonly FloatTweenableVariable m_TweenableVariable = new FloatTweenableVariable();
 
         float m_TweenTarget;
@@ -49,8 +49,8 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.Hands
                 return;
             }
 
-            m_HoverInteractable = m_PokeFilter.GetComponent<IXRHoverInteractable>();
-            m_InteractionStrengthInteractable = m_PokeFilter.GetComponent<IXRInteractionStrengthInteractable>();
+            m_HoverInteractable = m_PokeFilter.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.IXRHoverInteractable>();
+            m_InteractionStrengthInteractable = m_PokeFilter.GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.IXRInteractionStrengthInteractable>();
             
             m_BindingsGroup.AddBinding(m_PokeFilter.pokeStateData.Subscribe(data =>
             {
