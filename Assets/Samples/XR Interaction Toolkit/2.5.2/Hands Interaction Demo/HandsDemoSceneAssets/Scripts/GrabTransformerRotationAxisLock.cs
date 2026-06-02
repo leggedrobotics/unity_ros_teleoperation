@@ -18,14 +18,14 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.Hands
         Vector3 m_InitialEulerRotation;
 
         /// <inheritdoc />
-        public override void OnLink(XRGrabInteractable grabInteractable)
+        public override void OnLink(UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grabInteractable)
         {
             base.OnLink(grabInteractable);
             m_InitialEulerRotation = grabInteractable.transform.rotation.eulerAngles;
         }
 
         /// <inheritdoc />
-        public override void Process(XRGrabInteractable grabInteractable, XRInteractionUpdateOrder.UpdatePhase updatePhase, ref Pose targetPose, ref Vector3 localScale)
+        public override void Process(UnityEngine.XR.Interaction.Toolkit.Interactables.XRGrabInteractable grabInteractable, XRInteractionUpdateOrder.UpdatePhase updatePhase, ref Pose targetPose, ref Vector3 localScale)
         {
             Vector3 newRotationEuler = targetPose.rotation.eulerAngles;
 
