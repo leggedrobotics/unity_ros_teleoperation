@@ -49,12 +49,14 @@ On the ROS side, the custom [TCP Endpoint](https://github.com/leggedrobotics/ROS
 ## Minor Version History
 
 ### 0.2.0
-- Bumped to Unity 6.2 for improved OpenXR and Quest 3 support (note this is the last version of Unity that will support ROS 1 on Ubuntu 20.04)
+- Bumped to Unity 6.2 for improved OpenXR and Quest 3 support (note this is the last version of Unity that will support ROS 1 on Ubuntu 20.04, if you are looking for a pre Unity 6 build check out [v0.1.1](https://github.com/leggedrobotics/unity_ros_teleoperation/releases/tag/v0.1.1))
+- Now supports ROS 1 and ROS 2 in the same build allowing dynamic switching with a new version of the ROS-TCP-Endpoint
 - Added Gaussian Splatting as an option for PointCloud messages
 - New Robot manager that moves robot models to external repos (see [unity_ros_robots](https://github.com/leggedrobotics/unity_ros_robots) for more info)
 - Added support for spatial anchors ensuring persistent localization and mapping across sessions
 - Improved package naming within the app for cross package imports
-- Added git hooks for easier setup and contribution
+- Various bug fixes and improvements
+- Added support for 360 stereo image streams
 
 
 ### 0.1.1
