@@ -131,7 +131,7 @@ namespace RSL.Sensors.Lidar
         public TMPro.TMP_InputField pointMinInput;
         public TMPro.TMP_InputField pointMaxInput;
         public bool autoIntensityRange = true;
-        public int colorOffset = 4;
+        public int colorOffset = 3;
 
         public Slider densitySlider;
         public Slider sizeSlider;
@@ -488,9 +488,16 @@ namespace RSL.Sensors.Lidar
                         // Normalize colours
                         for (int i = 0; i < _numPts; i++)
                         {
-                            float value = System.BitConverter.ToSingle(pointData, i * 16 + 12); // We have x,y,z (12 bytes) followed by the color field (4 bytes)
+                            int colorIndex = i * 16 + 12; // Index of the color field in the point data
+                            float value = System.BitConverter.ToSingle(pointData, colorIndex); // We have x,y,z (12 bytes) followed by the color field (4 bytes)
                             value = (value - pointMin) / range;
-                            System.BitConverter.GetBytes(value).CopyTo(pointData, i * 16 + 12);
+
+                            int raw = System.Runtime.CompilerServices.Unsafe.As<float, int>(ref value);
+
+                            pointData[colorIndex + 0] = (byte)(raw);
+                            pointData[colorIndex + 1] = (byte)(raw >> 8);
+                            pointData[colorIndex + 2] = (byte)(raw >> 16);
+                            pointData[colorIndex + 3] = (byte)(raw >> 24);
                         }   
                     }
                 }

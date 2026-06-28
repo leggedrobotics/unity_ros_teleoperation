@@ -3431,7 +3431,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 5
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &5386350759691659569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3653,7 +3653,7 @@ MonoBehaviour:
   pointMinInput: {fileID: 2590198534184602934}
   pointMaxInput: {fileID: 8007743825960420603}
   autoIntensityRange: 1
-  colorOffset: 12
+  colorOffset: 3
   densitySlider: {fileID: 5556720871005494764}
   sizeSlider: {fileID: 2618189240512244449}
   colorModeDropdown: {fileID: 1961523899843784558}
