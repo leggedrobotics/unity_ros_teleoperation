@@ -352,7 +352,7 @@ namespace RSL.Sensors.Lidar
             return new Color(r / 255f, g / 255f, b / 255f, 1.0f); // Fixed alpha
         }
 
-        public static byte[] ExtractData(PointCloud2Msg data, int maxPts, VizType vizType, out int numPts)
+        public static byte[] ExtractData(PointCloud2Msg data, int maxPts, VizType vizType, int colourOffset, out int numPts)
         {
 
             /**
@@ -367,7 +367,7 @@ namespace RSL.Sensors.Lidar
             if (maxPts < 1) maxPts = 1;
             int decmiator = 1;
 
-            int data_size = vizType.GetSize();
+            int data_size = (int) data.point_step;
 
             numPts = (int)(data.data.Length / data.point_step);
 
@@ -382,31 +382,8 @@ namespace RSL.Sensors.Lidar
             // For each point...
             for (int i = 0; i < numPts; i++)
             {
-                // Grab the point at the decimated index
-                int inIdx = (int)(i * data.point_step * (decmiator));
-                int outIdx = i * data_size;
-
-                // For each field in the point...
-                for (int j = 0; j < vizType.GetFieldCount(); j++)
-                {
-                    if (j >= data.fields.Length)
-                    {
-                        // Debug.LogWarning($"LidarUtils: Field index {j} out of bounds for fields count {data.fields.Length}. Filling with 0.");
-
-                        // If we are missing the last field (ie xyz only) then fill with 0
-                        for (int k = 0; k < 4; k++)
-                        {
-                            outData[outIdx + j * 4 + k] = 0;
-                        }
-                        continue;
-
-                    }
-                    // Copy the 4 bytes in the float
-                    for (int k = 0; k < 4; k++)
-                    {
-                        outData[outIdx + j * 4 + k] = data.data[inIdx + (int)data.fields[j].offset + k];
-                    }
-                }
+                System.Buffer.BlockCopy(data.data, (int)(i * data.point_step * decmiator), outData, i * 16, 12); // Copy x,y,z (3 floats = 12 bytes) for position
+                System.Buffer.BlockCopy(data.data, (int)(i * data.point_step * decmiator + data.fields[colourOffset].offset), outData, i * 16 + 12, 4); // Copy intensity or rgb (1 float = 4 bytes) for color
             }
             return outData;
         }

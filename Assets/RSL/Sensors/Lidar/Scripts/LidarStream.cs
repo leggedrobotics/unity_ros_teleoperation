@@ -131,14 +131,13 @@ namespace RSL.Sensors.Lidar
         public TMPro.TMP_InputField pointMinInput;
         public TMPro.TMP_InputField pointMaxInput;
         public bool autoIntensityRange = true;
-        public int colorOffset = 12;
+        public int colorOffset = 4;
 
         public Slider densitySlider;
         public Slider sizeSlider;
         public Dropdown colorModeDropdown;
 
         public Dropdown colorFieldDropdown;
-        private List<int> fieldToOffset;
 
         public Dropdown vizTypeDropdown;
 
@@ -394,11 +393,8 @@ namespace RSL.Sensors.Lidar
             {
                 colorFieldDropdown.ClearOptions();
                 colorFieldDropdown.AddOptions(newValues);
+                colorFieldDropdown.value = Mathf.Clamp(colorOffset, 0, newValues.Count - 1);
                 colorFieldDropdown.RefreshShownValue();
-                fieldToOffset.Clear();
-                foreach (var f in pointCloud.fields) {
-                    fieldToOffset.Add((int)f.offset);
-                }
             }
         }
 
@@ -463,7 +459,7 @@ namespace RSL.Sensors.Lidar
                 GaussianSplatRenderer renderer = splatRendererObj.GetComponent<GaussianSplatRenderer>();
                 renderer.m_Asset = asset;
             } else {
-                byte[] pointData = LidarUtils.ExtractData(pointCloud, displayPts, vizType, out _numPts);
+                byte[] pointData = LidarUtils.ExtractData(pointCloud, displayPts, vizType, colorOffset, out _numPts);
                 if (colorOffset >= 0 && colorOffset + sizeof(float) <= point_step)
                 {
                     float minValue = float.PositiveInfinity;
@@ -471,7 +467,7 @@ namespace RSL.Sensors.Lidar
 
                     for (int i = 0; i < _numPts; i++)
                     {
-                        float value = System.BitConverter.ToSingle(pointData, i * point_step + colorOffset);
+                        float value = System.BitConverter.ToSingle(pointData, i * 16 + 12); // We have x,y,z (12 bytes) followed by the color field (4 bytes)
                         if (float.IsNaN(value) || float.IsInfinity(value)) continue;
                         minValue = Mathf.Min(minValue, value);
                         maxValue = Mathf.Max(maxValue, value);
@@ -479,18 +475,23 @@ namespace RSL.Sensors.Lidar
 
                     if (autoIntensityRange && !float.IsInfinity(minValue) && !float.IsInfinity(maxValue))
                     {
-                        float range = maxValue - minValue;
 
-                        Debug.Log("Min: " + minValue + ", Max: " + maxValue + ", Range: " + range);
-                        // minValue = 0.0f;
-                        // range = 10.0f;
-                        renderParams.matProps.SetInt("_PointStep", point_step);
-                        renderParams.matProps.SetFloat("_ColorValueMin", minValue);
-                        renderParams.matProps.SetFloat("_ColorValueRange", Mathf.Abs(range) > Mathf.Epsilon ? range : 0.1f);
-                    } else if (!autoIntensityRange)
+                        // Debug.Log("Min: " + minValue + ", Max: " + maxValue + ", Range: " + range);
+                        pointMin = minValue;
+                        pointMax = maxValue;
+                        pointMinInput?.SetTextWithoutNotify(pointMin.ToString());
+                        pointMaxInput?.SetTextWithoutNotify(pointMax.ToString());
+                    }
+                    float range = pointMax - pointMin;
+                    if (colorMode == ColorMode.Intensity)
                     {
-                        renderParams.matProps.SetFloat("_ColorValueMin", pointMin);
-                        renderParams.matProps.SetFloat("_ColorValueRange", Mathf.Abs(pointMax - pointMin) > Mathf.Epsilon ? pointMax - pointMin : 0.1f);
+                        // Normalize colours
+                        for (int i = 0; i < _numPts; i++)
+                        {
+                            float value = System.BitConverter.ToSingle(pointData, i * 16 + 12); // We have x,y,z (12 bytes) followed by the color field (4 bytes)
+                            value = (value - pointMin) / range;
+                            System.BitConverter.GetBytes(value).CopyTo(pointData, i * 16 + 12);
+                        }   
                     }
                 }
                 _ptData.SetData(pointData);
@@ -592,9 +593,9 @@ namespace RSL.Sensors.Lidar
                 Debug.LogWarning("Invalid color field selected: " + value);
                 return;
             }
-
-            colorOffset = fieldToOffset[value];
-            renderParams.matProps.SetInt("_ColorOffset", colorOffset);
+            Debug.Log("Wow value is " + value);
+            colorOffset = value;
+            Debug.Log("New value is " + colorOffset);
             OnValidate();
         }
 
