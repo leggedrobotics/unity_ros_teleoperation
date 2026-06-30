@@ -1,0 +1,12 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <ui:VisualElement name="Background" class="background">
+        <ui:Label text="New Profile" name="Title" class="h1" />
+        <ui:TextField label="Server IP" placeholder-text="192.168.0.1" name="IP" max-length="-1" emoji-fallback-support="true" style="align-self: auto; align-items: center; justify-content: space-around;" />
+        <ui:IntegerField label="Port" value="0" name="Port" placeholder-text="10000" />
+        <ui:VisualElement class="row" style="flex-grow: 1; flex-direction: row;">
+            <ui:Button text="Cancel" name="Cancel" />
+            <ui:Button text="Save" name="Save" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
