@@ -1,0 +1,5 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <ui:Label text="Label" />
+    <ui:Button text="Button" />
+</ui:UXML>

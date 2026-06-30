@@ -1,0 +1,13 @@
+@import url("unity-theme://default");
+
+:root {
+    --color-primary: #285cac;
+    --color-text: #d6d6d6;
+    --color-icon: #ffffff;
+    --color-accent: #3f88f5;
+    --color-alert: #ff4d4f;
+    --color-alert-accent: #c20300;
+    --row-height: 64px;
+    --row-content: 54px;
+
+}
