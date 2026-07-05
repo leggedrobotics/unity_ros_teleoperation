@@ -9,6 +9,7 @@ using GaussianSplatting.Runtime;
 using Unity.Collections;
 using UnityEngine.Experimental.Rendering;
 using System.Diagnostics;
+using RSL.Core.Utils;
 
 namespace RSL.Sensors.Lidar
 {
@@ -367,7 +368,7 @@ namespace RSL.Sensors.Lidar
             if (maxPts < 1) maxPts = 1;
             int decmiator = 1;
 
-            int data_size = (int) data.point_step;
+            int data_size = vizType.GetSize();
 
             numPts = (int)(data.data.Length / data.point_step);
 
@@ -494,8 +495,7 @@ namespace RSL.Sensors.Lidar
                 var qq = GaussianUtils.NormalizeSwizzleRotation(rot);
                 qq = GaussianUtils.PackSmallest3Rotation(qq);
                 uint encoded = EncodeQuatToNorm10(qq);
-                byte[] otherData = System.BitConverter.GetBytes(encoded); // little-endian
-                System.Buffer.BlockCopy(otherData, 0, outData.other, vector4Idx, 4);
+                Utils.writeUIntToByteArray(encoded, outData.other, vector4Idx);
 
                 // Copy the 12 bytes (three floats) starting from offset 12 of the incoming point into scale data
                 bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 12));
@@ -509,12 +509,9 @@ namespace RSL.Sensors.Lidar
                     System.BitConverter.ToSingle(data.data, inIdx + 20)
                     );
                 float3 linearScale = GaussianUtils.LinearScale(scale);
-                byte[] sxBytes = System.BitConverter.GetBytes(linearScale.x);
-                byte[] syBytes = System.BitConverter.GetBytes(linearScale.y);
-                byte[] szBytes = System.BitConverter.GetBytes(linearScale.z);
-                System.Buffer.BlockCopy(sxBytes, 0, outData.other, vector4Idx + 4, 4);
-                System.Buffer.BlockCopy(syBytes, 0, outData.other, vector4Idx + 8, 4);
-                System.Buffer.BlockCopy(szBytes, 0, outData.other, vector4Idx + 12, 4);
+                Utils.writeFloatToByteArray(linearScale.x, outData.other, vector4Idx + 4);
+                Utils.writeFloatToByteArray(linearScale.y, outData.other, vector4Idx + 8);
+                Utils.writeFloatToByteArray(linearScale.z, outData.other, vector4Idx + 12);
 
                 // Copy the 12 bytes (three floats) from offset 40 of the incoming point into normal data
                 bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 40));
@@ -530,10 +527,10 @@ namespace RSL.Sensors.Lidar
                 for (int x = 0; x < width; x++){
                     float4 pix = color[srcIdx + x];
 
-                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.x), 0, outData.color, dstIdx + 0, 4);
-                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.y), 0, outData.color, dstIdx + 4, 4);
-                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.z), 0, outData.color, dstIdx + 8, 4);
-                    System.Buffer.BlockCopy(System.BitConverter.GetBytes(pix.w), 0, outData.color, dstIdx + 12, 4);
+                    Utils.writeFloatToByteArray(pix.x, outData.color, dstIdx + 0);
+                    Utils.writeFloatToByteArray(pix.y, outData.color, dstIdx + 4);
+                    Utils.writeFloatToByteArray(pix.z, outData.color, dstIdx + 8);
+                    Utils.writeFloatToByteArray(pix.w, outData.color, dstIdx + 12);
                     dstIdx += 16;
                 }
             }
