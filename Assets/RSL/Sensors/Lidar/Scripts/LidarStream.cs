@@ -193,8 +193,6 @@ namespace RSL.Sensors.Lidar
             _intensityKeyword = new LocalKeyword(renderParams.material.shader, "COLOR_INTENSITY");
             _zKeyword = new LocalKeyword(renderParams.material.shader, "COLOR_Z");
 
-            SetColorMode(renderParams.material, _rgbdKeyword);
-
             if (colorModeDropdown != null)
             {
                 colorModeDropdown.ClearOptions();
@@ -206,6 +204,7 @@ namespace RSL.Sensors.Lidar
                 };
                 colorModeDropdown.AddOptions(colorOptions);
                 colorModeDropdown.onValueChanged.AddListener(OnColorSelect);
+                colorModeDropdown.value = (int) colorMode;
             }
 
             if (colorFieldDropdown != null)
@@ -492,6 +491,7 @@ namespace RSL.Sensors.Lidar
                             float value = System.BitConverter.ToSingle(pointData, colorIndex); // We have x,y,z (12 bytes) followed by the color field (4 bytes)
                             value = (value - pointMin) / range;
 
+                            // TODO: Convert this into a Core function
                             int raw = System.Runtime.CompilerServices.Unsafe.As<float, int>(ref value);
 
                             pointData[colorIndex + 0] = (byte)(raw);
