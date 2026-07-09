@@ -1,7 +1,8 @@
-namespace RSL.Core.Utils
+namespace RSL.Core
 {
-    static class Utils{
-        public static void writeFloatToByteArray(float value, byte[] array, int startIndex)
+    static class Utils
+    {
+        public static void writeToByteArray(this float value, byte[] array, int startIndex)
         {
             int raw = System.Runtime.CompilerServices.Unsafe.As<float, int>(ref value);
 
@@ -11,7 +12,7 @@ namespace RSL.Core.Utils
             array[startIndex + 3] = (byte)(raw >> 24);
         }
 
-        public static void writeUIntToByteArray(uint value, byte[] array, int startIndex)
+        public static void writeToByteArray(this uint value, byte[] array, int startIndex)
         {
             array[startIndex + 0] = (byte)(value);
             array[startIndex + 1] = (byte)(value >> 8);

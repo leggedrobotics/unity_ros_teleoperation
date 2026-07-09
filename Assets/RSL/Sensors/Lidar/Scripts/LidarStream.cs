@@ -11,7 +11,7 @@ using Unity.VisualScripting;
 using GaussianSplatting.Runtime;
 using Unity.Mathematics;
 using System.Linq;
-using RSL.Core.Utils;
+using RSL.Core;
 
 namespace RSL.Sensors.Lidar
 {
@@ -492,7 +492,7 @@ namespace RSL.Sensors.Lidar
                             float value = System.BitConverter.ToSingle(pointData, colorIndex); // We have x,y,z (12 bytes) followed by the color field (4 bytes)
                             value = (value - pointMin) / range;
 
-                            Utils.writeFloatToByteArray(value, pointData, colorIndex);
+                            value.writeToByteArray(pointData, colorIndex);
                         }   
                     }
                 }

@@ -9,7 +9,7 @@ using GaussianSplatting.Runtime;
 using Unity.Collections;
 using UnityEngine.Experimental.Rendering;
 using System.Diagnostics;
-using RSL.Core.Utils;
+using RSL.Core;
 
 namespace RSL.Sensors.Lidar
 {
@@ -495,7 +495,7 @@ namespace RSL.Sensors.Lidar
                 var qq = GaussianUtils.NormalizeSwizzleRotation(rot);
                 qq = GaussianUtils.PackSmallest3Rotation(qq);
                 uint encoded = EncodeQuatToNorm10(qq);
-                Utils.writeUIntToByteArray(encoded, outData.other, vector4Idx);
+                encoded.writeToByteArray(outData.other, vector4Idx);
 
                 // Copy the 12 bytes (three floats) starting from offset 12 of the incoming point into scale data
                 bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 12));
@@ -509,9 +509,9 @@ namespace RSL.Sensors.Lidar
                     System.BitConverter.ToSingle(data.data, inIdx + 20)
                     );
                 float3 linearScale = GaussianUtils.LinearScale(scale);
-                Utils.writeFloatToByteArray(linearScale.x, outData.other, vector4Idx + 4);
-                Utils.writeFloatToByteArray(linearScale.y, outData.other, vector4Idx + 8);
-                Utils.writeFloatToByteArray(linearScale.z, outData.other, vector4Idx + 12);
+                linearScale.x.writeToByteArray(outData.other, vector4Idx + 4);
+                linearScale.y.writeToByteArray(outData.other, vector4Idx + 8);
+                linearScale.z.writeToByteArray(outData.other, vector4Idx + 12);
 
                 // Copy the 12 bytes (three floats) from offset 40 of the incoming point into normal data
                 bytesToCopy = Mathf.Min(12, data.data.Length - (inIdx + 40));
@@ -527,10 +527,10 @@ namespace RSL.Sensors.Lidar
                 for (int x = 0; x < width; x++){
                     float4 pix = color[srcIdx + x];
 
-                    Utils.writeFloatToByteArray(pix.x, outData.color, dstIdx + 0);
-                    Utils.writeFloatToByteArray(pix.y, outData.color, dstIdx + 4);
-                    Utils.writeFloatToByteArray(pix.z, outData.color, dstIdx + 8);
-                    Utils.writeFloatToByteArray(pix.w, outData.color, dstIdx + 12);
+                    pix.x.writeToByteArray(outData.color, dstIdx + 0);
+                    pix.y.writeToByteArray(outData.color, dstIdx + 4);
+                    pix.z.writeToByteArray(outData.color, dstIdx + 8);
+                    pix.w.writeToByteArray(outData.color, dstIdx + 12);
                     dstIdx += 16;
                 }
             }
