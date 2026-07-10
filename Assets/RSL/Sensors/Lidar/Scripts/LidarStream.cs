@@ -200,8 +200,7 @@ namespace RSL.Sensors.Lidar
                 List<string> colorOptions = new List<string>
                 {
                     "RGB",
-                    "Intensity",
-                    "Z"
+                    "Intensity"
                 };
                 colorModeDropdown.AddOptions(colorOptions);
                 colorModeDropdown.onValueChanged.AddListener(OnColorSelect);
