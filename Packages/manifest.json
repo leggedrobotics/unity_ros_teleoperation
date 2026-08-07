@@ -32,7 +32,6 @@
     "com.unity.xr.hands": "1.7.2",
     "com.unity.xr.interaction.toolkit": "3.2.2",
     "com.unity.xr.meta-openxr": "2.3.0",
-    "com.unity.xr.oculus": "4.5.2",
     "com.unity.xr.openxr": "1.16.1",
     "com.whinarn.unitymeshsimplifier": "https://github.com/Whinarn/UnityMeshSimplifier.git",
     "org.nesnausk.gaussian-splatting": "git@github.com:aras-p/UnityGaussianSplatting.git?path=/package#2c6fed37da67a217367261fcfcd3316d34c73e76",
