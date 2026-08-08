@@ -89,6 +89,13 @@ namespace RSL.Sensors.Camera
 
         public DebayerMode debayerType = DebayerMode.GRBG;
 
+        private Texture2D _tempTextureBuffer;
+        private int _tempTextureWidth = -1;
+        private int _tempTextureHeight = -1;
+
+        [SerializeField] private bool _useTextureCompression = true;
+        [SerializeField] private bool _downscaleLarge4K = false;
+
         void Awake()
         {
             _msgType = "sensor_msgs/Image";
@@ -179,6 +186,12 @@ namespace RSL.Sensors.Camera
         {
             if (topicName != null)
                 _ros.Unsubscribe(topicName);
+
+            if (_tempTextureBuffer != null)
+                Destroy(_tempTextureBuffer);
+
+            if (_texture2D != null)
+                _texture2D.Release();
         }
 
         protected override void UpdateTopics(Dictionary<string, string> topics)
@@ -322,10 +335,18 @@ namespace RSL.Sensors.Camera
 
         protected virtual void SetupTex(int width = 2, int height = 2)
         {
-            if (_texture2D == null)
+            if (_texture2D == null || _texture2D.width != width || _texture2D.height != height)
             {
-                _texture2D = new RenderTexture(width, height, 0, GraphicsFormat.R8G8B8A8_UNorm);
+                if (_texture2D != null)
+                    _texture2D.Release();
+
+                GraphicsFormat format = _useTextureCompression ?
+                    GraphicsFormat.B8G8R8A8_SRGB :
+                    GraphicsFormat.R8G8B8A8_UNorm;
+
+                _texture2D = new RenderTexture(width, height, 0, format);
                 _texture2D.enableRandomWrite = true;
+                _texture2D.autoGenerateMips = false;
                 _texture2D.Create();
                 material.SetTexture("_BaseMap", _texture2D);
             }
@@ -380,26 +401,33 @@ namespace RSL.Sensors.Camera
 
             try
             {
-                Texture2D _input = new Texture2D(2, 2);
-                ImageConversion.LoadImage(_input, msg.data);
-                _input.Apply();
-                SetupTex(_input.width, _input.height);
+                if (_tempTextureBuffer == null)
+                    _tempTextureBuffer = new Texture2D(2, 2);
+
+                ImageConversion.LoadImage(_tempTextureBuffer, msg.data);
+                _tempTextureBuffer.Apply();
+
+                int imgWidth = _tempTextureBuffer.width;
+                int imgHeight = _tempTextureBuffer.height;
+
+                if (_downscaleLarge4K && imgWidth > 2048)
+                {
+                    _tempTextureBuffer = DownsampleTexture(_tempTextureBuffer, 2048);
+                }
+
+                SetupTex(_tempTextureBuffer.width, _tempTextureBuffer.height);
 
                 if (debayerType == DebayerMode.None)
                 {
-                    RenderTexture.active = _texture2D;
-                    Graphics.Blit(_input, _texture2D);
-                    RenderTexture.active = null;
+                    Graphics.Blit(_tempTextureBuffer, _texture2D);
+                    Resize();
                     return;
                 }
 
-                // debayer the image using compute shader
                 debayer.SetInt("mode", (int)debayerType);
-                debayer.SetTexture(0, "Input", _input);
+                debayer.SetTexture(0, "Input", _tempTextureBuffer);
                 debayer.SetTexture(0, "Result", _texture2D);
-                debayer.Dispatch(0, _input.width / 2, _input.height / 2, 1);
-
-                Destroy(_input);
+                debayer.Dispatch(0, _tempTextureBuffer.width / 2, _tempTextureBuffer.height / 2, 1);
 
                 Resize();
             }
@@ -411,26 +439,61 @@ namespace RSL.Sensors.Camera
 
         void OnImage(ImageMsg msg)
         {
-            SetupTex((int)msg.width, (int)msg.height);
             ParseHeader(msg.header);
 
             try
             {
-                Texture2D temp = new Texture2D((int)msg.width, (int)msg.height, GetTextureFormat(msg.encoding), false);
-                temp.LoadRawTextureData(msg.data);
-                temp.Apply();
-                RenderTexture.active = _texture2D;
-                Graphics.Blit(temp, _texture2D);
-                RenderTexture.active = null;
-                Destroy(temp);
+                int imgWidth = (int)msg.width;
+                int imgHeight = (int)msg.height;
 
+                if (_tempTextureBuffer == null || _tempTextureWidth != imgWidth || _tempTextureHeight != imgHeight)
+                {
+                    if (_tempTextureBuffer != null)
+                        Destroy(_tempTextureBuffer);
+                    _tempTextureBuffer = new Texture2D(imgWidth, imgHeight, GetTextureFormat(msg.encoding), false);
+                    _tempTextureWidth = imgWidth;
+                    _tempTextureHeight = imgHeight;
+                }
 
+                _tempTextureBuffer.LoadRawTextureData(msg.data);
+                _tempTextureBuffer.Apply();
+
+                if (_downscaleLarge4K && imgWidth > 2048)
+                {
+                    _tempTextureBuffer = DownsampleTexture(_tempTextureBuffer, 2048);
+                }
+
+                SetupTex(_tempTextureBuffer.width, _tempTextureBuffer.height);
+                Graphics.Blit(_tempTextureBuffer, _texture2D);
             }
             catch (System.Exception e)
             {
                 Debug.LogError(e);
             }
             Resize();
+        }
+
+        private Texture2D DownsampleTexture(Texture2D source, int maxDimension = 2048)
+        {
+            if (source.width <= maxDimension && source.height <= maxDimension)
+                return source;
+
+            float scale = (float)maxDimension / Mathf.Max(source.width, source.height);
+            int newWidth = Mathf.RoundToInt(source.width * scale);
+            int newHeight = Mathf.RoundToInt(source.height * scale);
+
+            RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight, 0, RenderTextureFormat.Default);
+            Graphics.Blit(source, rt);
+
+            Texture2D result = new Texture2D(newWidth, newHeight, TextureFormat.RGB24, false);
+            RenderTexture.active = rt;
+            result.ReadPixels(new Rect(0, 0, newWidth, newHeight), 0, 0);
+            result.Apply();
+            RenderTexture.active = null;
+            RenderTexture.ReleaseTemporary(rt);
+
+            Destroy(source);
+            return result;
         }
 
         public static TextureFormat GetTextureFormat(string rosEncoding)
