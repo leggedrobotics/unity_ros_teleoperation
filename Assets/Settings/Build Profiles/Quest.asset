@@ -20,8 +20,10 @@ MonoBehaviour:
     rid: 8579078181635489794
   m_OverrideGlobalSceneList: 1
   m_Scenes:
-  - m_enabled: 1
+  - m_enabled: 0
     m_path: Assets/Scenes/Main.unity
+  - m_enabled: 1
+    m_path: Assets/RSL/Core/Menu/MenuTestScene.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings: []
