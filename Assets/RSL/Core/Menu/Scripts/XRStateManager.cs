@@ -33,7 +33,11 @@ namespace RSL.Core.Menu
         void Start()
         {
             // OVRManager.HMDMounted += OnHMDMounted;
+#if META_QUEST
             OVRManager.TrackingAcquired += OnTrackingAcquired;
+#else
+            TrackingAcquired = true;
+#endif
         }
 
         void OnHMDMounted()
@@ -50,6 +54,7 @@ namespace RSL.Core.Menu
 
         void Update()
         {
+#if META_QUEST
             if (originAnchor == null || !originAnchor.TryGetComponent<OVRSpatialAnchor>(out _))
             {
                 // Debug.Log("No anchor created yet, saving position");
@@ -58,6 +63,16 @@ namespace RSL.Core.Menu
             {
                 LocalizeOrigin();
             }
+#else
+            if (originAnchor == null)
+            {
+                if (TrackingAcquired) CreateOriginAnchor();
+            }
+            else
+            {
+                LocalizeOrigin();
+            }
+#endif
         }
 
         async void CreateOriginAnchor()
@@ -79,11 +94,13 @@ namespace RSL.Core.Menu
                 originAnchor.transform.SetPositionAndRotation(xrOrigin.transform.position, Quaternion.Inverse(xrOrigin.transform.rotation));
             }
 
+#if META_QUEST
             // Add the anchor component
             OVRSpatialAnchor anchor = originAnchor.AddComponent<OVRSpatialAnchor>();
 
             // Wait for localization so it becomes world‑locked
             await anchor.WhenLocalizedAsync();
+#endif
 
             // Debug.Log("Origin anchor created and localized at world origin.");
         }
@@ -96,6 +113,7 @@ namespace RSL.Core.Menu
                 return;
             }
 
+#if META_QUEST
             OVRSpatialAnchor anchor = originAnchor.GetComponent<OVRSpatialAnchor>();
 
             if (anchor == null)
@@ -106,6 +124,7 @@ namespace RSL.Core.Menu
 
             // Wait for localization so it becomes world‑locked
             await anchor.WhenLocalizedAsync();
+#endif
 
 
             float distanceToOrigin = Vector3.Distance(originAnchor.transform.position, Vector3.zero);
