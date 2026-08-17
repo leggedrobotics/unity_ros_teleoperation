@@ -2,6 +2,7 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/main/Unity.gitignore
 #
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
@@ -10,8 +11,9 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
-# for security for now we also remove the keystore
+# for security for now we also remove the keystore and meta uploader
 *.keystore
+upload_build
 
 # Dont include splat files
 *.splat

@@ -7,8 +7,8 @@
     <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
     <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="false"/>
     <uses-feature android:name="android.hardware.touchscreen.multitouch.distinct" android:required="false"/>
-    <uses-feature android:name="com.oculus.feature.PASSTHROUGH" android:required="true"/>
-    <!-- <uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="true" /> -->
+    <uses-feature android:name="com.oculus.feature.PASSTHROUGH" android:required="false"/>
+    <!-- <uses-feature android:name="com.oculus.feature.CONTEXTUAL_BOUNDARYLESS_APP" android:required="false" /> -->
     <uses-permission android:name="com.oculus.permission.USE_ANCHOR_API"/>
     <uses-permission android:name="com.oculus.permission.USE_SCENE"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30"/>
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
-    <uses-feature android:name="oculus.software.overlay_keyboard" android:required="true"/>
+    <uses-feature android:name="oculus.software.overlay_keyboard" android:required="false"/>
     <uses-permission android:name="com.oculus.permission.HAND_TRACKING"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-feature android:name="oculus.software.handtracking" android:required="false"/>
@@ -36,14 +36,20 @@
 
         <activity android:theme="@style/UnityThemeSelector" android:name="com.unity3d.player.UnityPlayerActivity" android:exported="true" android:launchMode="singleTask" android:screenOrientation="landscape" android:configChanges="fontScale|layoutDirection|density|smallestScreenSize|screenSize|uiMode|screenLayout|orientation|navigation|keyboardHidden|keyboard|touchscreen|locale|mnc|mcc" android:hardwareAccelerated="false" android:resizeableActivity="false">
             <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="com.oculus.intent.category.VR"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="org.khronos.openxr.intent.category.IMMERSIVE_HMD"/>
             </intent-filter>
             <meta-data android:name="unityplayer.UnityActivity" android:value="true"/>
             <meta-data android:name="notch_support" android:value="true"/>
             <meta-data android:name="com.oculus.vr.focusaware" android:value="true"/>
         </activity>
-        <meta-data android:name="com.oculus.supportedDevices" android:value="quest2|cambria|eureka|quest3s"/>
     </application>
 </manifest>
