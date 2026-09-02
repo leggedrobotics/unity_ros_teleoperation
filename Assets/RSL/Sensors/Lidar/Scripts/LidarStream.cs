@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Sensor;
 using RosMessageTypes.Std;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Rendering;
@@ -168,7 +168,7 @@ namespace RSL.Sensors.Lidar
         void Awake()
         {
             _msgType = "sensor_msgs/PointCloud2";
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
 
             mesh = LidarUtils.MakePolygon(sides);
 
@@ -248,7 +248,7 @@ namespace RSL.Sensors.Lidar
 
             if (_enabled && !string.IsNullOrEmpty(topicName))
             {
-                _ros.Subscribe<PointCloud2Msg>(topicName, OnPointcloud);
+                _ros.Subscribe<PointCloud2Msg>(topicName, OnPointcloud, mainThread: true);
             }
         }
 
@@ -534,7 +534,7 @@ namespace RSL.Sensors.Lidar
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
-            _ros.Subscribe<PointCloud2Msg>(topic, OnPointcloud);
+            _ros.Subscribe<PointCloud2Msg>(topic, OnPointcloud, mainThread: true);
             Debug.Log("Subscribed to " + topic);
         }
 
@@ -670,7 +670,7 @@ namespace RSL.Sensors.Lidar
             else
             {
                 Debug.Log("Subscribing to " + topicName);
-                _ros.Subscribe<PointCloud2Msg>(topicName, OnPointcloud);
+                _ros.Subscribe<PointCloud2Msg>(topicName, OnPointcloud, mainThread: true);
             }
         }
 
@@ -721,3 +721,4 @@ namespace RSL.Sensors.Lidar
 
     }
 }
+

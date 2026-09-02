@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UvgRos;
 using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Std;
 using RosMessageTypes.Tf2;
@@ -10,13 +11,41 @@ namespace RSL.Core.TF
 {
     public class StaticRemapper : MonoBehaviour
     {
-        ROSConnection ros;
+        UvgRosConnection ros;
+
+        // Singleton guard: two of these in one scene silently double-
+        // subscribed to /tf_static, and UvgRosConnection.Subscribe's
+        // duplicate-topic handling (tear down the old native stream, ask the
+        // server for a new one) doesn't renegotiate the server's cached
+        // route -- the result was a second stream listening on a port the
+        // server was never told to send to, with no error anywhere. Refusing
+        // the second instance outright, loudly, beats relying on that
+        // recovery path working.
+        private static StaticRemapper s_instance;
+
+        void Awake()
+        {
+            if (s_instance != null && s_instance != this)
+            {
+                Debug.LogWarning("[StaticRemapper] another instance (" + s_instance.name +
+                    ") already exists in this scene -- disabling this one on " + name +
+                    ". Only one StaticRemapper should subscribe to /tf_static.");
+                enabled = false;
+                return;
+            }
+            s_instance = this;
+        }
+
+        void OnDestroy()
+        {
+            if (s_instance == this) s_instance = null;
+        }
 
         void Start()
         {
-            ros = ROSConnection.GetOrCreateInstance();
-            ros.Subscribe<TFMessageMsg>("/tf_static", StaticTF);
-            
+            ros = UvgRosConnection.GetOrCreateInstance();
+            ros.Subscribe<TFMessageMsg>("/tf_static", StaticTF, mainThread: true);
+
         }
         void StaticTF (TFMessageMsg msg){
             // get the tf system

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using UnityEngine.UI;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Std;
@@ -44,7 +44,7 @@ namespace RSL.Sensors.Path
         public void Awake()
         {
             _msgType = "nav_msgs/Path";
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
             _mesh = LidarUtils.MakeArrow(arrowRadius, arrowSides);
 
             // Create empty child line renderer
@@ -137,7 +137,7 @@ namespace RSL.Sensors.Path
             _enabled = true;
             topicName = newTopic;
             topicText?.SetText(newTopic);
-            _ros.Subscribe<PathMsg>(newTopic, OnPath);
+            _ros.Subscribe<PathMsg>(newTopic, OnPath, mainThread: true);
             Debug.Log("[PathStream] Subscribed to " + newTopic);
         }
 
@@ -217,3 +217,4 @@ namespace RSL.Sensors.Path
 
     }
 }
+

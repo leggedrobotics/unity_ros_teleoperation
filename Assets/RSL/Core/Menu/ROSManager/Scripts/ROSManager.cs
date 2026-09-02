@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 
 namespace RSL.Core.Menu
 {
@@ -32,7 +32,7 @@ namespace RSL.Core.Menu
         private TMPro.TMP_InputField _ipText;
         private TMPro.TMP_InputField _portText;
 
-        private ROSConnection _ros;
+        private UvgRosConnection _ros;
         private bool _connected = false;
         private bool _stagnant = false;
 
@@ -72,7 +72,7 @@ namespace RSL.Core.Menu
             _ipText = ipSetting.GetComponent<TMPro.TMP_InputField>();
             _portText = portSetting.GetComponentInChildren<TMPro.TMP_InputField>();
 
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
 
             menu.SetActive(false);
 
@@ -139,9 +139,17 @@ namespace RSL.Core.Menu
                 _connected = !_ros.HasConnectionError;
                 OnConnectionColor.Invoke(_connected);
             }
-            if(_stagnant != _ros.LastMessageReceivedRealtime - Time.time < 2.5)
+            // Was `_ros.LastMessageReceivedRealtime - Time.time < 2.5` against
+            // ROSConnection -- almost always true (a stamp bounded by the
+            // session's elapsed time, minus a monotonically growing Time.time,
+            // is usually deeply negative), so _stagnant was effectively always
+            // true regardless of real traffic. UvgRosConnection.
+            // SecondsSinceLastMessage is an elapsed-time value, so the
+            // corrected, presumably-intended check is the other way around:
+            // stagnant when MORE than 2.5s have passed since the last message.
+            if(_stagnant != _ros.SecondsSinceLastMessage > 2.5)
             {
-                _stagnant = _ros.LastMessageReceivedRealtime - Time.time < 2.5;
+                _stagnant = _ros.SecondsSinceLastMessage > 2.5;
                 OnConnectionStagnant.Invoke(_stagnant);
             }
 

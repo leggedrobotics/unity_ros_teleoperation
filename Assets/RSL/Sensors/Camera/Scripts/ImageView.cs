@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Std;
 using RosMessageTypes.Sensor;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using TMPro;
@@ -26,6 +26,18 @@ namespace RSL.Sensors.Camera
             if (GUILayout.Button("Click"))
             {
                 imageView.OnClick();
+            }
+            // For a topic that will never show up in the dropdown -- e.g. a
+            // synthetic test route with no real ROS graph registration behind
+            // it -- set topicName above directly, then use this instead of
+            // the dropdown-driven Select buttons.
+            if (GUILayout.Button("Subscribe to topicName"))
+            {
+                imageView.OnTopicChange(imageView.topicName);
+            }
+            if (GUILayout.Button("Refresh Topics"))
+            {
+                imageView.RefreshAndPrintTopics();
             }
             if (GUILayout.Button("Select First Item"))
             {
@@ -100,7 +112,7 @@ namespace RSL.Sensors.Camera
         {
             _msgType = "sensor_msgs/Image";
 
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
             nameText.text = "None";
 
             icons = new Sprite[] { untracked, headTracked, tracked };
@@ -121,6 +133,28 @@ namespace RSL.Sensors.Camera
             topMenu.SetActive(false);
 
             RefreshTopics();
+        }
+
+        /// <summary>Editor-button convenience: get_topics only sees the real
+        /// ROS graph, so a synthetic test route with nothing registered there
+        /// never shows up in the dropdown at all -- this prints what the
+        /// server actually reported, so a topic missing from the dropdown is
+        /// visibly "not in the ROS graph" rather than "did this even run".
+        /// </summary>
+        public void RefreshAndPrintTopics()
+        {
+            _ros.GetTopicAndTypeList(topics =>
+            {
+                UpdateTopics(topics);
+                if (topics.Count == 0)
+                {
+                    Debug.Log("[ImageView] get_topics returned no topics");
+                    return;
+                }
+                var sb = new System.Text.StringBuilder("[ImageView] " + topics.Count + " topic(s):");
+                foreach (var kv in topics) sb.Append("\n  ").Append(kv.Key).Append("  (").Append(kv.Value).Append(")");
+                Debug.Log(sb.ToString());
+            });
         }
 
         public void OnValidate()
@@ -304,13 +338,23 @@ namespace RSL.Sensors.Camera
 
             topicName = topic;
 
-            if (topicName.EndsWith("compressed"))
+            try
             {
-                _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressed);
+                if (topicName.EndsWith("compressed"))
+                {
+                    _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressed, mainThread: true);
+                }
+                else
+                {
+                    _ros.Subscribe<ImageMsg>(topicName, OnImage, mainThread: true);
+                }
             }
-            else
+            catch (System.NotSupportedException e)
             {
-                _ros.Subscribe<ImageMsg>(topicName, OnImage);
+                // Hit when the server negotiated an H.264 (encoded_video) route
+                // for this topic -- UvgRosConnection.Subscribe<T> only handles
+                // the plain chain/msgpack_list framings so far, not that path.
+                Debug.LogError("[ImageView] '" + topicName + "' is not viewable yet: " + e.Message);
             }
             topicDropdown.gameObject.SetActive(false);
             topMenu.SetActive(false);
@@ -632,3 +676,4 @@ namespace RSL.Sensors.Camera
         }
     }
 }
+

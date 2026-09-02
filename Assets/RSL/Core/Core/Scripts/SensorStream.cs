@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using Unity.VisualScripting;
 
 
@@ -33,7 +33,7 @@ namespace RSL.Core
         public string topicName;
         protected int _trackingState = 0; 
         protected int _lastSelected = 0;
-        protected ROSConnection _ros;
+        protected UvgRosConnection _ros;
 
         /// <summary>
         /// Message type for this sensor, needs to be set to use the automatic topic refresh
@@ -137,3 +137,4 @@ namespace RSL.Core
         }
     }
 }
+

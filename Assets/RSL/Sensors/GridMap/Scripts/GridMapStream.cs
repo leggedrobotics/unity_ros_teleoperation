@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 
 using RosMessageTypes.Std;
@@ -46,7 +46,7 @@ namespace RSL.Sensors.GridMap
         void Awake()
         {
             _msgType = "grid_map_msgs/GridMap";
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
         }
 
         void Start()
@@ -200,7 +200,7 @@ namespace RSL.Sensors.GridMap
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
-            _ros.Subscribe<GridMapMsg>(topic, OnGridMapMessage);
+            _ros.Subscribe<GridMapMsg>(topic, OnGridMapMessage, mainThread: true);
             Debug.Log("Subscribed to " + topic);
         }
 
@@ -271,3 +271,4 @@ namespace RSL.Sensors.GridMap
         }
     }
 }
+

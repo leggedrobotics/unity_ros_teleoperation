@@ -34,6 +34,11 @@ namespace RSL.Sensors.Service
         public TextMeshProUGUI topicText;
         public TMPro.TMP_InputField topicInputField;
 
+        // Services have no uvgROS equivalent yet (see the migration plan's
+        // Part D backlog) -- kept on its own ROSConnection rather than the
+        // inherited, now UvgRosConnection-typed _ros, so this widget still
+        // compiles and works exactly as before until that lands.
+        private ROSConnection _rosLegacy;
 
         // Start is called before the first frame update
         void Awake()
@@ -41,7 +46,7 @@ namespace RSL.Sensors.Service
             topicText.text = topicName;
             topicInputField.text = topicName;
 
-            _ros = ROSConnection.GetOrCreateInstance();
+            _rosLegacy = ROSConnection.GetOrCreateInstance();
         }
 
         public override void OnTopicChange(string newTopic)
@@ -50,7 +55,7 @@ namespace RSL.Sensors.Service
             topicText.text = topicName;
             topicInputField.text = topicName;
             Debug.Log($"Topic changed to: {topicName}");
-            _ros.RegisterRosService<EmptyRequest, EmptyResponse>(topicName);
+            _rosLegacy.RegisterRosService<EmptyRequest, EmptyResponse>(topicName);
 
         }
 
@@ -62,7 +67,7 @@ namespace RSL.Sensors.Service
         public void TriggerService()
         {
             Debug.Log($"Triggering service: {topicName}");
-            _ros.SendServiceMessage<EmptyResponse>(topicName, new EmptyRequest(), ServiceCallback);
+            _rosLegacy.SendServiceMessage<EmptyResponse>(topicName, new EmptyRequest(), ServiceCallback);
         }
 
         private void ServiceCallback(EmptyResponse response)
@@ -77,3 +82,4 @@ namespace RSL.Sensors.Service
         }
     }
 }
+

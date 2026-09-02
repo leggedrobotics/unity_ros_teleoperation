@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Std;
 using RosMessageTypes.Sensor;
-using Unity.Robotics.ROSTCPConnector;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
@@ -109,8 +108,8 @@ namespace RSL.Sensors.Camera
 
             if (topicName.EndsWith("compressed"))
             {
-                _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressedLeft);
-                _ros.Subscribe<CompressedImageMsg>(topicName.Replace("left", "right"), OnCompressedRight);
+                _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressedLeft, mainThread: true);
+                _ros.Subscribe<CompressedImageMsg>(topicName.Replace("left", "right"), OnCompressedRight, mainThread: true);
             }
             else
             {
@@ -239,8 +238,8 @@ namespace RSL.Sensors.Camera
                 }
 
                 nameText.text = topicName;
-                _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressedLeft);
-                _ros.Subscribe<CompressedImageMsg>(topicName.Replace("left", "right"), OnCompressedRight);
+                _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressedLeft, mainThread: true);
+                _ros.Subscribe<CompressedImageMsg>(topicName.Replace("left", "right"), OnCompressedRight, mainThread: true);
             }
             catch (System.Exception e)
             {
@@ -260,4 +259,5 @@ namespace RSL.Sensors.Camera
         }
     }
 }
+
 

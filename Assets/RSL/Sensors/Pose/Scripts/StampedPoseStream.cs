@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using UnityEngine.UI;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Std;
@@ -39,7 +39,7 @@ namespace RSL.Sensors.Pose
         public void Awake()
         {
             _msgType = "geometry_msgs/PoseStamped";
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
             _mesh = LidarUtils.MakeArrow(arrowRadius, arrowSides);
 
             _meshTriangles = new GraphicsBuffer(GraphicsBuffer.Target.Structured, _mesh.triangles.Length, 4);
@@ -129,7 +129,7 @@ namespace RSL.Sensors.Pose
             _enabled = true;
             topicName = newTopic;
             topicText?.SetText(newTopic);
-            _ros.Subscribe<PoseStampedMsg>(newTopic, OnPose);
+            _ros.Subscribe<PoseStampedMsg>(newTopic, OnPose, mainThread: true);
             Debug.Log("[PoseStream] Subscribed to " + newTopic);
         }
 
@@ -188,3 +188,4 @@ namespace RSL.Sensors.Pose
         }
     }
 }
+

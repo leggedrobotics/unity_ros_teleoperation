@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using RosMessageTypes.Visualization;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
@@ -100,7 +100,7 @@ namespace RSL.Sensors.Markers
         {
             _id = nextId++;
             // Initialize ROS connection
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
         }
         // Start is called before the first frame update
         void Start()
@@ -324,7 +324,7 @@ namespace RSL.Sensors.Markers
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
-            _ros.Subscribe<MarkerMsg>(topic, OnMarker);
+            _ros.Subscribe<MarkerMsg>(topic, OnMarker, mainThread: true);
             Debug.Log("Subscribed to " + topic);
         }
 
@@ -369,3 +369,4 @@ namespace RSL.Sensors.Markers
         }
     }
 }
+
