@@ -201,6 +201,219 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3055682186710828737, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
   m_PrefabInstance: {fileID: 639842761}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &247528981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247528983}
+  - component: {fileID: 247528982}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &247528982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247528981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00eb77e176f45d946b5d0dfd27fa89df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UvgRos::UvgRos.UvgRosTestClient
+  serverHost: 100.76.44.78
+  serverPort: 10001
+  localHost: 100.92.79.37
+  stackVersion: 0.1.0
+  nodeId: unity-test-client
+  imageTopic: /dynaarm_REALSENSE/color/image_raw/compressed
+  imageMsgType: sensor_msgs/CompressedImage
+  pointCloudTopic: /point_cloud_filter/lidar/point_cloud_filtered
+  pointCloudMsgType: sensor_msgs/PointCloud2
+  tfTopic: /tf
+  tfMsgType: tf2_msgs/TFMessage
+  targetSurface: {fileID: 344147113}
+  flipVertically: 1
+  tfRateHz: 10
+  imageDownscale: 1
+  lastTuningResult: 
+  verboseLogging: 1
+  alsoPublishTfToEndpoint: 1
+  imageStatus: not started
+  imagePackets: 0
+  imageWidth: 0
+  imageHeight: 0
+  imageEncoding: 
+  imagesReceived: 0
+  imageHz: 0
+  cloudStatus: not started
+  cloudPackets: 0
+  pointCloudsReceived: 0
+  lastCloudPoints: 0
+  cloudHz: 0
+  tfStatus: not started
+  tfPackets: 0
+  tfMessagesReceived: 0
+  tfTransformsLastMsg: 0
+  tfDistinctFrames: 0
+  tfBridge: compile UVGROS_ROSTCP to enable
+  heartbeatStatus: not started
+  rttMs: 0
+  bestRttMs: 0
+  clockOffsetMs: 0
+  probesSent: 0
+  echoesReceived: 0
+  imageResolvedType: 
+  cloudResolvedType: 
+  tfResolvedType: 
+  sessionId: 
+  serverVersion: 
+  coreAbi: 
+  coreCodecs: 
+  videoStatus: 
+  encryptionStatus: 
+  uvgrtpCounters: 
+  serverPluginVersions: 
+  bytesReceived: 0
+  decodeErrors: 0
+  lastError: 
+  serverEvent: 
+--- !u!4 &247528983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247528981}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.43503, y: -0.05, z: 4.31118}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &344147111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 344147115}
+  - component: {fileID: 344147114}
+  - component: {fileID: 344147113}
+  - component: {fileID: 344147112}
+  m_Layer: 0
+  m_Name: Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!64 &344147112
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147111}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &344147113
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147111}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &344147114
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147111}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &344147115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344147111}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.43503, y: -0.05, z: 4.31118}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &615282063
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1201,3 +1414,5 @@ SceneRoots:
   - {fileID: 1266845200}
   - {fileID: 639842761}
   - {fileID: 615282063}
+  - {fileID: 247528983}
+  - {fileID: 344147115}
