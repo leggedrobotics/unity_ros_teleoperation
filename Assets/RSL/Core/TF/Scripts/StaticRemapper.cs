@@ -48,6 +48,13 @@ namespace RSL.Core.TF
 
         }
         void StaticTF (TFMessageMsg msg){
+            // A buffered message can still drain through Update() a frame or
+            // two into Play mode stopping / the app quitting -- by then the
+            // frame GameObjects (and possibly this component) are already
+            // destroyed, and Unity's fake-null still lets a bare reference
+            // through, so this is not optional even though it looks it.
+            if (this == null) return;
+
             // get the tf system
             var tfSystem = TFSystem.GetOrCreateInstance();
 
@@ -56,6 +63,7 @@ namespace RSL.Core.TF
             {
                 var child = tfSystem.GetOrCreateFrame(tf.child_frame_id);
                 var parent = tfSystem.GetOrCreateFrame(tf.header.frame_id);
+                if (child?.GameObject == null || parent?.GameObject == null) continue;
                 child.SetParent(parent);
                 child.GameObject.transform.localPosition = ToVector3(tf.transform.translation);
                 child.GameObject.transform.localRotation = ToQuaternion(tf.transform.rotation);
