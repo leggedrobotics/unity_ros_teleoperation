@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using UnityEngine.UI;
 
 namespace RSL.Sensors.Lidar
@@ -42,12 +42,12 @@ namespace RSL.Sensors.Lidar
 
         // public GameObject menu;
 
-        private ROSConnection ros;
+        private UvgRosConnection ros;
 
 
         void Start()
         {
-            ros = ROSConnection.GetOrCreateInstance();
+            ros = UvgRosConnection.GetOrCreateInstance();
 
         }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 
 namespace RSL.Core.Menu
 {
@@ -12,14 +12,14 @@ namespace RSL.Core.Menu
 
         private string _ipAddress;
 
-        private ROSConnection _ros;
+        private UvgRosConnection _ros;
 
         void Start()
         {
             _text = GetComponent<TMPro.TextMeshProUGUI>();
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
             _ipAddress = GetLocalIPv4();
-            _text.text = _ros.rosVersion.ToString() + " : " + _ipAddress;
+            _text.text = _ros.RosVersion.ToString() + " : " + _ipAddress;
         }
 
         public string GetLocalIPv4()
@@ -31,7 +31,7 @@ namespace RSL.Core.Menu
         {
             if (_text.enabled)
             {
-                _text.text = _ros.rosVersion.ToString() + " : " + _ipAddress;
+                _text.text = _ros.RosVersion.ToString() + " : " + _ipAddress;
             }
         }
 

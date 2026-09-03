@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Std;
 using TMPro;
 
@@ -34,19 +33,13 @@ namespace RSL.Sensors.Service
         public TextMeshProUGUI topicText;
         public TMPro.TMP_InputField topicInputField;
 
-        // Services have no uvgROS equivalent yet (see the migration plan's
-        // Part D backlog) -- kept on its own ROSConnection rather than the
-        // inherited, now UvgRosConnection-typed _ros, so this widget still
-        // compiles and works exactly as before until that lands.
-        private ROSConnection _rosLegacy;
-
         // Start is called before the first frame update
         void Awake()
         {
             topicText.text = topicName;
             topicInputField.text = topicName;
 
-            _rosLegacy = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRos.UvgRosConnection.GetOrCreateInstance();
         }
 
         public override void OnTopicChange(string newTopic)
@@ -55,8 +48,9 @@ namespace RSL.Sensors.Service
             topicText.text = topicName;
             topicInputField.text = topicName;
             Debug.Log($"Topic changed to: {topicName}");
-            _rosLegacy.RegisterRosService<EmptyRequest, EmptyResponse>(topicName);
-
+            // No separate registration step -- call_service looks the
+            // service up by name on the server side per call, unlike
+            // ROSConnection's RegisterRosService/SendServiceMessage pair.
         }
 
         public void SubscribeToService()
@@ -67,7 +61,7 @@ namespace RSL.Sensors.Service
         public void TriggerService()
         {
             Debug.Log($"Triggering service: {topicName}");
-            _rosLegacy.SendServiceMessage<EmptyResponse>(topicName, new EmptyRequest(), ServiceCallback);
+            _ros.CallService<EmptyRequest, EmptyResponse>(topicName, new EmptyRequest(), ServiceCallback);
         }
 
         private void ServiceCallback(EmptyResponse response)

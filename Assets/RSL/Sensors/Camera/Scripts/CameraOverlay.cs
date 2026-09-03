@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.Sensor;
 
 namespace RSL.Sensors.Camera
@@ -18,7 +18,7 @@ namespace RSL.Sensors.Camera
         // public Camera depthCam;
         public RawImage overlayImage;
         public RenderTexture renderTexture;
-        ROSConnection ros;
+        UvgRosConnection ros;
         public string topicName = "/img";
         public string transportHint = TransportHint.Raw;
 
@@ -61,9 +61,19 @@ namespace RSL.Sensors.Camera
 
 
 
-            ros = ROSConnection.GetOrCreateInstance();
+            ros = UvgRosConnection.GetOrCreateInstance();
             // ros.Subscribe<ImageMsg>(_topicName, OnImage);
-            ros.Subscribe<CompressedImageMsg>(_topicName, OnCompressed);
+            try
+            {
+                ros.Subscribe<CompressedImageMsg>(_topicName, OnCompressed, mainThread: true);
+            }
+            catch (System.NotSupportedException e)
+            {
+                // Hit when the server negotiated an H.264 (encoded_video) route
+                // for this topic -- UvgRosConnection.Subscribe<T> only handles
+                // the plain chain/msgpack_list framings so far, not that path.
+                Debug.LogError("[CameraOverlay] '" + _topicName + "' is not viewable yet: " + e.Message);
+            }
         }
 
 

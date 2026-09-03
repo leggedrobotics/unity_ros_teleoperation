@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.VrHaptic;
 
 namespace RSL.Core.Haptics
@@ -10,13 +10,13 @@ namespace RSL.Core.Haptics
     {
         public string topicName = "/quest/haptics";
 
-        ROSConnection _ros;
+        UvgRosConnection _ros;
 
         // Start is called before the first frame update
         void Start()
         {
-            _ros = ROSConnection.GetOrCreateInstance();
-            _ros.Subscribe<HapticReadingsMsg>(topicName, ReceiveMessage);
+            _ros = UvgRosConnection.GetOrCreateInstance();
+            _ros.Subscribe<HapticReadingsMsg>(topicName, ReceiveMessage, mainThread: true);
         }
 
         int ForceMapper(double force)

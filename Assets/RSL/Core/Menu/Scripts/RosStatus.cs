@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using UnityEngine.UI;
 using TMPro;
 
@@ -9,7 +9,7 @@ namespace RSL.Core.Menu
 {
     public class RosStatus : MonoBehaviour
     {
-        ROSConnection ros;
+        UvgRosConnection ros;
         public GameObject ipSetting;
         public GameObject portSetting;
         public Numpad numpad;
@@ -25,7 +25,7 @@ namespace RSL.Core.Menu
 
         void Start()
         {
-            ros = ROSConnection.GetOrCreateInstance();
+            ros = UvgRosConnection.GetOrCreateInstance();
 
             _rawImage = GetComponent<RawImage>();
             _ipText = ipSetting.GetComponent<TMPro.TMP_InputField>();

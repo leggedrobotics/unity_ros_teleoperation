@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using UnityEngine.UI;
 using System;
 using UnityEngine.SceneManagement;
@@ -73,7 +73,7 @@ namespace RSL.Core
         public GameObject sensorPrefab;
         public TMPro.TextMeshProUGUI count;
         protected List<GameObject> sensors;
-        protected ROSConnection _ros;
+        protected UvgRosConnection _ros;
         protected Image _icon;
 
         private string _sceneName = "";
@@ -81,7 +81,7 @@ namespace RSL.Core
 
         private void Awake()
         {
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
             sensors = new List<GameObject>();
 
             _sceneName = SceneManager.GetActiveScene().name;
