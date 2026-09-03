@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
+using UvgRos.TF2;
 
 namespace RSL.Core.Menu
 {
@@ -13,20 +14,20 @@ namespace RSL.Core.Menu
         {
 
             bool useSimTime = PlayerPrefs.GetInt("use_sim_time", 0) == 1;
-            TFStream.UseSimTime = useSimTime;
+            TF2Stream.UseSimTime = useSimTime;
 
             label = GetComponent<TMPro.TextMeshProUGUI>();
-            label.text = "Use Sim Time: " + TFStream.UseSimTime;
+            label.text = "Use Sim Time: " + TF2Stream.UseSimTime;
 
-            PlayerPrefs.SetInt("use_sim_time", TFStream.UseSimTime ? 1 : 0);
+            PlayerPrefs.SetInt("use_sim_time", TF2Stream.UseSimTime ? 1 : 0);
             PlayerPrefs.Save();
         }
         
         public void ToggleSimTime()
         {
-            TFStream.UseSimTime = !TFStream.UseSimTime;
-            label.text = "Use Sim Time: " + TFStream.UseSimTime;
-            PlayerPrefs.SetInt("use_sim_time", TFStream.UseSimTime ? 1 : 0);
+            TF2Stream.UseSimTime = !TF2Stream.UseSimTime;
+            label.text = "Use Sim Time: " + TF2Stream.UseSimTime;
+            PlayerPrefs.SetInt("use_sim_time", TF2Stream.UseSimTime ? 1 : 0);
             PlayerPrefs.Save();
         }
 

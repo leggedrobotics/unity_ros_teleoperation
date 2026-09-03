@@ -10,14 +10,34 @@ namespace RSL.Core
 {
     #if UNITY_EDITOR
     using UnityEditor;
+    // NOTE: editorForChildClasses:true (a 2nd `true` arg here) looks like it
+    // should make this the fallback editor for any SensorStream subclass
+    // without its own -- in practice it did NOT take effect for GridMapStream
+    // (confirmed: SensorStreamEditor.OnInspectorGUI never ran for it, per the
+    // Editor log, while it does run for MarkerStream/ServiceStream, which
+    // explicitly inherit this class below). So every subclass needs its own
+    // explicit `[CustomEditor(typeof(X))] class XEditor : SensorStreamEditor {}`
+    // (see GridMapStream.cs, PathStream.cs, StampedPoseStream.cs,
+    // CameraOverlay.cs for empty-body examples that just inherit this as-is).
     [CustomEditor(typeof(SensorStream))]
-    public abstract class SensorStreamEditor : Editor
+    public class SensorStreamEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
             SensorStream myScript = (SensorStream)target;
+            if (GUILayout.Button("Refresh Topics"))
+            {
+                myScript.RefreshTopics();
+            }
+            // For a topic that won't show up in the dropdown (e.g. a
+            // synthetic test route with no real ROS graph registration
+            // behind it) -- edit topicName above directly, then use this.
+            if (GUILayout.Button("Subscribe to topicName"))
+            {
+                myScript.Subscribe();
+            }
             if (GUILayout.Button("Clear"))
             {
                 myScript.Clear();
@@ -58,6 +78,20 @@ namespace RSL.Core
         public void RefreshTopics()
         {
             _ros?.GetTopicAndTypeList(UpdateTopics);
+        }
+
+        /// <summary>
+        /// Re-subscribes using whatever topic name is currently sitting in
+        /// topicName -- e.g. after typing a new one into the Inspector's
+        /// default-drawn field, which alone doesn't trigger anything (it's
+        /// a plain field, not a dropdown onValueChanged). Wired to the base
+        /// SensorStreamEditor's "Subscribe to topicName" button; several
+        /// subclass editors (LidarStreamEditor, ImageViewEditor) also expose
+        /// this same call directly.
+        /// </summary>
+        public void Subscribe()
+        {
+            OnTopicChange(topicName);
         }
 
         /// <summary>

@@ -43,6 +43,14 @@ namespace RSL.Sensors.Lidar
             {
                 myScript.OnTopicSelect(1);
             }
+            // For a topic that won't show up in the dropdown (e.g. a
+            // synthetic test route with no real ROS graph registration
+            // behind it) -- edit topicName above directly, then use this
+            // instead of the dropdown-index-driven Select buttons.
+            if (GUILayout.Button("Subscribe to topicName"))
+            {
+                myScript.Subscribe();
+            }
             if (GUILayout.Button("Set color to RGB"))
             {
                 myScript.OnColorSelect(0);

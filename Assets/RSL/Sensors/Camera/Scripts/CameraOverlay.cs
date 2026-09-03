@@ -4,10 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UvgRos;
 using RosMessageTypes.Sensor;
+using RSL.Core;
 
 namespace RSL.Sensors.Camera
 {
-    public class CameraOverlay : MonoBehaviour
+    #if UNITY_EDITOR
+    using UnityEditor;
+    // Empty on purpose -- see GridMapStreamEditor's comment in
+    // GridMapStream.cs (SensorStream's editorForChildClasses fallback
+    // didn't take effect in practice).
+    [CustomEditor(typeof(CameraOverlay))]
+    public class CameraOverlayEditor : RSL.Core.SensorStreamEditor
+    {
+    }
+    #endif
+
+    public class CameraOverlay : SensorStream
     {
         public static class TransportHint
         {
@@ -18,8 +30,6 @@ namespace RSL.Sensors.Camera
         // public Camera depthCam;
         public RawImage overlayImage;
         public RenderTexture renderTexture;
-        UvgRosConnection ros;
-        public string topicName = "/img";
         public string transportHint = TransportHint.Raw;
 
         private string _topicName;
@@ -43,29 +53,46 @@ namespace RSL.Sensors.Camera
 
             depthMaterial = new Material(depthShader);
 
+            _meshRenderer = plane.GetComponent<MeshRenderer>();
 
+            _ros = UvgRosConnection.GetOrCreateInstance();
+            _msgType = "sensor_msgs/CompressedImage";
 
+            OnTopicChange(topicName);
+        }
 
+        public override void ToggleTrack(int mode)
+        {
+            // No tracking-mode concept for a fixed passthrough overlay --
+            // required by the SensorStream base but not applicable here.
+        }
 
-            if (topicName.EndsWith("compressed"))
+        public override void OnTopicChange(string topic)
+        {
+            if (!string.IsNullOrEmpty(topicName))
+                _ros?.Unsubscribe(topicName);
+
+            if (string.IsNullOrEmpty(topic))
+            {
+                topicName = null;
+                return;
+            }
+
+            topicName = topic;
+            if (topic.EndsWith("compressed"))
             {
                 transportHint = TransportHint.Compressed;
-                _topicName = topicName;
+                _topicName = topic;
             }
             else
             {
-                _topicName = topicName + transportHint;
+                _topicName = topic + transportHint;
             }
 
-            _meshRenderer = plane.GetComponent<MeshRenderer>();
-
-
-
-            ros = UvgRosConnection.GetOrCreateInstance();
             // ros.Subscribe<ImageMsg>(_topicName, OnImage);
             try
             {
-                ros.Subscribe<CompressedImageMsg>(_topicName, OnCompressed, mainThread: true);
+                _ros.Subscribe<CompressedImageMsg>(_topicName, OnCompressed, mainThread: true);
             }
             catch (System.NotSupportedException e)
             {
@@ -76,6 +103,16 @@ namespace RSL.Sensors.Camera
             }
         }
 
+        public void OnSelect(int value)
+        {
+            if (value == _lastSelected) return;
+            _lastSelected = value;
+
+            string selectedTopic = topicDropdown.options[value].text;
+            if (selectedTopic == "None") selectedTopic = null;
+
+            OnTopicChange(selectedTopic);
+        }
 
         void OnCompressed(CompressedImageMsg msg)
         {
@@ -88,12 +125,21 @@ namespace RSL.Sensors.Camera
                 uiImage.texture = _texture2D;
                 uiImage.color = Color.white;
             }
+            var sw = System.Diagnostics.Stopwatch.StartNew();
             ImageConversion.LoadImage(_texture2D, msg.data);
 
             // demosiac the bayered image
 
 
             _texture2D.Apply();
+            sw.Stop();
+            // See ImageView.OnCompressed's identical instrumentation --
+            // LoadImage (JPEG decode) + Apply (GPU upload) both run
+            // synchronously on the main thread.
+            if (sw.Elapsed.TotalMilliseconds > 4.0)
+                Debug.LogWarning("[CameraOverlay] LoadImage+Apply for '" + topicName + "' (" +
+                    _texture2D.width + "x" + _texture2D.height + ", " + msg.data.Length +
+                    " bytes) took " + sw.Elapsed.TotalMilliseconds.ToString("F1") + "ms on the main thread");
 
             float aspectRatio = (float)_texture2D.height / (float)_texture2D.width;
             float width = uiImage.rectTransform.rect.width;
@@ -124,11 +170,11 @@ namespace RSL.Sensors.Camera
                 uiImage.color = Color.white;
 
                 // overlayImage.rectTransform.sizeDelta = new Vector2(msg.width, msg.height);
-                
+
                 // renderTexture.width = (int)msg.width;
                 // renderTexture.height = (int)msg.height;
             }
-            
+
             _texture2D.LoadRawTextureData(msg.data);
             _texture2D.Apply();
 

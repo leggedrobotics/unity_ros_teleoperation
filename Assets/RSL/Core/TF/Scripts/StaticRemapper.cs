@@ -6,6 +6,7 @@ using Unity.Robotics.ROSTCPConnector;
 using RosMessageTypes.Std;
 using RosMessageTypes.Tf2;
 using RosMessageTypes.Geometry;
+using UvgRos.TF2;
 
 namespace RSL.Core.TF
 {
@@ -45,7 +46,19 @@ namespace RSL.Core.TF
         {
             ros = UvgRosConnection.GetOrCreateInstance();
             ros.Subscribe<TFMessageMsg>("/tf_static", StaticTF, mainThread: true);
+            ros.Subscribe<TFMessageMsg>("/tf", DynamicTF, mainThread: true);
+        }
 
+        // TF2System (see UvgRos.TF2.TF2System's doc comment) no longer
+        // subscribes to anything itself -- this is the one place in the
+        // project that feeds it live, dynamic /tf messages, mirroring
+        // StaticTF below for /tf_static. Both land in the same default
+        // "/tf" topic-bucket (GetOrCreateFrame's default tfTopic param), so
+        // this doesn't create a second, separate tree.
+        void DynamicTF(TFMessageMsg msg)
+        {
+            if (this == null) return;
+            TF2System.GetOrCreateInstance().GetOrCreateTFTopic("/tf").ReceiveTF(msg);
         }
         void StaticTF (TFMessageMsg msg){
             // A buffered message can still drain through Update() a frame or
@@ -56,7 +69,7 @@ namespace RSL.Core.TF
             if (this == null) return;
 
             // get the tf system
-            var tfSystem = TFSystem.GetOrCreateInstance();
+            var tfSystem = TF2System.GetOrCreateInstance();
 
             // add the static tfs to the tf tree
             foreach (var tf in msg.transforms)

@@ -11,6 +11,16 @@ using RSL.Sensors.Lidar;
 
 namespace RSL.Sensors.Pose
 {
+    #if UNITY_EDITOR
+    using UnityEditor;
+    // Empty on purpose -- see GridMapStreamEditor's comment (SensorStream's
+    // editorForChildClasses fallback didn't take effect in practice).
+    [CustomEditor(typeof(StampedPoseStream))]
+    public class StampedPoseStreamEditor : RSL.Core.SensorStreamEditor
+    {
+    }
+    #endif
+
     public class StampedPoseStream : RSL.Core.SensorStream
     {
         public TMPro.TextMeshProUGUI topicText;

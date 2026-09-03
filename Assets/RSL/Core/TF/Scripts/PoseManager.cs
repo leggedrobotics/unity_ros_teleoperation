@@ -144,6 +144,16 @@ namespace RSL.Core.TF
 
             while (root.parent != null && findRoot)
             {
+                // Stop at the purpose-built "root" anchor (ModelManager._root)
+                // instead of climbing through it into whatever TF frame it's
+                // parented under. Climbing past it used to mean this script
+                // manually repositioned a TFSystem-owned GameObject by hand --
+                // fine if that frame never receives live updates (a true
+                // topological root), but actively fighting TFTopicState's own
+                // continuous repositioning otherwise (e.g. "odom", which
+                // usually does get live corrections). This way any frame is
+                // safe to pick as the root frame, not just the tree's actual top.
+                if (root.CompareTag("root")) break;
                 root = root.parent;
                 _root = root;
                 Debug.Log("root frame: " + root);

@@ -55,7 +55,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 14533633921710204}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating
@@ -135,7 +135,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 766497990645564566}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/middle_L1
@@ -181,7 +181,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1047081698601769548}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/middle_L1/middle_L2/middle_back
@@ -261,7 +261,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1840972704888861449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/thumb_L1
@@ -309,7 +309,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1907093889310551593}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/pinky_L1
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2080375760825555052}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ring_L1/ring_L2
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3556224957665527568}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base
@@ -668,7 +668,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4035861528418747683}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/middle_L1/middle_L2/middle_tip
@@ -714,7 +714,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4290749037089515514}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ability_hand_ee/back
@@ -762,7 +762,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4809746628904581072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ring_L1
@@ -812,7 +812,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4868513826171980073}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/index_L1/index_L2
@@ -861,7 +861,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4948425508621935715}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ability_hand_ee
@@ -908,7 +908,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5089542045039092497}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/index_L1/index_L2/index_fsr_sensor_1
@@ -954,7 +954,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5117959108854157992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/thumb_L1/thumb_L2/thumb_back
@@ -1032,7 +1032,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5365804488603968874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/thumb_L1/thumb_L2/thumb_tip
@@ -1081,7 +1081,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5482244823644497841}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/pinky_L1/pinky_L2
@@ -1162,7 +1162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5643066899214491230}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/middle_L1/middle_L2
@@ -1240,7 +1240,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6129766365595785293}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/pinky_L1/pinky_L2/pinky_back
@@ -1289,7 +1289,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6225693829886262537}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/thumb_L1/thumb_L2
@@ -1337,7 +1337,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6816930395760978429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector
@@ -1415,7 +1415,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7144326680807152518}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/index_L1/index_L2/index_tip
@@ -1545,7 +1545,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7655456276983860429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ability_hand_ee
@@ -1623,7 +1623,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7805781636945066008}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/pinky_L1/pinky_L2/pinky_tip
@@ -1670,7 +1670,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7912428888875320354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/index_L1/index_L2/index_fsr_sensor_1/fsr_sensor_cyl
@@ -1716,7 +1716,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7916877531722370774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ring_L1/ring_L2/ring_tip
@@ -1794,7 +1794,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8051798421248641779}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/index_L1/index_L2/index_back
@@ -1840,7 +1840,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8231964506867706912}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ring_L1/ring_L2/ring_back
@@ -1886,7 +1886,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9002151604386605800}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/ability_hand_ee/palm
@@ -1934,7 +1934,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9166702713961474100}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /floating/wrist_connector/ability_hand_base/index_L1

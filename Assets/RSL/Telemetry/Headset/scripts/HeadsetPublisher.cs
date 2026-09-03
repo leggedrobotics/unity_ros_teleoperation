@@ -8,6 +8,7 @@ using RosMessageTypes.Tf2;
 using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using TMPro;
+using UvgRos.TF2;
 
 namespace RSL.Telemetry.Headset
 {
@@ -54,7 +55,7 @@ namespace RSL.Telemetry.Headset
                 rootFrame = "odom"; // default to odom if no root is found
             }
             else 
-                rootFrame = root.GetComponent<TFAttachment>().FrameID;
+                rootFrame = root.GetComponent<TF2Attachment>().FrameID;
 
             ros.RegisterPublisher<PoseStampedMsg>(poseTopic+"/headset");
 

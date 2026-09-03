@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
-using Unity.Robotics.ROSTCPConnector;
 using RSL.Robots;
+using UvgRos.TF2;
 
 namespace RSL.Core.Robots
 {
@@ -45,6 +45,12 @@ namespace RSL.Core.Robots
         public Button toggleModel;
         public Dropdown robotDropdown;
         public TMP_InputField rootFrame;
+        // Live list of frames currently known to the TF tree -- lets the
+        // user pick e.g. "world" instead of typing it blind into rootFrame.
+        // Populated/refreshed by RefreshRootFrameOptions(); wire a UI button
+        // to that method, same pattern as the topics-list button in
+        // UvgRosConnectionEditor.
+        public TMP_Dropdown rootFrameDropdown;
         public bool startVisible = true;
 
         public bool _enabled;
@@ -64,11 +70,21 @@ namespace RSL.Core.Robots
 
             rootFrame.text = startRootFrame;
             _root.name = startRootFrame;
-            _root.GetComponent<TFAttachment>().FrameID = startRootFrame;
+            _root.GetComponent<TF2Attachment>().FrameID = startRootFrame;
 
             rootFrame.onEndEdit.AddListener(delegate {
                 ChangeRootFrame(rootFrame.text);
             });
+
+            if (rootFrameDropdown != null)
+            {
+                rootFrameDropdown.onValueChanged.AddListener(delegate {
+                    string picked = rootFrameDropdown.options[rootFrameDropdown.value].text;
+                    rootFrame.text = picked;
+                    ChangeRootFrame(picked);
+                });
+                RefreshRootFrameOptions();
+            }
 
 
             if (startVisible)
@@ -132,10 +148,29 @@ namespace RSL.Core.Robots
         public void ChangeRootFrame(string newRootFrame)
         {
             _root.name = newRootFrame;
-            _root.GetComponent<TFAttachment>().FrameID = newRootFrame;
+            _root.GetComponent<TF2Attachment>().FrameID = newRootFrame;
 
             PlayerPrefs.SetString("rootFrame", newRootFrame);
             PlayerPrefs.Save();
+        }
+
+        // Wire to a UI "Refresh" button (or call periodically) to repopulate
+        // rootFrameDropdown from whatever frames the TF tree currently knows
+        // about -- doesn't include anything not yet seen on the wire.
+        public void RefreshRootFrameOptions()
+        {
+            if (rootFrameDropdown == null) return;
+
+            List<string> names = new List<string>(TF2System.GetOrCreateInstance().GetTransformNames("/tf"));
+            names.Sort();
+
+            string current = rootFrame != null ? rootFrame.text : null;
+            rootFrameDropdown.ClearOptions();
+            rootFrameDropdown.AddOptions(names);
+
+            int currentIndex = current != null ? names.IndexOf(current) : -1;
+            if (currentIndex >= 0)
+                rootFrameDropdown.SetValueWithoutNotify(currentIndex);
         }
 
         public void ToggleModel()

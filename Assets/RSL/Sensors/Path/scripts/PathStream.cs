@@ -12,6 +12,16 @@ using RSL.Sensors.Lidar;
 
 namespace RSL.Sensors.Path
 {
+    #if UNITY_EDITOR
+    using UnityEditor;
+    // Empty on purpose -- see GridMapStreamEditor's comment (SensorStream's
+    // editorForChildClasses fallback didn't take effect in practice).
+    [CustomEditor(typeof(PathStream))]
+    public class PathStreamEditor : RSL.Core.SensorStreamEditor
+    {
+    }
+    #endif
+
     public class PathStream : RSL.Core.SensorStream
     {
         public TMPro.TextMeshProUGUI topicText;

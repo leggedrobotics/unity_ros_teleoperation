@@ -7,7 +7,8 @@ namespace RSL.Sensors.Path
     #if UNITY_EDITOR
     using UnityEditor;
 
-    class PathManagerEditor : RSL.Core.SensorManagerEditor
+    [CustomEditor(typeof(PathManager))]
+    public class PathManagerEditor : RSL.Core.SensorManagerEditor
     {
         public override void OnInspectorGUI()
         {

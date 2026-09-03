@@ -16,6 +16,19 @@ using RSL.Sensors.Lidar;
 
 namespace RSL.Sensors.GridMap
 {
+    #if UNITY_EDITOR
+    using UnityEditor;
+    // Empty on purpose -- SensorStream's editorForChildClasses fallback
+    // didn't actually take effect for this type (see the note in
+    // SensorStream.cs), so this exists purely to make Unity pick
+    // SensorStreamEditor's Refresh Topics/Subscribe to topicName/Clear
+    // buttons instead of falling back to the bare default inspector.
+    [CustomEditor(typeof(GridMapStream))]
+    public class GridMapStreamEditor : RSL.Core.SensorStreamEditor
+    {
+    }
+    #endif
+
     public class GridMapStream : RSL.Core.SensorStream
     {
 

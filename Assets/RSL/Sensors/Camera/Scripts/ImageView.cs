@@ -448,8 +448,21 @@ namespace RSL.Sensors.Camera
                 if (_tempTextureBuffer == null)
                     _tempTextureBuffer = new Texture2D(2, 2);
 
+                var sw = System.Diagnostics.Stopwatch.StartNew();
                 ImageConversion.LoadImage(_tempTextureBuffer, msg.data);
                 _tempTextureBuffer.Apply();
+                sw.Stop();
+                // At 90fps VR the whole frame budget is ~11ms -- LoadImage
+                // (JPEG decode) + Apply (GPU upload) both run synchronously
+                // on the main thread here, so a genuinely large frame (4K+)
+                // can spike this well past that on its own. Logged instead
+                // of just assumed so a real number shows up when testing
+                // against a large image topic (see network_test_server.py
+                // --franken-bag's large-image topic).
+                if (sw.Elapsed.TotalMilliseconds > 4.0)
+                    Debug.LogWarning("[ImageView] LoadImage+Apply for '" + topicName + "' (" +
+                        _tempTextureBuffer.width + "x" + _tempTextureBuffer.height + ", " + msg.data.Length +
+                        " bytes) took " + sw.Elapsed.TotalMilliseconds.ToString("F1") + "ms on the main thread");
 
                 int imgWidth = _tempTextureBuffer.width;
                 int imgHeight = _tempTextureBuffer.height;
@@ -499,8 +512,14 @@ namespace RSL.Sensors.Camera
                     _tempTextureHeight = imgHeight;
                 }
 
+                var sw = System.Diagnostics.Stopwatch.StartNew();
                 _tempTextureBuffer.LoadRawTextureData(msg.data);
                 _tempTextureBuffer.Apply();
+                sw.Stop();
+                if (sw.Elapsed.TotalMilliseconds > 4.0)
+                    Debug.LogWarning("[ImageView] LoadRawTextureData+Apply for '" + topicName + "' (" +
+                        imgWidth + "x" + imgHeight + ", " + msg.data.Length +
+                        " bytes) took " + sw.Elapsed.TotalMilliseconds.ToString("F1") + "ms on the main thread");
 
                 if (_downscaleLarge4K && imgWidth > 2048)
                 {

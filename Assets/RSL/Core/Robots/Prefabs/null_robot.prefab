@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1880815937606192030}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9ca0c4d88f90d140ab1d4dd9e4e8e1c, type: 3}
+  m_Script: {fileID: 11500000, guid: e444cc90173b871d99cdb386ccd9aa0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_FrameID: /robot

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos.TF2;
 
 namespace RSL.Core.Robots
 {
@@ -100,6 +100,9 @@ namespace RSL.Core.Robots
             if(o.name.Contains("mesh")){
                 // remove tf attachment in all children
                 foreach(Component c in o.GetComponentsInChildren<Component>()){
+                    // Deliberately matches both TF2Attachment (ours) and the
+                    // stale pre-fork TFAttachment (ros-tcp-connector's) --
+                    // both contain this substring regardless of namespace.
                     if(c.GetType().ToString().Contains("TFAttachment"))
                     {
                         DestroyImmediate(c);
@@ -110,16 +113,26 @@ namespace RSL.Core.Robots
 
 
             // if not a prefab and doesnt have a mesh renderer, add tf attachment
-            if(o.GetComponent<MeshRenderer>() == null && !PrefabUtility.IsPartOfAnyPrefab(o.gameObject) && o.GetComponent<TFAttachment>() == null ){
-                o.gameObject.AddComponent<TFAttachment>();
+            if(o.GetComponent<MeshRenderer>() == null && !PrefabUtility.IsPartOfAnyPrefab(o.gameObject) && o.GetComponent<TF2Attachment>() == null ){
+                o.gameObject.AddComponent<TF2Attachment>();
             }
 
             foreach(Component c in o.GetComponents<Component>()){
-                if(c.GetType().ToString().Contains("TFAttachment"))
+                if(c is TF2Attachment tf)
                 {
-                    TFAttachment tf = (TFAttachment)c;
                     tf.FrameID = path;
-                } else if(c.GetType().ToString().Contains("Articulation") || c.GetType().ToString().Contains("Urdf") )
+                }
+                else if(c.GetType().ToString().Contains("TFAttachment"))
+                {
+                    // A stale TFAttachment component from before TFSystem was
+                    // forked into UvgRos.TF2 (TF2Attachment) -- a distinct
+                    // component type Unity won't recognize as the one above
+                    // (`c is TF2Attachment` already didn't match, or we
+                    // wouldn't be in this branch). Strip it so it doesn't
+                    // linger alongside the new one added just above this loop.
+                    DestroyImmediate(c);
+                }
+                else if(c.GetType().ToString().Contains("Articulation") || c.GetType().ToString().Contains("Urdf") )
                 {
                     DestroyImmediate(c);
                 }
