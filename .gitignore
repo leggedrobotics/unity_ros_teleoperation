@@ -18,6 +18,9 @@
 # tooling only, kept as a purely local embedded package specifically so it
 # never travels with the project: no manifest.json entry, never pushed.
 /Packages/com.maximum.claudebridge/
+/claude_bridge_cmd.txt
+/claude_bridge_response.txt
+/claude_bridge_dump.txt
 
 # Dont include splat files
 *.splat
