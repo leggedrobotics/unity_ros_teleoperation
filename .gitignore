@@ -80,3 +80,12 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Claude Code's own Editor automation (file-based remote control for an
+# already-running Editor -- see the package's own package.json). Local dev
+# tooling only, kept as a purely local embedded package specifically so it
+# never travels with the project: no manifest.json entry, never pushed.
+/Packages/com.maximum.claudebridge/
+/claude_bridge_cmd.txt
+/claude_bridge_response.txt
+/claude_bridge_dump.txt
