@@ -86,9 +86,16 @@
       "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
     },
     "com.leggedrobotics.uvgros": {
-      "version": "file:/home/maximum/misc/uvgRTP_ros_unity",
+      "version": "git@github.com:leggedrobotics/uvgRTP_ros_unity.git",
       "depth": 0,
-      "source": "local",
+      "source": "git",
+      "dependencies": {},
+      "hash": "3cf0d6f9b9d28223d3a940a79db3692e7660e31c"
+    },
+    "com.maximum.claudebridge": {
+      "version": "file:com.maximum.claudebridge",
+      "depth": 0,
+      "source": "embedded",
       "dependencies": {}
     },
     "com.meta.xr.sdk.core": {
