@@ -147,8 +147,22 @@ namespace RSL.Sensors.Path
             _enabled = true;
             topicName = newTopic;
             topicText?.SetText(newTopic);
-            _ros.Subscribe<PathMsg>(newTopic, OnPath, mainThread: true);
-            Debug.Log("[PathStream] Subscribed to " + newTopic);
+            try
+            {
+                _ros.Subscribe<PathMsg>(newTopic, OnPath, mainThread: true);
+                Debug.Log("[PathStream] Subscribed to " + newTopic);
+            }
+            catch (System.Exception e)
+            {
+                // See LidarStream.OnTopicChange's identical catch for why --
+                // Subscribe<T> can throw (e.g. a chain this client cannot
+                // decode), and topicName/_enabled above were already
+                // claiming a route that never actually opened.
+                Debug.LogError("[PathStream] '" + newTopic + "' subscribe failed: " + e.Message);
+                _enabled = false;
+                topicName = null;
+                topicText?.SetText("None");
+            }
         }
 
         private void OnPath(PathMsg msg)

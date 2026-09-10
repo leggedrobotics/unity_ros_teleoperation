@@ -155,6 +155,12 @@ namespace RSL.Sensors.Lidar
 
         public GameObject splatRendererPrefab;
 
+        [Tooltip("Which named UvgRosConnection this stream subscribes through -- " +
+                 "empty (the default) preserves existing behavior exactly. Set this " +
+                 "to subscribe to a SECOND robot's own connection/server instead of " +
+                 "the default one, e.g. for a multi-robot scene.")]
+        public string RobotId = "";
+
         private Mesh mesh;
         private LidarSpawner _lidarSpawner;
         public bool _enabled = false;
@@ -176,7 +182,7 @@ namespace RSL.Sensors.Lidar
         void Awake()
         {
             _msgType = "sensor_msgs/PointCloud2";
-            _ros = UvgRosConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance(RobotId);
 
             mesh = LidarUtils.MakePolygon(sides);
 
@@ -542,8 +548,26 @@ namespace RSL.Sensors.Lidar
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
-            _ros.Subscribe<PointCloud2Msg>(topic, OnPointcloud, mainThread: true);
-            Debug.Log("Subscribed to " + topic);
+            try
+            {
+                _ros.Subscribe<PointCloud2Msg>(topic, OnPointcloud, mainThread: true);
+                Debug.Log("Subscribed to " + topic);
+            }
+            catch (System.Exception e)
+            {
+                // Subscribe<T> throws when the negotiated chain isn't
+                // something this client can actually decode -- e.g. a
+                // draco-only chain, since uvgros_core's own codec table is
+                // deliberately just header/zlib (see UvgRosDracoDecoder.cs's
+                // doc comment: draco is meant to be intercepted before ever
+                // reaching that parser, which Subscribe<T> does not do yet).
+                // Without this catch, topicName/_enabled above were already
+                // claiming a route that never actually opened.
+                Debug.LogError("[LidarStream] '" + topic + "' subscribe failed: " + e.Message);
+                _enabled = false;
+                topicName = null;
+                topicText?.SetText("None");
+            }
         }
 
         public void OnTopicSelect(int value)

@@ -94,10 +94,24 @@ namespace RSL.Core
             OnTopicChange(topicName);
         }
 
+        /// <summary>A route this client can actually decode generically --
+        /// "chain"/"msgpack_list" framing, same test UvgRosConnection.
+        /// Subscribe&lt;T&gt; itself applies before throwing
+        /// NotSupportedException. A topic can be exactly the right ROS
+        /// message type and still fail this (e.g. a sensor_msgs/Image
+        /// topic the server routes through the H.264 video transport,
+        /// which negotiates "encoded_video") -- checking this ahead of
+        /// time keeps a topic-refresh dropdown from offering a route that
+        /// would only fail once actually selected.</summary>
+        protected static bool IsViewable(UvgRos.TopicListEntry entry)
+        {
+            return entry.Framing == "chain" || entry.Framing == "msgpack_list";
+        }
+
         /// <summary>
         /// Updates the dropdown list of topics based on the available topics from ROS
         /// </summary>
-        protected virtual void UpdateTopics(Dictionary<string, string> topics)
+        protected virtual void UpdateTopics(Dictionary<string, UvgRos.TopicListEntry> topics)
         {
             if (_msgType == "")
             {
@@ -109,7 +123,7 @@ namespace RSL.Core
             options.Add("None");
             foreach (var topic in topics)
             {
-                if (topic.Value == _msgType)
+                if (topic.Value.MsgType == _msgType && IsViewable(topic.Value))
                 {
                     options.Add(topic.Key);
                     Debug.Log($"Found topic {topic.Key} for {_msgType}");
@@ -151,9 +165,15 @@ namespace RSL.Core
                 transform.position = sensorData.position;
                 transform.rotation = sensorData.rotation;
                 transform.localScale = sensorData.scale;
-                topicName = sensorData.topicName;
                 _trackingState = sensorData.trackingState;
-                OnTopicChange(topicName);
+                // Do NOT set topicName here -- every OnTopicChange override
+                // unsubscribes whatever topic is CURRENTLY in topicName
+                // before subscribing the new one; setting it to the
+                // incoming topic first leaves nothing for that step to
+                // find, so the previous topic's route never gets released
+                // (it looks like unsubscribing the new topic, a no-op,
+                // instead of the old one).
+                OnTopicChange(sensorData.topicName);
             }
             catch (System.Exception e)
             {

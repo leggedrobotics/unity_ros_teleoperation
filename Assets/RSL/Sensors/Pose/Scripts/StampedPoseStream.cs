@@ -139,8 +139,22 @@ namespace RSL.Sensors.Pose
             _enabled = true;
             topicName = newTopic;
             topicText?.SetText(newTopic);
-            _ros.Subscribe<PoseStampedMsg>(newTopic, OnPose, mainThread: true);
-            Debug.Log("[PoseStream] Subscribed to " + newTopic);
+            try
+            {
+                _ros.Subscribe<PoseStampedMsg>(newTopic, OnPose, mainThread: true);
+                Debug.Log("[PoseStream] Subscribed to " + newTopic);
+            }
+            catch (System.Exception e)
+            {
+                // See LidarStream.OnTopicChange's identical catch for why --
+                // Subscribe<T> can throw (e.g. a chain this client cannot
+                // decode), and topicName/_enabled above were already
+                // claiming a route that never actually opened.
+                Debug.LogError("[StampedPoseStream] '" + newTopic + "' subscribe failed: " + e.Message);
+                _enabled = false;
+                topicName = null;
+                topicText?.SetText("None");
+            }
         }
 
         private void OnPose(PoseStampedMsg msg)

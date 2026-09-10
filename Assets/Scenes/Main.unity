@@ -296,7 +296,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 887017025970902625, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: defaultIP
-      value: 100.70.217.51
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     - target: {fileID: 887017025970902625, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
       propertyPath: defaultPort

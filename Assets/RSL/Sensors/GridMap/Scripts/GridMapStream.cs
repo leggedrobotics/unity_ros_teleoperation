@@ -213,8 +213,22 @@ namespace RSL.Sensors.GridMap
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
-            _ros.Subscribe<GridMapMsg>(topic, OnGridMapMessage, mainThread: true);
-            Debug.Log("Subscribed to " + topic);
+            try
+            {
+                _ros.Subscribe<GridMapMsg>(topic, OnGridMapMessage, mainThread: true);
+                Debug.Log("Subscribed to " + topic);
+            }
+            catch (System.Exception e)
+            {
+                // See LidarStream.OnTopicChange's identical catch for why --
+                // Subscribe<T> can throw (e.g. a chain this client cannot
+                // decode), and topicName/_enabled above were already
+                // claiming a route that never actually opened.
+                Debug.LogError("[GridMapStream] '" + topic + "' subscribe failed: " + e.Message);
+                _enabled = false;
+                topicName = null;
+                topicText?.SetText("None");
+            }
         }
 
         public void OnTopicSelect(int value)

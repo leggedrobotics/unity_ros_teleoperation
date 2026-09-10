@@ -324,8 +324,22 @@ namespace RSL.Sensors.Markers
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
-            _ros.Subscribe<MarkerMsg>(topic, OnMarker, mainThread: true);
-            Debug.Log("Subscribed to " + topic);
+            try
+            {
+                _ros.Subscribe<MarkerMsg>(topic, OnMarker, mainThread: true);
+                Debug.Log("Subscribed to " + topic);
+            }
+            catch (System.Exception e)
+            {
+                // See LidarStream.OnTopicChange's identical catch for why --
+                // Subscribe<T> can throw (e.g. a chain this client cannot
+                // decode), and topicName/_enabled above were already
+                // claiming a route that never actually opened.
+                Debug.LogError("[MarkerStream] '" + topic + "' subscribe failed: " + e.Message);
+                _enabled = false;
+                topicName = null;
+                topicText?.SetText("None");
+            }
         }
 
         void OnDestroy()

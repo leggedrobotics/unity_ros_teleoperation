@@ -107,6 +107,14 @@ namespace RSL.Sensors.Camera
 
         [SerializeField] private bool _useTextureCompression = true;
         [SerializeField] private bool _downscaleLarge4K = false;
+        // UvgRosJpegDecoder emits top-row-first, same as UvgRosTestClient's own
+        // use of it -- flip if this material's convention needs bottom-row-
+        // first (visible immediately as an upside-down image if wrong).
+        [SerializeField] private bool _flipDecodedJpeg = true;
+
+        // Off-thread JPEG decode for OnCompressed -- see JpegDecodeWorker's
+        // own docstring for why this exists.
+        private JpegDecodeWorker _jpegDecodeWorker;
 
         void Awake()
         {
@@ -135,24 +143,32 @@ namespace RSL.Sensors.Camera
             RefreshTopics();
         }
 
-        /// <summary>Editor-button convenience: get_topics only sees the real
-        /// ROS graph, so a synthetic test route with nothing registered there
-        /// never shows up in the dropdown at all -- this prints what the
-        /// server actually reported, so a topic missing from the dropdown is
-        /// visibly "not in the ROS graph" rather than "did this even run".
-        /// </summary>
+        /// <summary>Editor-button convenience: prints exactly the topics
+        /// this ImageView can actually display -- the same set UpdateTopics
+        /// just populated the dropdown with, filtered through IsImageTopic
+        /// -- rather than the server's whole ROS graph, so a topic missing
+        /// from the dropdown is visibly "not viewable" (wrong type, wrong
+        /// framing, or filtered as depth/not-in-graph) instead of "did this
+        /// even run".</summary>
         public void RefreshAndPrintTopics()
         {
             _ros.GetTopicAndTypeList(topics =>
             {
                 UpdateTopics(topics);
-                if (topics.Count == 0)
+                var viewable = new List<KeyValuePair<string, UvgRos.TopicListEntry>>();
+                foreach (var kv in topics)
                 {
-                    Debug.Log("[ImageView] get_topics returned no topics");
+                    if (IsImageTopic(kv.Value) && !kv.Key.Contains("depth"))
+                        viewable.Add(kv);
+                }
+                if (viewable.Count == 0)
+                {
+                    Debug.Log("[ImageView] no viewable image topics (" + topics.Count + " total on the server)");
                     return;
                 }
-                var sb = new System.Text.StringBuilder("[ImageView] " + topics.Count + " topic(s):");
-                foreach (var kv in topics) sb.Append("\n  ").Append(kv.Key).Append("  (").Append(kv.Value).Append(")");
+                var sb = new System.Text.StringBuilder("[ImageView] " + viewable.Count + " viewable topic(s):");
+                foreach (var kv in viewable)
+                    sb.Append("\n  ").Append(kv.Key).Append("  (").Append(kv.Value.MsgType).Append(")");
                 Debug.Log(sb.ToString());
             });
         }
@@ -226,27 +242,39 @@ namespace RSL.Sensors.Camera
 
             if (_texture2D != null)
                 _texture2D.Release();
+
+            _jpegDecodeWorker?.Stop();
         }
 
-        protected override void UpdateTopics(Dictionary<string, string> topics)
+        /// <summary>The one predicate both UpdateTopics and
+        /// RefreshAndPrintTopics filter through, so the debug print always
+        /// shows exactly what the dropdown will actually offer -- not the
+        /// server's whole ROS graph (e.g. a /video topic negotiating
+        /// encoded_video framing is a real sensor_msgs/Image topic but not
+        /// one this component can display).</summary>
+        private static bool IsImageTopic(UvgRos.TopicListEntry entry)
+        {
+            if (!IsViewable(entry)) return false;
+            return entry.MsgType == "sensor_msgs/Image" || entry.MsgType == "sensor_msgs/CompressedImage";
+        }
+
+        protected override void UpdateTopics(Dictionary<string, UvgRos.TopicListEntry> topics)
         {
             List<string> options = new List<string>();
             options.Add("None");
             foreach (var topic in topics)
             {
-                if (topic.Value == "sensor_msgs/Image" || topic.Value == "sensor_msgs/CompressedImage")
-                {
-                    // issue with depth images at the moment
-                    if (topic.Key.Contains("depth")) continue;
+                if (!IsImageTopic(topic.Value)) continue;
+                // issue with depth images at the moment
+                if (topic.Key.Contains("depth")) continue;
 
-                    if (topic.Key.Contains("small"))
-                    {
-                        options.Insert(1, topic.Key);
-                    }
-                    else
-                    {
-                        options.Add(topic.Key);
-                    }
+                if (topic.Key.Contains("small"))
+                {
+                    options.Insert(1, topic.Key);
+                }
+                else
+                {
+                    options.Add(topic.Key);
                 }
             }
 
@@ -322,11 +350,30 @@ namespace RSL.Sensors.Camera
         {
             nameText.text = topic;
 
+            // Drop anything the worker has in flight for whatever topic was
+            // subscribed before this call -- otherwise a decode that was
+            // still running (or already finished but not yet collected) can
+            // surface on the very next OnCompressed as if it belonged to the
+            // topic being switched to, briefly showing the old stream's
+            // resolution/aspect ratio.
+            _jpegDecodeWorker?.Reset();
+
+            // Unconditionally, here rather than in each caller: OnTopicChange
+            // is called from three places (the dropdown's OnSelect, the
+            // Editor's "Subscribe to topicName" button, Deserialize) and only
+            // OnSelect used to release the previous topic itself -- the other
+            // two left it subscribed forever, so switching topics through
+            // them accumulated routes instead of replacing one, exactly what
+            // the connection inspector's route list showed after a few
+            // topic switches (every previous topic still listed, still live).
+            if (topicName != null)
+            {
+                Debug.Log("[ImageView] unsubscribing '" + topicName + "' (switching to '" + topic + "')");
+                _ros.Unsubscribe(topicName);
+            }
+
             if (string.IsNullOrEmpty(topic))
             {
-                if (topicName != null)
-                    _ros.Unsubscribe(topicName);
-
                 topicName = null;
                 // set texture to grey
                 material.SetTexture("_BaseMap", null);
@@ -343,10 +390,12 @@ namespace RSL.Sensors.Camera
                 if (topicName.EndsWith("compressed"))
                 {
                     _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressed, mainThread: true);
+                    Debug.Log("[ImageView] subscribed '" + topicName + "'");
                 }
                 else
                 {
                     _ros.Subscribe<ImageMsg>(topicName, OnImage, mainThread: true);
+                    Debug.Log("[ImageView] subscribed '" + topicName + "'");
                 }
             }
             catch (System.NotSupportedException e)
@@ -364,11 +413,13 @@ namespace RSL.Sensors.Camera
         {
             if (value == _lastSelected) return;
 
+            Debug.Log("[ImageView] OnSelect(" + value + ") -- was " + _lastSelected +
+                       ", options: [" + string.Join(", ", topicDropdown.options.ConvertAll(o => o.text)) + "]");
+
             _lastSelected = value;
 
-            if (topicName != null)
-                _ros.Unsubscribe(topicName);
-
+            // OnTopicChange itself now releases whatever topicName was
+            // previously subscribed -- no need to duplicate that here.
             string selectedTopic = topicDropdown.options[value].text;
 
             if (selectedTopic == "None")
@@ -443,26 +494,42 @@ namespace RSL.Sensors.Camera
         {
             ParseHeader(msg.header);
 
+            if (_jpegDecodeWorker == null)
+                _jpegDecodeWorker = new JpegDecodeWorker("ImageView-JpegDecode");
+
+            bool haveResult = _jpegDecodeWorker.TryTakeResult(
+                out byte[] decodedRgb, out int decodedW, out int decodedH, out byte[] fallbackBytes);
+            _jpegDecodeWorker.Submit(msg.data); // newest-wins hand-off for this message
+
+            if (!haveResult) return; // nothing finished decoding yet
+
             try
             {
                 if (_tempTextureBuffer == null)
                     _tempTextureBuffer = new Texture2D(2, 2);
 
-                var sw = System.Diagnostics.Stopwatch.StartNew();
-                ImageConversion.LoadImage(_tempTextureBuffer, msg.data);
-                _tempTextureBuffer.Apply();
-                sw.Stop();
-                // At 90fps VR the whole frame budget is ~11ms -- LoadImage
-                // (JPEG decode) + Apply (GPU upload) both run synchronously
-                // on the main thread here, so a genuinely large frame (4K+)
-                // can spike this well past that on its own. Logged instead
-                // of just assumed so a real number shows up when testing
-                // against a large image topic (see network_test_server.py
-                // --franken-bag's large-image topic).
-                if (sw.Elapsed.TotalMilliseconds > 4.0)
-                    Debug.LogWarning("[ImageView] LoadImage+Apply for '" + topicName + "' (" +
-                        _tempTextureBuffer.width + "x" + _tempTextureBuffer.height + ", " + msg.data.Length +
-                        " bytes) took " + sw.Elapsed.TotalMilliseconds.ToString("F1") + "ms on the main thread");
+                if (fallbackBytes != null)
+                {
+                    // Same synchronous path this method always used, only
+                    // reached now for content the from-scratch decoder
+                    // declined -- not a regression, just no longer the
+                    // common case.
+                    ImageConversion.LoadImage(_tempTextureBuffer, fallbackBytes);
+                    _tempTextureBuffer.Apply();
+                }
+                else
+                {
+                    if (_tempTextureBuffer.width != decodedW || _tempTextureBuffer.height != decodedH ||
+                        _tempTextureBuffer.format != TextureFormat.RGB24)
+                    {
+                        Destroy(_tempTextureBuffer);
+                        _tempTextureBuffer = new Texture2D(decodedW, decodedH, TextureFormat.RGB24, false);
+                    }
+                    byte[] final = _flipDecodedJpeg
+                        ? JpegDecodeWorker.FlipRows(decodedRgb, decodedW, decodedH, 3) : decodedRgb;
+                    _tempTextureBuffer.LoadRawTextureData(final);
+                    _tempTextureBuffer.Apply(false);
+                }
 
                 int imgWidth = _tempTextureBuffer.width;
                 int imgHeight = _tempTextureBuffer.height;
@@ -668,10 +735,16 @@ namespace RSL.Sensors.Camera
                 transform.position = imgData.position;
                 transform.rotation = imgData.rotation;
                 transform.localScale = imgData.scale;
-                topicName = imgData.topicName;
                 _trackingState = imgData.trackingState;
 
-                OnTopicChange(topicName);
+                // Do NOT set topicName here -- OnTopicChange's own
+                // unsubscribe-the-previous-topic step reads topicName
+                // expecting it to still be the OLD value; setting it to the
+                // incoming one first (as this used to) left nothing for
+                // that step to find, so the previous topic's route never
+                // got released -- the exact bug that showed up as two
+                // routes staying open (and receiving) at once.
+                OnTopicChange(imgData.topicName);
             }
             catch (System.Exception e)
             {
