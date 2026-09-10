@@ -90,13 +90,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3cf0d6f9b9d28223d3a940a79db3692e7660e31c"
-    },
-    "com.maximum.claudebridge": {
-      "version": "file:com.maximum.claudebridge",
-      "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "hash": "6937540920657f46229f5b59a1e29803402efda8"
     },
     "com.meta.xr.sdk.core": {
       "version": "205.0.0",

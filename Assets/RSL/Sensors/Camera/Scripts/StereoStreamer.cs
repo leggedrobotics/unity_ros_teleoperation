@@ -9,6 +9,7 @@ using RosMessageTypes.Sensor;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.UI;
+using UvgRos;
 
 namespace RSL.Sensors.Camera
 {
