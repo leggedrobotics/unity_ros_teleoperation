@@ -61,12 +61,26 @@ namespace RSL.Core.Haptics
             }
         }
 
+        // Connection state as a readable property rather than something you
+        // can only observe by sampling leftHandImg.color. The UI Toolkit
+        // settings panel polls these; the uGUI palmmenu keeps using the Images.
+        public bool HasLeftGlove => _hasLeft;
+        public bool HasRightGlove => _hasRight;
+
+        private static void SetHandColor(Image img, Color color)
+        {
+            if (img != null)
+                img.color = color;
+        }
+
         public void CheckDevices()
         {
             List<HapticDevice> devices = BhapticsLibrary.GetDevices();
 
-            leftHandImg.color = Color.red;
-            rightHandImg.color = Color.red;
+            // Null whenever the driving UI is UI Toolkit -- these Image fields
+            // only exist on the uGUI palmmenu.
+            SetHandColor(leftHandImg, Color.red);
+            SetHandColor(rightHandImg, Color.red);
             _hasLeft = false;
             _hasRight = false;
 
@@ -76,12 +90,12 @@ namespace RSL.Core.Haptics
                 if (device.DeviceName.Contains("(L)") && device.IsConnected)
                 {
                     _hasLeft = true;
-                    leftHandImg.color = Color.green;
+                    SetHandColor(leftHandImg, Color.green);
                 }
                 if (device.DeviceName.Contains("(R)") && device.IsConnected)
                 {
                     _hasRight = true;
-                    rightHandImg.color = Color.green;
+                    SetHandColor(rightHandImg, Color.green);
                 }
                 if(!started)
                 {
@@ -110,8 +124,8 @@ namespace RSL.Core.Haptics
                 float maxLeft = Mathf.Max(leftHand)/100f;
 
                 if(DebugLogger.active){
-                    leftHandImg.color = DebugLogger.debugGradient.Evaluate(maxLeft);
-                    rightHandImg.color = DebugLogger.debugGradient.Evaluate(maxRight);               
+                    SetHandColor(leftHandImg, DebugLogger.debugGradient.Evaluate(maxLeft));
+                    SetHandColor(rightHandImg, DebugLogger.debugGradient.Evaluate(maxRight));
                 }
 
                 if(maxRight > 0)

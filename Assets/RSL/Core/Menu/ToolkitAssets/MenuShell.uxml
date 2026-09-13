@@ -1,0 +1,22 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- The centre slot of the palm strip, replacing StatusImg. One document per
+         slot, for the rotation reason explained in PalmTab.uxml; this one takes
+         StatusImg's own transform, which is the 40-degree tilt with no fan.
+
+         No .background: the other panels are cards floating in front of the
+         palm, but this sits ON it and has no plate of its own. -->
+    <ui:VisualElement name="Status" class="palm-status">
+        <!-- Version and IP hang ABOVE the slot, positioned absolutely, so
+             revealing them cannot change the slot's size and nudge the lamp out
+             from under the user's thumb. -->
+        <ui:VisualElement name="StatusText" class="shell-status-text is-hidden">
+            <ui:Label text="" name="Version" class="shell-version" />
+            <ui:Label text="" name="IpAddress" class="shell-ip" />
+        </ui:VisualElement>
+        <!-- One button, two jobs, exactly as StatusImg was: it shows the ROS
+             connection state as its colour AND is the press that reveals the
+             debug overlays. -->
+        <ui:Button name="DebugReveal" class="icon-button status-button" tooltip="ROS connection / show debug overlays" />
+    </ui:VisualElement>
+</ui:UXML>

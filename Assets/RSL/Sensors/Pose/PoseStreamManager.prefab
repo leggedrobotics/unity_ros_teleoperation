@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 4892422342853690074}
   m_Layer: 5
   m_Name: PoseStreamManager
-  m_TagString: Untagged
+  m_TagString: sensorManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

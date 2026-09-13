@@ -1,0 +1,40 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <ui:VisualElement name="Background" class="background">
+        <ui:Label text="General Settings" name="Title" class="h1" />
+        <!-- mode Vertical, not the default VerticalAndHorizontal. Now that the
+             panel has a pinned width, any row a pixel too wide gave the whole
+             menu a horizontal scrollbar along the bottom. Vertical mode drops
+             the horizontal scroller and makes content fit the width instead
+             of scrolling sideways. -->
+        <ui:ScrollView name="Content" class="settings-scroll" mode="Vertical">
+            <ui:Label text="Robot" name="RobotLabel" class="h2" />
+            <ui:VisualElement name="RobotRow" class="row">
+                <ui:DropdownField name="RobotModel" />
+                <ui:Button name="ToggleModel" class="icon-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="RootFrameRow" class="row">
+                <ui:TextField label="Root Frame" name="RootFrame" placeholder-text="odom" />
+            </ui:VisualElement>
+            <ui:Label text="Pose" name="PoseLabel" class="h2" />
+            <ui:VisualElement name="InteractionRow" class="row">
+                <ui:DropdownField label="Interaction Mode" name="InteractionMode" />
+            </ui:VisualElement>
+            <ui:VisualElement name="PoseButtons" class="row">
+                <ui:Button name="LockPose" class="icon-button" tooltip="Lock Pose" />
+                <ui:Button name="LockRobot" class="icon-button" tooltip="Lock Robot" />
+                <ui:Button name="Recenter" class="icon-button" tooltip="Recenter" />
+            </ui:VisualElement>
+            <ui:VisualElement name="PoseTopicRow" class="row">
+                <ui:TextField label="Pose Topic" name="PoseTopic" placeholder-text="/quest/pose" />
+            </ui:VisualElement>
+            <ui:Label text="System" name="SystemLabel" class="h2" />
+            <ui:VisualElement name="OpacityRow" class="row">
+                <ui:Slider label="NVblox Opacity" name="OpacitySlider" low-value="0" high-value="1" value="0.5" show-input-field="true" fill="false" />
+            </ui:VisualElement>
+            <ui:VisualElement name="NvbloxRow" class="row">
+                <ui:Toggle label="NVblox" name="Nvblox" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,32 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <ui:VisualElement name="Background" class="background">
+        <ui:Label text="Debug" name="Title" class="h1" />
+        <!-- mode Vertical, not the default VerticalAndHorizontal. Now that the
+             panel has a pinned width, any row a pixel too wide gave the whole
+             menu a horizontal scrollbar along the bottom. Vertical mode drops
+             the horizontal scroller and makes content fit the width instead
+             of scrolling sideways. -->
+        <ui:ScrollView name="Content" class="settings-scroll" mode="Vertical">
+            <ui:Label text="TF Settings" name="TfLabel" class="h2" />
+            <ui:VisualElement name="PointSizeRow" class="row">
+                <ui:Slider label="Point size" name="PointSizeSlider" low-value="0.1" high-value="3" value="1" show-input-field="true" fill="false" />
+            </ui:VisualElement>
+            <ui:VisualElement name="TfVizRow" class="row">
+                <ui:Label text="Toggle TF (may lag)" name="TfVizLabel" class="status-text" />
+                <ui:Button text="Toggle" name="ToggleTf" class="text-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="SimTimeRow" class="row">
+                <ui:Toggle label="Use Sim Time" name="SimTime" />
+            </ui:VisualElement>
+            <ui:Label text="System" name="SystemLabel" class="h2" />
+            <ui:VisualElement name="PassthroughRow" class="row">
+                <ui:Toggle label="Enable Passthrough" name="Passthrough" />
+            </ui:VisualElement>
+            <ui:VisualElement name="ClearRow" class="row">
+                <ui:Label text="Clear Settings" name="ClearLabel" class="status-text" />
+                <ui:Button name="ClearSettings" class="icon-button" tooltip="Clear saved settings (keeps ip/port)" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

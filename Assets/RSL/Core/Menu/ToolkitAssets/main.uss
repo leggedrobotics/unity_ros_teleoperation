@@ -1,45 +1,103 @@
 :root {
+    /* Transition COLOURS ONLY. transition-duration on its own means "all", and
+       "all" includes width and height -- so on a world-space UIDocument in
+       Dynamic size mode, where the panel's physical size follows the layout,
+       every menu spent a second inflating from a point at its pivot when it
+       opened. Naming the properties keeps the slow cross-fade that was wanted
+       here and leaves layout to happen instantly.
+
+       Elements that DO want to animate geometry say so themselves: the profile
+       sub-panel scales open, .chip and .icon-button have their own 0.1s. */
+    transition-property: color, background-color, border-color, opacity, -unity-background-image-tint-color;
     transition-duration: 1s;
     -unity-background-image-tint-color: var(--color-icon);
     color: var(--color-text);
 }
 
 Button.icon-button {
-    -unity-background-scale-mode: scale-to-fit;
-    background-position-x: center;
+    /* background-size + background-position, NOT -unity-background-scale-mode:
+       the scale-mode shorthand fits the icon to the whole element, and padding
+       cannot inset it because a background is painted across the padding box
+       too. Sizing the image to 62% and centring it is what actually leaves a
+       margin of tile around the glyph. (scale-mode is also the deprecated
+       spelling of these three properties in Unity 6, and setting both fights.) */
+    /* ONE value, not two. Two independent percentages (62% 62%) assume the
+       icon's imported bitmap is square -- true for most of these SVGs by
+       coincidence (their ink roughly fills a square), but not for one that
+       is not: minus.svg is a thin 14x2 bar, and forcing that to 62% width AND
+       62% height independently stretched it into a solid block (measured).
+       A single value sizes by WIDTH and leaves height as auto, which keeps
+       the image's own aspect ratio -- the same 62% inset, safe for any icon
+       regardless of how square its ink happens to be. */
+    background-size: 62%;
+    background-position: center center;
+    background-repeat: no-repeat;
     background-color: var(--color-primary);
     padding: 0;
-    background-size: 75% 75%;
     padding-left: 0;
     -unity-background-image-tint-color: var(--color-icon);
     padding-top: 0;
     margin-top: 0;
-    margin-right: 10px;
+    /* 6px, not 10. Three icon tiles plus a control is the widest thing these
+       rows hold, and at 10px a side that came to 222px of an available 240 --
+       the profile dropdown was squeezed to nothing and the row spilled out into
+       a horizontal scrollbar. */
+    margin-right: 6px;
     margin-bottom: 0;
-    margin-left: 10px;
+    margin-left: 6px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     border-bottom-left-radius: 5px;
     padding-right: 0;
     padding-bottom: 0;
-    height: 100%;
-    width: auto;
+    width: var(--row-content);
     min-width: var(--row-content);
-    flex-grow: 1;
+    max-width: var(--row-content);
+    flex-grow: 0;
     align-items: center;
     justify-content: space-between;
     align-self: center;
-    flex-shrink: 1;
     align-content: stretch;
+    flex-shrink: 0;
+    /* Square, always. Width was pinned three ways while height was auto, so a
+       tile stretched or squashed with whatever row it landed in. */
+    height: var(--row-content);
     min-height: var(--row-content);
-    translate: 0 0 -0.1px;
-    transition-duration: 0.1s;
+    max-height: var(--row-content);
+    flex-basis: var(--row-content);
+    /* Sits PROUD of whatever is behind it, and presses in on hover. The old
+       value was -0.1px moving to -0.05px, which is a twentieth of a pixel: it
+       was there to win a depth tie, not to be seen, and read as no feedback at
+       all. 5px is ~0.5 canvas units on the palm -- small in absolute terms,
+       clearly visible on a tile this size. */
+    translate: 0 0 -5px;
+    /* Named, not "all". A bare transition-duration animates every property
+       including width and height, which on a world-space Dynamic panel makes
+       the whole thing inflate from a point when it opens -- the exact bug that
+       bit :root. Only the three that should move are listed. */
+    transition-property: translate, scale, background-color;
+    transition-duration: 0.08s;
 }
 
+/* Hover PRESSES IN: back to the surface, and slightly smaller, so the feedback
+   survives on tiles whose colour is already spoken for -- the open tab is
+   accent and the status lamp is red/green, and neither can signal with a tint.
+   Geometry works on all of them. */
+Button.icon-button:hover {
+    translate: 0 0 0;
+    scale: 0.94 0.94;
+}
+
+/* Held down: past the surface. */
+Button.icon-button:active {
+    translate: 0 0 3px;
+    scale: 0.9 0.9;
+}
+
+/* Anything else with a Button tint keeps the old accent-on-hover. */
 Button:hover {
     background-color: var(--color-accent);
-    translate: 0 0 -0.05px;
     transition-duration: 0.1s;
 }
 
@@ -72,7 +130,15 @@ Button:hover {
 
 .background {
     position: relative;
-    width: 100%;
+    /* EXPLICIT, not 100%. These panels are world-space UIDocuments in Dynamic
+       size mode, which lays the root out unconstrained -- so a percentage width
+       has no parent to be a percentage OF and collapses to the content width.
+       For a panel whose content is a ScrollView (no intrinsic width) over rows
+       sized in percent (likewise none), that is indeterminate, and every menu
+       came out a different accidental size -- Debug, with the least fixed-size
+       content, came out far too small. One token, so the menus match by
+       construction and a retheme moves them together. */
+    width: var(--menu-width);
     height: 100%;
     -unity-background-scale-mode: stretch-to-fill;
     align-items: stretch;
@@ -95,4 +161,898 @@ Button:hover {
     padding-right: 10px;
     padding-bottom: 10px;
     padding-left: 10px;
+}
+
+/* ---------------------------------------------------------------------------
+   Settings panel
+   Icon state lives in USS rather than as Sprite fields on the controller, so
+   the panel renders correctly in the UI Builder preview and in a bare scene
+   with nothing wired up. C# only ever toggles the state class.
+   The uGUI original (palmmenu) swapped Image.sprite from serialized fields;
+   the two icons per control are the same pair it used.
+--------------------------------------------------------------------------- */
+
+.settings-scroll {
+    flex-grow: 1;
+}
+
+/* A label + control line. .row fixes the height, which is right for a strip of
+   icon buttons but crushes a labelled field, so fields get their own rule. */
+.row > .unity-base-field {
+    flex-grow: 1;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.row > .unity-base-field > .unity-base-field__label {
+    min-width: 40%;
+    color: var(--color-text);
+}
+
+.row > .unity-base-slider {
+    flex-grow: 1;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+}
+
+/* Pose axis lock -- axis-arrow / axis-arrow-lock */
+#LockPose {
+    background-image: url("project://database/Assets/Materials/mdi/axis-arrow.svg?fileID=7388822144124034973&guid=d60032fc7bdc8db91b454ee5c68f9105&type=3#axis-arrow");
+}
+
+#LockPose.is-locked {
+    background-image: url("project://database/Assets/Materials/mdi/axis-arrow-lock.svg?fileID=7388822144124034973&guid=59f25925f06319d02925dc6f372d08c3&type=3#axis-arrow-lock");
+}
+
+/* Robot base lock -- robot-industrial / robot-industrial-lock */
+#LockRobot {
+    background-image: url("project://database/Assets/Materials/mdi/robot-industrial.svg?fileID=7388822144124034973&guid=51da4ffdaa0cdd7bc8a5705a768934f1&type=3#robot-industrial");
+}
+
+#LockRobot.is-locked {
+    background-image: url("project://database/Assets/Materials/mdi/robot-industrial-lock.svg?fileID=7388822144124034973&guid=4ef2366ac8a687a4f876c4858461d2e3&type=3#robot-industrial-lock");
+}
+
+/* Robot model visibility -- eye-outline / eye-lock-outline */
+#ToggleModel {
+    background-image: url("project://database/Assets/Materials/mdi/eye-outline.svg?fileID=7388822144124034973&guid=ffec11417ea5fc843812ed31f421fd2b&type=3#eye-outline");
+}
+
+#ToggleModel.is-hidden {
+    background-image: url("project://database/Assets/Materials/mdi/eye-lock-outline.svg?fileID=7388822144124034973&guid=74b319175386543739f211db30eb86fa&type=3#eye-lock-outline");
+}
+
+#Recenter {
+    background-image: url("project://database/Assets/Materials/mdi/home-map-marker.svg?fileID=7388822144124034973&guid=8faed1a7d9c0d8f8c994407bb27f2174&type=3#home-map-marker");
+}
+
+#ClearSettings {
+    background-image: url("project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&guid=36893462c1947ffd8ad5151e01466ecf&type=3#delete");
+}
+
+#ClearSettings:hover {
+    background-color: var(--color-alert-accent);
+}
+
+/* Glove connection. palmmenu tinted the hand Image red/green from
+   HandManager.CheckDevices every frame; same signal, same colours. */
+.glove {
+    flex-grow: 1;
+    height: 100%;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--color-alert);
+    transition-duration: 0.2s;
+}
+
+.glove.is-connected {
+    -unity-background-image-tint-color: var(--color-connected);
+}
+
+.glove-left {
+    background-image: url("project://database/Assets/Materials/mdi/hand-back-left.svg?fileID=7388822144124034973&guid=61c1fea66954cda83946fe39a0b3a639&type=3#hand-back-left");
+}
+
+.glove-right {
+    background-image: url("project://database/Assets/Materials/mdi/hand-back-right.svg?fileID=7388822144124034973&guid=2d334aef980222b6e8ec42f284b8cdf2&type=3#hand-back-right");
+}
+
+/* A section whose backing system is absent from the scene (the bare
+   MenuTestScene has none of them). Dimmed and non-interactive rather than
+   hidden, so the panel's layout is still what you see in the Builder. */
+.unavailable {
+    opacity: 0.35;
+}
+
+/* ---------------------------------------------------------------------------
+   Connection (wifi) panel
+--------------------------------------------------------------------------- */
+
+.title-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* The title takes whatever is left after the button and WRAPS. Both parts
+   matter: without flex-shrink a long title pushed the button clean off the
+   right edge of the card (the panel has a fixed width now, so there is nowhere
+   for it to go), and without wrapping the only other option is truncating a
+   heading, which reads as a bug. */
+.title-row > .h1 {
+    flex-shrink: 1;
+    white-space: normal;
+}
+
+.title-row > .icon-button {
+    flex-shrink: 0;
+    margin-right: 0;
+}
+
+
+/* A normal labelled button, as opposed to .icon-button's square icon tile. */
+.text-button {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    min-height: var(--row-content);
+    padding-left: 18px;
+    padding-right: 18px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    flex-grow: 1;
+    margin-left: 6px;
+    margin-right: 6px;
+    transition-duration: 0.1s;
+}
+
+
+.form-error {
+    color: var(--color-alert);
+    white-space: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 20px;
+}
+
+/* A read-only field is the tap target that raises the system keyboard on
+   device (see SystemKeyboardField) -- it must not look disabled. */
+.row > .unity-base-field > .unity-base-text-field__input {
+    opacity: 1;
+}
+
+/* The title-row refresh button replaces the old red/green status dot: one
+   control that both REPORTS connection state (icon tint) and FIXES it
+   (click = reconnect), instead of a dot that only reported. */
+Button.status-button {
+    flex-grow: 0;
+    min-width: 44px;
+    width: 44px;
+    min-height: 44px;
+    height: 44px;
+    margin-right: 0;
+    -unity-background-image-tint-color: var(--color-alert);
+}
+
+Button.status-button.is-connected {
+    -unity-background-image-tint-color: var(--color-connected);
+}
+
+.status-text {
+    white-space: normal;
+    flex-grow: 1;
+}
+
+.text-button--primary {
+    background-color: var(--color-accent);
+}
+
+/* Same press as the icon tiles, so every button in the menu behaves alike. */
+.text-button {
+    translate: 0 0 -5px;
+    transition-property: translate, scale, background-color;
+    transition-duration: 0.08s;
+}
+
+.text-button:hover {
+    translate: 0 0 0;
+    scale: 0.97 0.97;
+}
+
+.text-button:active {
+    translate: 0 0 3px;
+    scale: 0.95 0.95;
+}
+
+/* ---- New/Edit profile panel -------------------------------------------
+   Grows out of the right edge of the menu rather than covering it, so the
+   profile list stays visible while you edit an entry.
+
+   left: 100% puts it just outside the parent's right edge. The grow is a
+   scale transition with the origin pinned to that edge, so it unfolds
+   outward from the menu instead of expanding about its own centre.
+   Scale (not display) is what animates -- display is not an animatable
+   property, and a display:none element cannot transition at all. Closed
+   state therefore relies on pickingMode being switched off in C#, since a
+   zero-scaled element still occupies its layout rect for hit-testing.
+------------------------------------------------------------------------ */
+.entry-host {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 85%;
+    margin-left: 14px;
+    transform-origin: left top;
+    scale: 0 0;
+    opacity: 0;
+    transition-property: scale, opacity;
+    transition-duration: 0.18s, 0.18s;
+    transition-timing-function: ease-out-back, ease-out;
+}
+
+.entry-host.is-open {
+    scale: 1 1;
+    opacity: 1;
+}
+
+/* WifiEntry's own root is width/height 100% for standalone authoring; inside
+   the host it should hug its content instead. */
+.entry-host > .entry-panel {
+    width: 100%;
+    height: auto;
+}
+
+.row > .unity-toggle > .unity-base-field__label {
+    flex-grow: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Menu shell -- the persistent chrome ported from palmmenu's StatusImg header
+   and its row of submenu buttons.
+--------------------------------------------------------------------------- */
+
+/* The shell hugs its content instead of filling the panel: it is a strip above
+   the panels, not a page of its own. */
+.shell {
+    height: auto;
+}
+
+.shell-status {
+    justify-content: flex-start;
+}
+
+.shell-status-text {
+    flex-grow: 1;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 12px;
+}
+
+/* display, NOT opacity. This block is 230px wide and absolutely positioned
+   over the palm, and PanelSettings builds each world-space panel's collider to
+   "Match 3-D bounding box" -- which counts an invisible child. At opacity 0 it
+   still inflated the status slot's collider from 0.54 to 2.30 units, i.e. 23
+   canvas units wide, which completely covered the Settings and Wifi tabs either
+   side of it and ate the ray before it ever reached them. display:none takes it
+   out of the bounding box as well as out of sight.
+
+   Nothing is lost by not fading: the panel is absolutely positioned, so it never
+   affected the strip's layout the way it did when this was one shared row. */
+.shell-status-text.is-hidden {
+    display: none;
+}
+
+.shell-version {
+    font-size: 16px;
+    color: var(--color-text);
+}
+
+.shell-ip {
+    font-size: 13px;
+    color: var(--color-text);
+    opacity: 0.7;
+}
+
+/* Same red/green signal StatusIndicator drove, plus the amber "connected but
+   the stream has stalled" state its OnDelay handled with a neutral icon. */
+.status-icon {
+    width: var(--row-content);
+    min-width: var(--row-content);
+    height: var(--row-content);
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: var(--color-alert);
+    transition-duration: 0.3s;
+}
+
+.status-icon.is-connected {
+    -unity-background-image-tint-color: var(--color-connected);
+}
+
+.status-icon.is-stagnant {
+    -unity-background-image-tint-color: var(--color-stagnant);
+}
+
+/* The status lamp, reproducing what uGUI's StatusIndicator did with two pieces:
+   a backdrop it tinted red or green, and a child Image whose sprite it swapped
+   between three robot faces. Both live on this one button now -- the fill is the
+   backdrop, the background-image is the face -- so the state reads the way it
+   always did instead of becoming a bare coloured dot.
+
+   The face is drawn dark, as it was: a white glyph vanishes on green.
+
+   Note the selector. Button.icon-button is a TYPE plus a class, so it outranks a
+   bare .status-button and its corners and primary fill won -- the lamp came out
+   a plain blue square. Matching .icon-button here ties the specificity and lets
+   source order decide, which is what these overrides want. */
+.icon-button.status-button {
+    margin-left: 0;
+    margin-right: 0;
+    background-color: var(--color-alert);
+    background-image: url("project://database/Assets/Materials/mdi/robot-dead.svg?fileID=7388822144124034973&guid=1fbafbac6c5c3b904840e1a1d6a27ac1&type=3#robot-dead");
+    -unity-background-image-tint-color: var(--color-on-signal);
+    transition-duration: 0.3s;
+}
+
+.icon-button.status-button.is-connected {
+    background-color: var(--color-connected);
+    background-image: url("project://database/Assets/Materials/mdi/robot-happy.svg?fileID=7388822144124034973&guid=b2ae07b26778a7cb99c88a653e039737&type=3#robot-happy");
+}
+
+/* Connected but the stream has stalled. StatusIndicator.OnDelay showed the
+   NEUTRAL face here and left the backdrop green; the face is kept and the
+   backdrop goes amber, because a stall you only notice by reading a facial
+   expression is a stall you miss. --color-stagnant already existed for it.
+
+   Declared after .is-connected on purpose: an element carrying both classes
+   matches both at equal specificity, so source order is what makes stalled
+   win over merely connected. */
+.icon-button.status-button.is-stagnant {
+    background-color: var(--color-stagnant);
+    background-image: url("project://database/Assets/Materials/mdi/robot.svg?fileID=7388822144124034973&guid=f9205a56116442c33acac63a9089fe0a&type=3#robot");
+}
+
+/* ---- The palm strip ---------------------------------------------------
+   Five separate documents, one per slot, each parented where its uGUI
+   ImageButton sat so it inherits that holder's rotation. There is no bar
+   element: the palm is curved and the buttons fan across it (40 degrees up out
+   of the palm, then -50/-20/0/+20/+50 around), and UI Toolkit has no
+   per-element 3D transform, so one panel holding all five could only be flat.
+
+   Each document is therefore just its button, and position, rotation and
+   spacing all come from the transform hierarchy rather than from here. */
+
+/* No margins: the document sizes itself to this button, so a margin would pad
+   the panel rather than space anything. .icon-button in the selector to match
+   Button.icon-button's specificity -- see the note on .icon-button.status-button
+   below. */
+.icon-button.palm-tab {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* The open menu. Accent rather than a border so the highlight follows a
+   retheme with everything else. */
+.icon-button.palm-tab.is-active {
+    background-color: var(--color-accent);
+}
+
+.tab-points {
+    background-image: url("project://database/Assets/Materials/mdi/radar.svg?fileID=7388822144124034973&guid=c3be9a44d0feb0e9dbedb6740f6daaa3&type=3#radar");
+}
+
+.tab-settings {
+    background-image: url("project://database/Assets/Materials/mdi/cog.svg?fileID=7388822144124034973&guid=1e005f6f6c34894e5b470d8cbfe357af&type=3#cog");
+}
+
+.tab-wifi {
+    background-image: url("project://database/Assets/Materials/mdi/wifi-cog.svg?fileID=7388822144124034973&guid=5aeabae639c51c162a68d5370d0f61cb&type=3#wifi-cog");
+}
+
+.tab-cameras {
+    background-image: url("project://database/Assets/Materials/mdi/camera.svg?fileID=7388822144124034973&guid=6079b5a172cefbd77a09079e6ad75f7a&type=3#camera");
+}
+
+/* A tab slot: exactly one tile, so the Dynamic document sizes to the button
+   and nothing else. */
+.palm-slot {
+    width: var(--row-content);
+    height: var(--row-content);
+    align-items: center;
+    justify-content: center;
+}
+
+/* The centre slot. Fixed to one tile so the revealed version/IP text, which is
+   absolutely positioned and much wider, cannot change the panel's size. */
+.palm-status {
+    width: var(--row-content);
+    min-width: var(--row-content);
+    height: var(--row-content);
+    align-items: center;
+    justify-content: center;
+}
+
+/* Absolute, and anchored to the BOTTOM of the status slot growing upward, so
+   two lines of text appear above the strip instead of inside it. */
+.palm-status > .shell-status-text {
+    position: absolute;
+    bottom: 100%;
+    left: -90px;
+    width: 230px;
+    padding-left: 0;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+/* ---------------------------------------------------------------------------
+   Sensor list -- replaces MenuTemplate's hand-stacked manager panels and
+   ManagerToggler's separate on/off list with one row per manager.
+--------------------------------------------------------------------------- */
+
+.sensor-row {
+    justify-content: flex-start;
+}
+
+
+/* In a chip this trails the name on its own line, and the buttons below keep
+   their own alignment -- so it no longer needs the wide fixed column it had
+   when everything shared one row. */
+.sensor-row-count {
+    font-size: 16px;
+    min-width: 24px;
+    -unity-text-align: middle-right;
+    padding-right: 0;
+    color: var(--color-text);
+    opacity: 0.7;
+}
+
+
+.sensor-empty {
+    white-space: normal;
+    padding: 16px;
+    color: var(--color-text);
+    opacity: 0.7;
+}
+
+/* ---------------------------------------------------------------------------
+   Chips -- a manager row reads as one large tappable card rather than a line
+   of text. Sized for a VR ray, where a thin list row is hard to hit.
+--------------------------------------------------------------------------- */
+
+.chip {
+    /* A COLUMN, overriding .row: the name sits above its buttons. Three 54px
+       icon buttons plus a manager name measure ~370px, and the menu is 260px
+       wide, so on one line the buttons simply ran off the right edge. Stacking
+       is what keeps the touch targets at the size every other panel uses. */
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    /* .row pins both to --row-height; a two-line chip is taller than that and
+       auto-sizes to its content. */
+    min-height: auto;
+    max-height: none;
+    background-color: var(--color-chip);
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+    border-bottom-left-radius: 16px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    /* No horizontal margin: the panel padding is the only inset, so a chip
+       left edge lines up exactly with the header above it. */
+    margin-left: 0;
+    margin-right: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* Colour only. A chip's HEIGHT changes whenever the list is rebuilt, and a
+       bare transition-duration would animate that too. */
+    transition-property: background-color;
+    transition-duration: 0.1s;
+}
+
+/* Line one: the manager's name, with its feed count pushed to the right. */
+.chip-head {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Line two: the buttons, right-aligned so they form a column down the list
+   however long the name above them is. */
+.chip-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+}
+
+/* Inside a chip the buttons are their own line, so they need a gap between
+   them rather than the symmetric inset .icon-button carries elsewhere -- and
+   no right margin at all, or the last one sits off the chip's padding edge. */
+.chip .icon-button {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+.chip:hover {
+    background-color: var(--color-chip-hover);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Sensor menu panel
+--------------------------------------------------------------------------- */
+
+/* Width matched to the uGUI menus this replaces: WifiMenu and SettingsMenu are
+   26 canvas units wide, and at 100 pixels-per-unit that is 260px. The other
+   ported panels are content-sized and already land there (General measures
+   264px), so pinning this one keeps the set consistent.
+
+   Height is deliberately AUTO: the document is world-space Dynamic, so the
+   panel takes its size from this element, and the menu ends up exactly as tall
+   as the managers attached to it. .background sets both to 100%, hence the
+   two-class selector to win on specificity. */
+.background.sensor-menu {
+    /* Width comes from --menu-width on .background, like every other menu. Only
+       the height differs: AUTO, so a Dynamic world-space document sizes the
+       panel to exactly the managers attached to it. */
+    height: auto;
+}
+
+/* Bottom breathing room roughly equal to a chip's 16px corner radius, so the
+   last chip's curve is not flush against the panel edge. The 10px inherited
+   from .background plus the chip's own 6px margin already comes to that. */
+.background.sensor-menu > #Rows {
+    padding-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Per-manager row controls. These live on rows that only some manager types
+   use, which is the point of managers owning their own markup.
+--------------------------------------------------------------------------- */
+
+/* TF tracking, cycling the same three states the uGUI panel's sprite array
+   held: free axis -> head-locked -> axis locked. */
+.track-button {
+    background-image: url("project://database/Assets/Materials/mdi/axis-arrow.svg?fileID=7388822144124034973&guid=d60032fc7bdc8db91b454ee5c68f9105&type=3#axis-arrow");
+}
+
+.track-button.is-track-1 {
+    background-image: url("project://database/Assets/Materials/mdi/head-snowflake-outline.svg?fileID=7388822144124034973&guid=0eebeed137c5a666e810befadd04c4b5&type=3#head-snowflake-outline");
+}
+
+.track-button.is-track-2 {
+    background-image: url("project://database/Assets/Materials/mdi/axis-arrow-lock.svg?fileID=7388822144124034973&guid=59f25925f06319d02925dc6f372d08c3&type=3#axis-arrow-lock");
+}
+
+/* Lidar's Actions row holds FOUR tiles (Refresh/Track/Enabled/Clear) plus the
+   point count -- one more than the 54px tile size leaves room for against
+   this card's 272px interior (300px viewer-width minus the card's own 14px
+   padding on both sides): four 54px tiles alone already come to 256px before
+   even leaving room for the count label. Shrunk to 42px, the same fix
+   .camera-options-menu's own five-tile row needed and for the same reason. */
+.lidar-options-menu .viewer-actions > .icon-button {
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    flex-basis: 42px;
+}
+
+/* Mic and speaker read as off until switched on -- the accent fill is the
+   "live" signal, matching how the uGUI ToggleButton swapped sprites. */
+.toggle-icon.is-on {
+    background-color: var(--color-accent);
+}
+
+.mic-button {
+    background-image: url("project://database/Assets/Materials/mdi/microphone-off.svg?fileID=7388822144124034973&guid=6aa9ab181c833794aa71383a9b8e1029&type=3#microphone-off");
+}
+
+.mic-button.is-on {
+    background-image: url("project://database/Assets/Materials/mdi/microphone.svg?fileID=7388822144124034973&guid=34583198ad6b7f24184a11109d6c5227&type=3#microphone");
+}
+
+.speaker-button {
+    background-image: url("project://database/Assets/Materials/mdi/volume-off.svg?fileID=7388822144124034973&guid=27e07c0065b43b942b8251797bac0f8e&type=3#volume-off");
+}
+
+.speaker-button.is-on {
+    background-image: url("project://database/Assets/Materials/mdi/volume-high.svg?fileID=7388822144124034973&guid=72105ab403f68844fa0553a96458eff8&type=3#volume-high");
+}
+
+/* ManagerTogglerPanel's per-manager on/off button -- same single-icon,
+   tint-on-.is-on convention as mic-button/speaker-button, just power.svg
+   instead of swapping images, matching ManagerToggler's old sprite pair
+   (activeSprite/inactiveSprite) with one icon and a color change instead. */
+.manager-toggle {
+    background-image: url("project://database/Assets/Materials/mdi/power.svg?fileID=7388822144124034973&guid=0adf581262aaf65d68882e5c7254dda9&type=3#power");
+}
+
+/* Global label class for a manager's name in a chip. Named plainly because it
+   is meant to be reused by anything that lists managers, not just this row. */
+.managerLabel {
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 17px;
+    color: var(--color-text);
+    padding-left: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Tighter than the default .background: a list of chips does not need the
+   same inset as a settings form, and the header sits on the same left edge
+   as the chips below it. */
+.background.sensor-menu {
+    padding-top: 8px;
+    padding-right: 8px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+}
+
+.background.sensor-menu > #Header {
+    padding-left: 0;
+    margin-bottom: 2px;
+    -unity-text-align: middle-left;
+}
+
+
+/* ---- Connection profile picker ----------------------------------------
+   Two lines: the profile name, then its buttons. See the note in
+   ConnectionSettings.uxml for why they cannot share one. */
+.profile-block {
+    flex-direction: column;
+    align-self: stretch;
+}
+
+.profile-dropdown {
+    width: 100%;
+    min-height: var(--row-content);
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Right-aligned, so the buttons line up with the panel edge rather than
+   floating in the middle of their own line. */
+.profile-actions {
+    justify-content: flex-end;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.profile-actions > .icon-button {
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+
+/* ---------------------------------------------------------------------------
+   Spawned sensor viewers
+
+   The floating panel a SensorManager spawns per feed, replacing each viewer
+   prefab's uGUI TopMenu. Measured off those panels so the ported ones occupy
+   the same space in the world:
+
+     ServiceButton TopMenu  30 x 12.14 canvas units  ->  300 x 121px
+     LidarViewer   TopMenu  30 x 41.59 canvas units  ->  300 x 416px
+
+   Height is pinned rather than left to the content, because these sit above a
+   title bar that is still uGUI and does not move: a panel that grew would push
+   through it instead of stacking on it.
+--------------------------------------------------------------------------- */
+
+.background.sensor-viewer {
+    width: var(--viewer-width);
+    /* EVEN on all four sides, and the same figure as the corner radius, so the
+       inset you see along a straight edge matches the one the rounded corner
+       already gives you. Uneven padding reads as a mistake at this size. */
+    padding-top: 14px;
+    padding-right: 14px;
+    padding-bottom: 14px;
+    padding-left: 14px;
+    /* AUTO, not pinned to the uGUI panel's height. Pinning was the wrong call:
+       416px was a pixel short of the lidar controls and they spilled out of the
+       bottom of the card, and the service panel had to be crushed to fit 121px.
+       The document is anchored at its BOTTOM edge (see SensorViewerUiToolkitSwap),
+       so a panel that is taller than its predecessor grows upward, away from the
+       title bar underneath, rather than through it. */
+    height: auto;
+    align-items: stretch;
+}
+
+/* Tighter than .h2's default spacing: these label their control directly
+   underneath, so the pair reads as one unit. Centred over it, because every
+   control in these panels is full width and a left-hung label is the only
+   thing that would break the column's symmetry. */
+.viewer-label {
+    margin-top: 6px;
+    margin-bottom: 2px;
+    color: var(--color-text);
+    -unity-text-align: middle-center;
+}
+
+.viewer-field {
+    margin-left: 0;
+    margin-right: 0;
+    min-height: var(--row-content);
+}
+
+.viewer-dropdown {
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 40px;
+}
+
+/* DropdownField pulls its default colors from Unity's own built-in runtime
+   theme (main.uss @imports "unity-theme://default", and nothing here ever
+   overrode this control specifically) -- a light grey box with dark text,
+   which is why it reads as a plain unstyled placeholder against every dark
+   .background card it sits in. Recoloured to the same chip/text tokens
+   every other control already uses. Unscoped (not just the camera options
+   menu): every viewer's own topic dropdown shares this class and had the
+   exact same unstyled look. */
+.viewer-dropdown .unity-base-popup-field__input {
+    background-color: var(--color-chip);
+    border-width: 0;
+}
+
+.viewer-dropdown .unity-base-popup-field__input:hover {
+    background-color: var(--color-chip-hover);
+}
+
+.viewer-dropdown .unity-base-popup-field__text {
+    color: var(--color-text);
+}
+
+.viewer-slider {
+    margin-left: 0;
+    margin-right: 0;
+    min-height: 28px;
+}
+
+/* The icon row. .row pins a height that suits a strip of tiles, and
+   space-between spreads them the way the uGUI panel had them. */
+.viewer-actions {
+    justify-content: flex-start;
+    padding-left: 0;
+    padding-right: 0;
+    /* .row pads 10px all round, which on top of its 64px min-height leaves only
+       44px of content -- less than a 54px icon tile, so the row grew past its
+       own height. The tiles centre in the bare 64px instead. */
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Spread across the panel rather than bunched against the left edge, which is
+   how the uGUI panels had them and what keeps the card looking balanced. A row
+   holding a count lets the count take the slack instead (see .viewer-count). */
+.viewer-actions {
+    justify-content: space-between;
+}
+
+/* Centred as a block when the row is only buttons. */
+.viewer-actions--center {
+    justify-content: center;
+}
+
+/* A gap of their own after all: in a row that also holds a count, the count
+   takes all the slack (it is flex-grow) and space-between has nothing left to
+   distribute, so the tiles ended up touching. */
+.viewer-actions > .icon-button {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.viewer-actions--center > .icon-button {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+/* Point count. Pushed to the right so it sits at the panel edge, as it did. */
+.viewer-count {
+    flex-grow: 1;
+    font-size: 20px;
+    -unity-text-align: middle-right;
+    color: var(--color-text);
+    opacity: 0.8;
+}
+
+/* Visibility of the cloud itself, the port of the uGUI Checkbox. Off reads as
+   an outline, on as the accent fill -- the same signal the mic and speaker
+   toggles use on the manager rows. */
+.viewer-enable {
+    background-image: url("project://database/Assets/Materials/mdi/eye-outline.svg?fileID=7388822144124034973&guid=ffec11417ea5fc843812ed31f421fd2b&type=3#eye-outline");
+}
+
+.viewer-enable.is-on {
+    background-color: var(--color-accent);
+}
+
+
+/* ---------------------------------------------------------------------------
+   Camera / Pano / Stereo viewer options menu
+
+   All three keep their video/sphere/stereo feed on the OLD mesh+material
+   path (see SensorImageViewer.uxml's own header comment for why -- Stereo's
+   per-eye shader and Pano's sphere both rule out a UI Toolkit Image). What
+   gets ported is JUST this options menu, styled and positioned exactly like
+   every other sensor viewer's (.background.sensor-viewer, bottom-anchored --
+   see SwapImageViewer), so all three end up with the same interface as
+   Lidar/GridMap/etc. The one real difference: it starts CLOSED and pops open
+   on tap rather than staying always-visible, since it would otherwise sit
+   over the video/sphere/stereo view it shares space with. ImageViewerPanel
+   polls ImageView's own topMenu flag and drives "is-open" here instead of
+   toggling the document's own active state, so the panel keeps running (and
+   polling) while visually hidden.
+--------------------------------------------------------------------------- */
+
+/* Same scale/opacity grow every other popout in this project uses (see
+   ConnectionSettings' EntryHost). transform-origin sits at the bottom to
+   match the document's own BottomCenter pivot, so it grows up from the same
+   edge the old TopMenu occupied rather than from its own middle.
+
+   NOT overflow: hidden -- tried that first, but it clips EVERYTHING that
+   reaches the card's edge, not just the dropdown's square corners, and the
+   icon-button tiles apparently paint slightly outside their own layout box
+   (their background-image is not perfectly inset), so clipping cut them off
+   entirely instead of just rounding the dropdown. TopicDropdown's own
+   corners are rounded directly below instead -- narrower fix, same visual
+   result, does not touch anything else in the card. */
+.camera-options-menu {
+    transform-origin: center bottom;
+    scale: 1 0;
+    opacity: 0;
+    transition-property: scale, opacity;
+    transition-duration: 0.18s, 0.18s;
+    transition-timing-function: ease-out-back, ease-out;
+}
+
+/* TopicDropdown is the LAST child of the card, so its own square bottom
+   corners sit right where the card's 20px-radius bottom corners curve
+   inward -- rounding them to match (outer radius minus the card's own 10px
+   padding, so the two curves land concentric) instead of relying on
+   overflow:hidden on the whole card, which also clipped the icon-button
+   tiles above it (their background-image paints slightly outside their own
+   layout box, so it lost pixels it should have kept). Scoped to THIS
+   card specifically -- .viewer-dropdown is shared by every other viewer's
+   panel too, where it usually is not the last row against a rounded edge. */
+.camera-options-menu .viewer-dropdown .unity-base-popup-field__input {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Five tiles, not the two-or-three every other .viewer-actions row holds --
+   at the shared 54px tile size plus viewer-actions--center's 8px-a-side
+   margins the row measured ~350px against this card's 272px interior (300px
+   viewer-width minus the card's own 14px padding on both sides), so the
+   outer tiles pushed past the rounded corners (and their own -5px "sits
+   proud" translate made the overflow read as floating in front of the card
+   at the wrong depth). Dropped the --center modifier for plain .viewer-actions
+   (space-between, zero left margin) and zeroed the right margin too so the
+   row's own edges land flush with the card's 14px padding -- exactly where
+   TopicDropdown's flush edges already sit one row down. Shrunk the tiles
+   themselves (54px does not fit five within 272px at any margin) to a size
+   that leaves space-between roughly the same ~10px gap every other icon-button
+   row already uses. */
+.camera-options-menu .viewer-actions > .icon-button {
+    width: 46px;
+    min-width: 46px;
+    max-width: 46px;
+    height: 46px;
+    min-height: 46px;
+    max-height: 46px;
+    flex-basis: 46px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.camera-options-menu.is-open {
+    scale: 1 1;
+    opacity: 1;
 }

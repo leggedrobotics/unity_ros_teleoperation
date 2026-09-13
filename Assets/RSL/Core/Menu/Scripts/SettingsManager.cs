@@ -62,6 +62,14 @@ namespace RSL.Core.Menu
 
         private bool _lockedPose = true;
         private bool _fixedPosition = false;
+        private int _mode = 2; // matches Start(): joystick on, pose publisher off
+
+        // Read-only state for UI that reflects this manager rather than owning
+        // it. The uGUI palmmenu inferred state from the sprite currently on
+        // its Images; a UI Toolkit panel has no Images to read back from.
+        public bool PoseLocked => _lockedPose;
+        public bool RobotLocked => _fixedPosition;
+        public int Mode => _mode;
 
         private PosePublisher _posePublisher;
         private JoystickManager _joystickManager;
@@ -70,36 +78,43 @@ namespace RSL.Core.Menu
         {
             poseManager = RSL.Core.TF.PoseManager.Instance;
             poseManager?.SetLocked(_lockedPose);
-            axisIcon.sprite = _lockedPose ? lockedIcon : unlockedIcon;
+            SetSprite(axisIcon, _lockedPose ? lockedIcon : unlockedIcon);
 
 
 
             _joystickManager = GetComponent<JoystickManager>();
-            _joystickManager.SetEnabled(true);
+            _joystickManager?.SetEnabled(true);
 
             _posePublisher = GetComponent<PosePublisher>();
-            _posePublisher.SetEnabled(false);
+            _posePublisher?.SetEnabled(false);
 
         }
 
 
         public void ChangeMode(int modes)
         {
+            _mode = modes;
             switch (modes)
             {
                 case 0: // Everything disabled
-                    _joystickManager.SetEnabled(false);
-                    _posePublisher.SetEnabled(false);
+                    _joystickManager?.SetEnabled(false);
+                    _posePublisher?.SetEnabled(false);
                     break;
                 case 1: // Pose Publisher enabled
-                    _joystickManager.SetEnabled(false);
-                    _posePublisher.SetEnabled(true);
+                    _joystickManager?.SetEnabled(false);
+                    _posePublisher?.SetEnabled(true);
                     break;
                 case 2: // Joystick Manager enabled
-                    _joystickManager.SetEnabled(true);
-                    _posePublisher.SetEnabled(false);
+                    _joystickManager?.SetEnabled(true);
+                    _posePublisher?.SetEnabled(false);
                     break;
             }
+        }
+
+        private static void SetSprite(Image target, Sprite sprite)
+        {
+            if (target != null)
+                target.sprite = sprite;
         }
 
         public void ToggleNvblox()
@@ -120,14 +135,14 @@ namespace RSL.Core.Menu
         {
             _fixedPosition = !_fixedPosition;
             poseManager?.SetFixedLocation(_fixedPosition);
-            robotIcon.sprite = _fixedPosition ? lockedRobotIcon : unlockedRobotIcon;
+            SetSprite(robotIcon, _fixedPosition ? lockedRobotIcon : unlockedRobotIcon);
         }
 
         public void TogglePoseLock()
         {
             _lockedPose = !_lockedPose;
             poseManager?.SetLocked(_lockedPose);
-            axisIcon.sprite = _lockedPose ? lockedIcon : unlockedIcon;
+            SetSprite(axisIcon, _lockedPose ? lockedIcon : unlockedIcon);
 
             _joystickManager?.SetEnabled(_lockedPose);
         }

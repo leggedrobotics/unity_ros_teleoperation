@@ -1,0 +1,19 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- Audio has no spawnable sensors to count; it has a mic and a speaker, and
+         its Clear tears those down (the uGUI panel wired Clear to deleteAll). -->
+    <!-- Two lines, not one. Three 54px touch targets plus a manager name do
+         not fit across a 260px menu: on one line the buttons ran off the
+         panel edge. Shrinking them was the alternative, and 54px is the
+         size every other panel in this menu uses for a VR ray target. -->
+    <ui:VisualElement name="SensorRow" class="row sensor-row chip">
+        <ui:VisualElement name="ChipHead" class="chip-head">
+            <ui:Label text="Audio" name="ManagerName" class="managerLabel" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ChipActions" class="chip-actions">
+        <ui:Button name="Mic" class="icon-button toggle-icon mic-button" tooltip="Toggle microphone" />
+        <ui:Button name="Speaker" class="icon-button toggle-icon speaker-button" tooltip="Toggle speaker" />
+        <ui:Button name="Clear" class="icon-button" tooltip="Stop mic and speaker" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

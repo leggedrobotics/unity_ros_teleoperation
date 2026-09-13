@@ -1,0 +1,34 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- Options menu shared by CameraViewer, PanoViewer Variant and
+         StereoViewer Variant (all three are ImageView subclasses — see
+         ImageViewerPanel). All three keep their video/sphere/stereo feed on
+         the OLD mesh+material path (Img/CamImage) — a UI Toolkit Image is a
+         flat single quad with no per-eye differentiation, which cannot
+         reproduce StereoStreamer's real per-eye shader, and PanoImageStreamer's
+         "image" is a sphere the viewer stands inside, not a flat picture. So
+         all three get the SAME interface: just this options menu, styled and
+         positioned exactly like every other sensor viewer's panel
+         (.background.sensor-viewer, anchored at the old TopMenu's bottom
+         edge — see SwapImageViewer), not the earlier picture-frame design
+         that only made sense for a flat single-camera image.
+
+         Starts CLOSED and pops open on tap, unlike the other six viewers'
+         always-visible panel: the video/sphere/stereo view occupies the same
+         space this would sit over, so it stays hidden until the feed itself
+         is tapped (ImageView.OnClick, wired on CamImage). ImageViewerPanel
+         polls topMenu's own active flag (ImageView's Start/OnClick/
+         OnTopicChange/ToggleTrack already flip it) and drives "is-open" here
+         instead of the document's own active state, so the panel keeps
+         running (and can poll) while visually hidden. -->
+    <ui:VisualElement name="OptionsMenu" class="background sensor-viewer camera-options-menu">
+        <ui:VisualElement name="Actions" class="row viewer-actions">
+            <ui:Button name="Clear" class="icon-button" tooltip="Remove this viewer" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+            <ui:Button name="Track" class="icon-button track-button" tooltip="Cycle TF tracking mode" />
+            <ui:Button name="Flip" class="icon-button" tooltip="Flip horizontally" style="background-image: url(&quot;project://database/Assets/Materials/mdi/flip-horizontal.svg?fileID=7388822144124034973&amp;guid=ddac7712fd292ee66b14b3774389dc4b&amp;type=3#flip-horizontal&quot;);" />
+            <ui:Button name="Plus" class="icon-button" tooltip="Grow" style="background-image: url(&quot;project://database/Assets/Materials/mdi/plus.svg?fileID=7388822144124034973&amp;guid=dc38c50b863592ab3b74e36e27d4c8fe&amp;type=3#plus&quot;);" />
+            <ui:Button name="Minus" class="icon-button" tooltip="Shrink" style="background-image: url(&quot;project://database/Assets/Materials/mdi/minus.svg?fileID=7388822144124034973&amp;guid=93c946fc25d5ecac38c1f3f667d7dbfe&amp;type=3#minus&quot;);" />
+        </ui:VisualElement>
+        <ui:DropdownField name="TopicDropdown" class="viewer-dropdown" />
+    </ui:VisualElement>
+</ui:UXML>

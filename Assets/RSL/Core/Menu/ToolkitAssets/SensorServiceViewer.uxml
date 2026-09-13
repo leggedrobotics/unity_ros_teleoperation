@@ -1,0 +1,18 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- The control panel of a spawned service button, replacing its uGUI
+         TopMenu. Sized to that panel: 30 x 12.14 canvas units, which is
+         300 x 121px at the pixels-per-unit these documents render at.
+
+         The title bar below it is deliberately NOT ported. It carries
+         UIPositionChanger and a Button over a BoxCollider, which is how the
+         viewer is grabbed and repositioned in the world — a physical handle
+         that happens to show the topic name, not a piece of menu. -->
+    <ui:VisualElement name="Background" class="background sensor-viewer">
+        <ui:TextField name="ServiceTopic" placeholder-text="Enter text..." class="viewer-field" />
+        <ui:VisualElement name="Actions" class="row viewer-actions">
+            <ui:Button name="Clear" class="icon-button" tooltip="Remove this service button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+            <ui:Button name="Subscribe" class="icon-button" tooltip="Register this service topic" style="background-image: url(&quot;project://database/Assets/Materials/mdi/check.svg?fileID=7388822144124034973&amp;guid=ea241a6eb1150804695890f30b1850f1&amp;type=3#check&quot;);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

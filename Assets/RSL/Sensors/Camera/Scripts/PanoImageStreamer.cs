@@ -21,10 +21,12 @@ namespace RSL.Sensors.Camera
 
     public class PanoImageStreamer : ImageView
     {
-        public void Flip()
-        {
-            _Img.localScale = new Vector3(-_Img.localScale.x, _Img.localScale.y, _Img.localScale.z);
-        }
+        // Flip() is no longer overridden here -- ImageView's own Flip() does
+        // the exact same _Img.localScale.x negation now, and since Flip() is
+        // virtual, inheriting it dispatches correctly (this used to have to
+        // be its own non-virtual copy specifically to avoid a base-typed
+        // call resolving to ImageView's old no-op -- see ImageView.Flip's
+        // own comment).
 
         override protected void Resize()
         {

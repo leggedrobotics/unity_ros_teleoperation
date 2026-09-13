@@ -1,0 +1,21 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- Row for managers whose feeds can be TF-tracked. The Track button cycles
+         head / world / locked; its icon comes from the is-track-N class in USS,
+         matching the three sprites the uGUI panel used. -->
+    <!-- Two lines, not one. Three 54px touch targets plus a manager name do
+         not fit across a 260px menu: on one line the buttons ran off the
+         panel edge. Shrinking them was the alternative, and 54px is the
+         size every other panel in this menu uses for a VR ray target. -->
+    <ui:VisualElement name="SensorRow" class="row sensor-row chip">
+        <ui:VisualElement name="ChipHead" class="chip-head">
+            <ui:Label text="Manager" name="ManagerName" class="managerLabel" />
+            <ui:Label text="0" name="Count" class="sensor-row-count" />
+        </ui:VisualElement>
+        <ui:VisualElement name="ChipActions" class="chip-actions">
+        <ui:Button name="Track" class="icon-button track-button" tooltip="Cycle TF tracking mode" />
+        <ui:Button name="Add" class="icon-button" tooltip="Add a sensor" style="background-image: url(&quot;project://database/Assets/Materials/mdi/plus.svg?fileID=7388822144124034973&amp;guid=dc38c50b863592ab3b74e36e27d4c8fe&amp;type=3#plus&quot;);" />
+        <ui:Button name="Clear" class="icon-button" tooltip="Remove all sensors" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

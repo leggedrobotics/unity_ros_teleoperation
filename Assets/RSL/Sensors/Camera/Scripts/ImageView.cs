@@ -62,11 +62,7 @@ namespace RSL.Sensors.Camera
     [System.Serializable]
     public class ImageView : RSL.Core.SensorStream
     {
-        public GameObject topMenu;
         public TMPro.TextMeshProUGUI nameText;
-        public Sprite untracked;
-        public Sprite tracked;
-        public Sprite headTracked;
         public ComputeShader debayer;
         public Material material;
 
@@ -74,9 +70,22 @@ namespace RSL.Sensors.Camera
         protected Transform _Img;
 
         protected GameObject _frustrum;
-        protected Image _icon;
         protected GameObject _root;
-        protected Sprite[] icons;
+
+        // Replaces the old uGUI TopMenu GameObject's own active state as the
+        // "is the options menu open" flag -- TopMenu itself is gone (it was
+        // dead uGUI weight once its buttons/dropdown/tracking icon were all
+        // retired in favour of the UI Toolkit options menu). ImageViewerPanel
+        // polls this instead of a GameObject's activeSelf.
+        protected bool _menuOpen;
+        public bool MenuOpen => _menuOpen;
+
+        // Exposes _trackingState (SensorStream, protected) so
+        // ImageViewerPanel can reflect it onto the Track button's own
+        // is-track-1/is-track-2 classes -- replaces the old uGUI tracking
+        // icon TopMenu used to own (Track/Image/Image, swapped via a
+        // Sprite[] this class no longer needs).
+        public int TrackingState => _trackingState;
 
         public enum DebayerMode
         {
@@ -96,8 +105,6 @@ namespace RSL.Sensors.Camera
             _ros = ROSConnection.GetOrCreateInstance();
             nameText.text = "None";
 
-            icons = new Sprite[] { untracked, headTracked, tracked };
-            _icon = topMenu.transform.Find("Track/Image/Image").GetComponent<Image>();
             _Img = transform.Find("Img");
             material = _Img.GetComponent<MeshRenderer>().material;
 
@@ -111,7 +118,7 @@ namespace RSL.Sensors.Camera
         {
             topicDropdown.onValueChanged.AddListener(OnSelect);
             topicDropdown.gameObject.SetActive(false);
-            topMenu.SetActive(false);
+            _menuOpen = false;
 
             RefreshTopics();
         }
@@ -206,13 +213,20 @@ namespace RSL.Sensors.Camera
             if (options.Count == 1)
             {
                 Debug.LogWarning("No image topics found!");
-                return;
             }
-            topicDropdown.ClearOptions();
 
-            topicDropdown.AddOptions(options);
+            // Guarded, not an early return like before: a viewer ported to UI
+            // Toolkit still needs the list even when the uGUI dropdown itself
+            // is gone, and TopicsChanged below has to fire either way -- it is
+            // how that panel learns the options exist at all.
+            if (topicDropdown != null)
+            {
+                topicDropdown.ClearOptions();
+                topicDropdown.AddOptions(options);
+                topicDropdown.value = Mathf.Min(_lastSelected, options.Count - 1);
+            }
 
-            topicDropdown.value = Mathf.Min(_lastSelected, options.Count - 1);
+            RaiseTopicsChanged(options);
         }
 
         public override void ToggleTrack(int newState)
@@ -220,8 +234,6 @@ namespace RSL.Sensors.Camera
             _trackingState = newState;
 
             _trackingState = _trackingState % 3;
-
-            _icon.sprite = icons[_trackingState];
 
             if (_trackingState == 0 && transform.parent != null && transform.parent.name != "odom")
             {
@@ -247,11 +259,21 @@ namespace RSL.Sensors.Camera
         {
             ToggleTrack(_trackingState + 1);
             topicDropdown.gameObject.SetActive(false);
-            topMenu.SetActive(false);
+            _menuOpen = false;
         }
 
-        public void Flip()
+        // Virtual now, not a bare no-op: PanoImageStreamer used to declare its
+        // OWN same-named non-virtual Flip() (a real implementation, since a
+        // sphere is happy to have its quad's localScale.x negated), which C#
+        // resolves by the reference's STATIC type for a non-virtual method --
+        // a plain ImageView-typed call would have silently run THIS empty
+        // no-op even when the real object was a PanoImageStreamer. Making
+        // this virtual and Pano's an override fixes dispatch properly, and
+        // gives the base (CameraViewer's own) case the same real behaviour
+        // Pano already had, instead of leaving it a no-op forever.
+        public virtual void Flip()
         {
+            _Img.localScale = new Vector3(-_Img.localScale.x, _Img.localScale.y, _Img.localScale.z);
         }
 
         public void ScaleUp()
@@ -264,11 +286,15 @@ namespace RSL.Sensors.Camera
             transform.localScale *= 0.9f;
         }
 
+        // Flips _menuOpen directly -- this used to toggle topicDropdown's own
+        // active state as the "is the menu open" flag (topicDropdown is the
+        // OLD uGUI dropdown, permanently retired now), so every other tap set
+        // it back to active again, right alongside the new UI Toolkit
+        // TopicDropdown. _menuOpen is what ImageViewerPanel actually polls.
         public virtual void OnClick()
         {
             RefreshTopics();
-            topicDropdown.gameObject.SetActive(!topicDropdown.gameObject.activeSelf);
-            topMenu.gameObject.SetActive(topicDropdown.gameObject.activeSelf);
+            _menuOpen = !_menuOpen;
         }
 
         public override void OnTopicChange(string topic)
@@ -285,7 +311,7 @@ namespace RSL.Sensors.Camera
                 material.SetTexture("_BaseMap", null);
 
                 topicDropdown.gameObject.SetActive(false);
-                topMenu.SetActive(false);
+                _menuOpen = false;
                 return;
             }
 
@@ -300,7 +326,7 @@ namespace RSL.Sensors.Camera
                 _ros.Subscribe<ImageMsg>(topicName, OnImage);
             }
             topicDropdown.gameObject.SetActive(false);
-            topMenu.SetActive(false);
+            _menuOpen = false;
         }
 
         public virtual void OnSelect(int value)
@@ -349,6 +375,13 @@ namespace RSL.Sensors.Camera
             System.IO.File.WriteAllBytes(Application.dataPath + "/../" + filename + ".png", bytes);
         }
 
+        // Resizes the mesh quad's aspect by hand -- overridden by
+        // PanoImageStreamer to a no-op (its sphere always looks right
+        // regardless of aspect). StereoStreamer has its own same-named
+        // non-virtual method instead of overriding this one (a completely
+        // separate method -- see ImageViewerPanel's note on why Flip used
+        // to need reflection for the same reason, now fixed for Flip but
+        // still true here).
         protected virtual void Resize()
         {
             if (_texture2D == null) return;

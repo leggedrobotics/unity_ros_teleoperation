@@ -1,21 +1,46 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
-    <ui:VisualElement name="Background" style="position: relative; width: 100%; height: 100%; -unity-background-scale-mode: stretch-to-fill; align-items: stretch; max-height: none; border-top-left-radius: 20px; border-top-right-radius: 20px; border-bottom-right-radius: 20px; border-bottom-left-radius: 20px; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255); align-content: stretch; background-color: rgba(60, 60, 60, 0.77);">
-        <ui:Label text="Connection Settings" name="Title" class="h1" />
-        <ui:Label text="Connection Profile" name="ProfileLabel" class="h2" />
-        <ui:VisualElement name="Profile" class="row" style="justify-content: space-evenly;">
-            <ui:DropdownField name="ConnectionProfile" style="align-items: center; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; height: 100%; width: 50%; overflow: hidden; margin-right: 8px;" />
-            <ui:Button name="AddButton" class="icon-button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/plus.svg?fileID=7388822144124034973&amp;guid=dc38c50b863592ab3b74e36e27d4c8fe&amp;type=3#plus&quot;);" />
-            <ui:Button name="DeleteButton" class="icon-button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+    <ui:VisualElement name="Background" class="background">
+        <ui:VisualElement name="TitleRow" class="title-row">
+            <ui:Label text="Connection Settings" name="Title" class="h1" />
+            <ui:Button name="Refresh" class="icon-button status-button" tooltip="Reconnect" style="background-image: url(&quot;project://database/Assets/Materials/mdi/refresh.svg?fileID=7388822144124034973&amp;guid=02f87054e03924dfa82e8b04406ca08d&amp;type=3#refresh&quot;);" />
         </ui:VisualElement>
-        <ui:Label text="Connected Gloves" name="GlovesLabel" class="h2" />
-        <ui:VisualElement name="Haptics" class="row">
-            <ui:VisualElement name="LeftHand" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Materials/mdi/hand-back-left.svg?fileID=7388822144124034973&amp;guid=61c1fea66954cda83946fe39a0b3a639&amp;type=3#hand-back-left&quot;); -unity-background-scale-mode: scale-to-fit; height: 100%;" />
-            <ui:VisualElement name="RightHand" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Materials/mdi/hand-back-right.svg?fileID=7388822144124034973&amp;guid=2d334aef980222b6e8ec42f284b8cdf2&amp;type=3#hand-back-right&quot;); -unity-background-scale-mode: scale-to-fit; height: 100%;" />
-        </ui:VisualElement>
-        <ui:Label text="Pose Publish Decimator" name="TFLabel" class="h2" />
-        <ui:VisualElement name="Decimator" class="row">
-            <ui:SliderInt value="1" high-value="100" show-input-field="true" fill="false" low-value="1" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
-        </ui:VisualElement>
+        <!-- mode Vertical AND an explicit hidden horizontal scroller. Now that
+             the panel has a pinned width, a row even slightly too wide put a
+             horizontal scrollbar across the bottom of the whole menu. The rows
+             below are sized to fit; this makes sure a future one that is not
+             clips quietly rather than growing a scrollbar. -->
+        <ui:ScrollView name="Content" class="settings-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
+            <ui:Label text="Connection Profile" name="ProfileLabel" class="h2" />
+            <!-- Dropdown on its own line above its buttons. A 260px menu cannot
+                 hold a readable profile name AND three 54px touch targets side
+                 by side: the dropdown was crushed to a sliver and the row spilled
+                 past the panel edge. -->
+            <ui:VisualElement name="Profile" class="profile-block">
+                <ui:DropdownField name="ConnectionProfile" class="profile-dropdown" />
+                <ui:VisualElement name="ProfileActions" class="row profile-actions">
+                    <ui:Button name="AddButton" class="icon-button" tooltip="New profile" style="background-image: url(&quot;project://database/Assets/Materials/mdi/plus.svg?fileID=7388822144124034973&amp;guid=dc38c50b863592ab3b74e36e27d4c8fe&amp;type=3#plus&quot;);" />
+                    <ui:Button name="EditButton" class="icon-button" tooltip="Edit the selected profile" style="background-image: url(&quot;project://database/Assets/Materials/mdi/wifi-cog.svg?fileID=7388822144124034973&amp;guid=5aeabae639c51c162a68d5370d0f61cb&amp;type=3#wifi-cog&quot;);" />
+                    <ui:Button name="DeleteButton" class="icon-button" tooltip="Delete the selected profile" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="StatusRow" class="row">
+                <ui:Label text="No profile selected" name="StatusText" class="status-text" />
+            </ui:VisualElement>
+            <ui:Label text="Pose Publishing" name="PosePubLabel" class="h2" />
+            <ui:VisualElement name="PosePubRow" class="row">
+                <ui:Toggle label="Enable Pose Publishing" name="PosePublishing" />
+            </ui:VisualElement>
+            <ui:Label text="Pose Publish Decimator" name="TFLabel" class="h2" />
+            <ui:VisualElement name="Decimator" class="row">
+                <ui:SliderInt name="DecimatorSlider" value="1" high-value="100" show-input-field="true" fill="false" low-value="1" style="width: 100%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+            </ui:VisualElement>
+            <ui:Label text="Connected Gloves" name="GlovesLabel" class="h2" />
+            <ui:VisualElement name="Haptics" class="row">
+                <ui:VisualElement name="LeftHand" class="glove glove-left" />
+                <ui:VisualElement name="RightHand" class="glove glove-right" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+        <ui:VisualElement name="EntryHost" class="entry-host" />
     </ui:VisualElement>
 </ui:UXML>

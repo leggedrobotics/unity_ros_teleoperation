@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 1755271183023628284}
   m_Layer: 5
   m_Name: MarkerManager
-  m_TagString: Untagged
+  m_TagString: sensorManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

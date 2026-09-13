@@ -1,0 +1,44 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- The control panel of a spawned point cloud viewer, replacing its uGUI
+         TopMenu. Sized to that panel: 30 x 41.59 canvas units, which is
+         300 x 416px at the pixels-per-unit these documents render at.
+
+         Order and grouping follow the original exactly, so a user who knows the
+         old panel does not have to relearn it: topic, the two point sliders, the
+         action row with the feed count, then the two display dropdowns.
+
+         Track reuses .track-button (the same class Camera's Track button
+         uses), just two of its three states: base (free-floating,
+         LidarStream.useTF false) and is-track-2 (locked to the TF frame,
+         useTF true), matching the uGUI original's own two-icon "Checkbox
+         Variant" (axis-arrow / axis-arrow-lock, onStateChanged calling
+         LidarStream.ToggleTrack) that had gone unnoticed missing from this
+         panel until an audit turned it up in the deleted TopMenu's own diff.
+
+         The title bar below is NOT ported — it is the grab handle
+         (UIPositionChanger over a BoxCollider), not a piece of menu. -->
+    <ui:VisualElement name="Background" class="background sensor-viewer lidar-options-menu">
+        <ui:DropdownField name="TopicDropdown" class="viewer-dropdown" />
+
+        <ui:Label text="Point density" name="DensityLabel" class="h2 viewer-label" />
+        <ui:Slider name="DensitySlider" low-value="0" high-value="1" value="0.1" class="viewer-slider" />
+
+        <ui:Label text="Point size" name="SizeLabel" class="h2 viewer-label" />
+        <ui:Slider name="SizeSlider" low-value="0.001" high-value="0.1" value="0.01" class="viewer-slider" />
+
+        <ui:VisualElement name="Actions" class="row viewer-actions">
+            <ui:Button name="Refresh" class="icon-button" tooltip="Re-scan available topics" style="background-image: url(&quot;project://database/Assets/Materials/mdi/refresh.svg?fileID=7388822144124034973&amp;guid=02f87054e03924dfa82e8b04406ca08d&amp;type=3#refresh&quot;);" />
+            <ui:Button name="Track" class="icon-button track-button" tooltip="Cycle TF tracking mode (locked to frame / floating)" />
+            <ui:Button name="Enabled" class="icon-button toggle-icon viewer-enable" tooltip="Show or hide this point cloud" />
+            <ui:Button name="Clear" class="icon-button" tooltip="Remove this viewer" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+            <ui:Label text="0" name="Count" class="viewer-count" />
+        </ui:VisualElement>
+
+        <ui:Label text="Viz Type" name="VizTypeLabel" class="h2 viewer-label" />
+        <ui:DropdownField name="VizTypeDropdown" class="viewer-dropdown" />
+
+        <ui:Label text="Color Mode" name="ColorModeLabel" class="h2 viewer-label" />
+        <ui:DropdownField name="ColorModeDropdown" class="viewer-dropdown" />
+    </ui:VisualElement>
+</ui:UXML>

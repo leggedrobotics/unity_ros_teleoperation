@@ -1,0 +1,11 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <ui:VisualElement name="Background" class="background sensor-menu">
+        <!-- Text is set by MenuTemplate from its tagFilter, humanised. -->
+        <ui:Label text="Sensors" name="Header" class="h1" />
+        <!-- No ScrollView: the document is world-space Dynamic, so the panel
+             takes its height from this content. A ScrollView wants a BOUNDED
+             height to scroll within, which is the opposite of sizing to fit. -->
+        <ui:VisualElement name="Rows" />
+    </ui:VisualElement>
+</ui:UXML>

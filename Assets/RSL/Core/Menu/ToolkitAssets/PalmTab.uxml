@@ -1,0 +1,22 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- ONE tab, one document. The palm is a curved surface and the buttons fan
+         across it, each on its own rotation: 40 degrees up out of the palm, then
+         50/20/0/20/50 degrees around. UI Toolkit has no per-element 3D
+         transform, so a single bar holding all five can only ever be flat, and
+         the outer tabs float off the surface.
+
+         Each of these is instead parented where its uGUI ImageButton sat, so it
+         inherits that holder's rotation without anyone having to restate it.
+
+         The icon comes from a class the controller adds (tab-points, tab-wifi,
+         ...), not from markup, so one asset serves every slot. -->
+    <ui:VisualElement name="Slot" class="palm-slot">
+        <!-- The button is wrapped rather than being the document root. As a root
+             it rendered nothing: .icon-button carries a small negative z-translate
+             (it lifts the tile off the panel behind it), which is harmless on a
+             nested element but pushes a ROOT element out of the panel's own
+             depth range. The wrapper gives it something to be nested in. -->
+        <ui:Button name="Tab" class="icon-button palm-tab" />
+    </ui:VisualElement>
+</ui:UXML>

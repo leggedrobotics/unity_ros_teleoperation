@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &53432486443110496
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1806222807769824675, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 2156156654065455413, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 2384115723209738786, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 2967102058878928774, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 3219267264552484774, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 4471689192786037004, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 5574309244156863063, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 6159070734855891246, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 7374999069423819212, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 7747557289840096209, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 8564552477827376171, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    - target: {fileID: 8605111556703751387, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_Name
+      value: palmmenu 2D Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.168
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8944342317890786913, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9013746463499372636, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}
+      propertyPath: m_PanelSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: 5ef05cc2e9054842b45610d70b92ff55, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 284c18ecc4f72ec20968371b116bf40b, type: 3}

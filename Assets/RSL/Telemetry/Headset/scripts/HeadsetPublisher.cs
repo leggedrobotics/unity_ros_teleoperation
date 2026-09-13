@@ -72,7 +72,8 @@ namespace RSL.Telemetry.Headset
 
             tfMsg = new TFMessageMsg(); 
 
-            decimatorText.text = "TF Decimator: " + _decimator;
+            if (decimatorText != null)
+                decimatorText.text = "TF Decimator: " + _decimator;
 
         }
 
@@ -150,10 +151,18 @@ namespace RSL.Telemetry.Headset
             ros.Publish("/tf", tfMsg);
         }
 
+        // Read-only view of the decimator for UI that reflects it rather than
+        // owning it (the UI Toolkit settings panel initialises its slider from
+        // this instead of assuming the field's default).
+        public int Decimator => _decimator;
+
         public void OnDecimatorChange(float value)
         {
-            _decimator = (int)value;
-            decimatorText.text = "TF Decimator: " + _decimator;
+            _decimator = Mathf.Max(1, (int)value);
+            // Null when the driving UI is UI Toolkit rather than the uGUI
+            // palmmenu -- the TMP label only exists in the latter.
+            if (decimatorText != null)
+                decimatorText.text = "TF Decimator: " + _decimator;
         }
     }
 }
