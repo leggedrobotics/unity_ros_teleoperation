@@ -7,6 +7,22 @@
     --color-accent: #3f88f5;
     --color-alert: #ff4d4f;
     --color-alert-accent: #c20300;
+    --color-connected: #3ecf5a;
+    --color-stagnant: #e8a33d;
+    /* Drawn ON a signal colour (the red/green status lamp), where the normal
+       white icon tint disappears. The uGUI StatusIndicator used flat black
+       for its robot face; this is that, softened a shade. */
+    --color-on-signal: #17171a;
+    --color-chip: #4a4a4d;
+    --color-chip-hover: #55555a;
+    /* Every menu panel is this wide. 260px is 26 units at the 100 pixels-
+       per-unit these panels render at, which is exactly the width of the
+       uGUI WifiMenu and SettingsMenu they replace -- so the ported menus
+       keep the same footprint on the palm. */
+    --menu-width: 260px;
+    /* A spawned sensor viewer is wider than a palm menu: its uGUI panel is
+       30 canvas units across against the menus' 26, which is 300px here. */
+    --viewer-width: 300px;
     --row-height: 64px;
     --row-content: 54px;
 

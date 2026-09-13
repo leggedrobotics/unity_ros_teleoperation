@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
-using UnityEngine.UI;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Std;
 using RosMessageTypes.Geometry;
@@ -33,6 +32,12 @@ namespace RSL.Sensors.Path
         private Vector4[] _rotArray;
         private LineRenderer _lineRenderer;
         private int _numPoints = 0;
+
+        /// <summary>Points in the path currently being drawn.</summary>
+        // The uGUI panel read this by having the stream push it into a TMP label
+        // the stream owned. The UI Toolkit panel mirrors it instead, so it needs
+        // a way to ask.
+        public int PointCount => _numPoints;
 
 
         public int maxPoints = 1000;
@@ -73,9 +78,6 @@ namespace RSL.Sensors.Path
             _renderParams.matProps.SetBuffer("_Positions", _meshVertices);
             _renderParams.matProps.SetBuffer("_RotationData", _rotData);
 
-            topicDropdown.ClearOptions();
-            topicDropdown.onValueChanged.AddListener((value) => { OnTopicSelected(value); });
-
             countText?.SetText("0");
 
             RefreshTopics();
@@ -88,25 +90,6 @@ namespace RSL.Sensors.Path
                 Transform t = _parent == null ? transform : _parent;
                 _renderParams.matProps.SetMatrix("_ObjectToWorld", t.localToWorldMatrix);
                 Graphics.RenderPrimitivesIndexed(_renderParams, MeshTopology.Triangles, _meshTriangles, _meshTriangles.count, (int)_mesh.GetIndexStart(0), _numPoints);
-            }
-        }
-
-        public void OnTopicSelected(int value)
-        {
-            if (value < 0 || value >= topicDropdown.options.Count)
-            {
-                Debug.LogWarning("Invalid topic selected: " + value);
-                return;
-            }
-
-            string selectedTopic = topicDropdown.options[value].text;
-            if (selectedTopic == "None")
-            {
-                OnTopicChange(null);
-            }
-            else
-            {
-                OnTopicChange(selectedTopic);
             }
         }
 

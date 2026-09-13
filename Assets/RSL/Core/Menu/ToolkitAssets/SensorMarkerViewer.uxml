@@ -1,0 +1,15 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- Control panel of a spawned marker viewer, replacing its uGUI TopMenu
+         (30 x 22 canvas units). The title bar is not ported; it is the grab
+         handle. -->
+    <ui:VisualElement name="Background" class="background sensor-viewer">
+        <ui:DropdownField name="TopicDropdown" class="viewer-dropdown" />
+        <ui:Label text="Point size" name="SizeSliderLabel" class="h2 viewer-label" />
+        <ui:Slider name="SizeSlider" low-value="0.01" high-value="1" value="0.1" class="viewer-slider" />
+        <ui:VisualElement name="Actions" class="row viewer-actions viewer-actions--center">
+            <ui:Button name="Refresh" class="icon-button" tooltip="Re-scan available topics" style="background-image: url(&quot;project://database/Assets/Materials/mdi/refresh.svg?fileID=7388822144124034973&amp;guid=02f87054e03924dfa82e8b04406ca08d&amp;type=3#refresh&quot;);" />
+            <ui:Button name="Clear" class="icon-button" tooltip="Remove this viewer" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

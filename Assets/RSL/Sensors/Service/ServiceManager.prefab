@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6842926589500481119}
   m_Layer: 5
   m_Name: ServiceManager
-  m_TagString: Untagged
+  m_TagString: sensorManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

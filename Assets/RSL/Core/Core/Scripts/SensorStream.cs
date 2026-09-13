@@ -55,6 +55,24 @@ namespace RSL.Core
         /// </summary>
         public abstract void OnTopicChange(string newTopic);
 
+        /// <summary>
+        /// Raised when the topic list is refreshed, with the options offered.
+        /// </summary>
+        // The seam the UI Toolkit viewer panels listen on. UpdateTopics used to
+        // write straight into the uGUI dropdown, so there was no way for another
+        // UI to learn what the topics were -- short of reading them back out of
+        // the widget it was replacing.
+        public event System.Action<List<string>> TopicsChanged;
+
+        /// <summary>
+        /// Raises TopicsChanged. A C# event can only be invoked from inside its
+        /// declaring type, so a subclass with its own UpdateTopics override
+        /// (ImageView, StereoStreamer -- their topic filtering differs enough
+        /// from the base that they replace it rather than extend it) calls this
+        /// instead of `TopicsChanged?.Invoke(...)` directly.
+        /// </summary>
+        protected void RaiseTopicsChanged(List<string> topics) => TopicsChanged?.Invoke(topics);
+
         public void RefreshTopics()
         {
             _ros?.GetTopicAndTypeList(UpdateTopics);
@@ -86,9 +104,18 @@ namespace RSL.Core
             {
                 Debug.LogWarning($"No topics available for {_msgType}");
             }
-            topicDropdown.ClearOptions();
-            topicDropdown.AddOptions(options);
-            topicDropdown.value = Mathf.Min(_lastSelected, options.Count - 1);
+            // Null-guarded so a viewer with no uGUI dropdown at all still
+            // refreshes. The ported viewers deactivate their old panel rather
+            // than deleting it, so the reference survives there -- this is for
+            // whatever is built without one.
+            if (topicDropdown != null)
+            {
+                topicDropdown.ClearOptions();
+                topicDropdown.AddOptions(options);
+                topicDropdown.value = Mathf.Min(_lastSelected, options.Count - 1);
+            }
+
+            TopicsChanged?.Invoke(options);
         }
 
         /// <summary>

@@ -49,22 +49,28 @@ namespace RSL.Sensors.Camera
             if (options.Count == 1)
             {
                 Debug.LogWarning("No image topics found!");
-                return;
             }
-            topicDropdown.ClearOptions();
-            topicDropdown.AddOptions(options);
-            topicDropdown.value = Mathf.Min(_lastSelected, options.Count - 1);
 
+            // Guarded, not an early return: mirrors the fix in ImageView --
+            // TopicsChanged has to fire either way, for the UI Toolkit panel
+            // that now shares this stream's topic list.
+            if (topicDropdown != null)
+            {
+                topicDropdown.ClearOptions();
+                topicDropdown.AddOptions(options);
+                topicDropdown.value = Mathf.Min(_lastSelected, options.Count - 1);
+            }
+
+            RaiseTopicsChanged(options);
         }
 
         /// <summary>
         /// Flips the image horizontally, NOTE: Not yet implemented for stereo images.... (might need to swap left and right as well...)
         /// </summary>
-        public void Flip()
+        public override void Flip()
         {
             Debug.Log("Flip not yet implemented");
         }
-
 
         public override void OnSelect(int value)
         {
@@ -101,7 +107,7 @@ namespace RSL.Sensors.Camera
                 material.SetTexture("_RightTex", _rightTexture2D);
 
                 topicDropdown.gameObject.SetActive(false);
-                topMenu.SetActive(false);
+                _menuOpen = false;
                 return;
             }
 
@@ -118,7 +124,7 @@ namespace RSL.Sensors.Camera
                 // ros.Subscribe<ImageMsg>(topicName, OnImage);
             }
             topicDropdown.gameObject.SetActive(false);
-            topMenu.SetActive(false);
+            _menuOpen = false;
         }
 
         /// <summary>

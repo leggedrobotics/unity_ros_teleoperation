@@ -6,7 +6,6 @@ using Unity.Robotics.ROSTCPConnector;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
-using UnityEngine.UI;
 using UnityEngine.Timeline;
 using System;
 
@@ -27,14 +26,6 @@ namespace RSL.Sensors.Markers
             if (GUILayout.Button("Refresh Topics"))
             {
                 myScript.RefreshTopics();
-            }
-            if (GUILayout.Button("Subscribe to 0"))
-            {
-                myScript.OnTopicSelected(0);
-            }
-            if (GUILayout.Button("Subscribe to 1"))
-            {
-                myScript.OnTopicSelected(1);
             }
         }
     }
@@ -107,13 +98,6 @@ namespace RSL.Sensors.Markers
         {
             _msgType = "visualization_msgs/Marker";
             _namespaces = new Dictionary<string, GameObject>();
-
-            // Initialize the topic dropdown
-            topicDropdown.ClearOptions();
-            topicDropdown.onValueChanged.AddListener((value) =>
-            {
-                OnTopicSelected(value);
-            });
 
             RefreshTopics();
         }
@@ -280,27 +264,6 @@ namespace RSL.Sensors.Markers
             }
 
         }
-
-        public void OnTopicSelected(int value)
-        {
-
-            if (value < 0 || value >= topicDropdown.options.Count)
-            {
-                Debug.LogWarning("Invalid topic selected: " + value);
-                return;
-            }
-
-            string selectedTopic = topicDropdown.options[value].text;
-            if (selectedTopic == "None")
-            {
-                OnTopicChange(null);
-            }
-            else
-            {
-                OnTopicChange(selectedTopic);
-            }
-        }
-
 
         public override void OnTopicChange(string topic)
         {

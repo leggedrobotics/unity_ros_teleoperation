@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Robotics.ROSTCPConnector;
-using UnityEngine.UI;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Std;
 using RosMessageTypes.Geometry;
@@ -22,7 +21,6 @@ namespace RSL.Sensors.Pose
         private GraphicsBuffer _rotData;
 
         private RenderParams _renderParams;
-        public Slider sizeSlider;
         private Mesh _mesh;
         public Transform _parent;
         private Quaternion _rotation = Quaternion.Euler(90, 0, 0);
@@ -68,9 +66,6 @@ namespace RSL.Sensors.Pose
 
             
 
-            topicDropdown.ClearOptions();
-            topicDropdown.onValueChanged.AddListener((value) => { OnTopicSelected(value); });
-
             RefreshTopics();
         }
 
@@ -82,25 +77,6 @@ namespace RSL.Sensors.Pose
                 _renderParams.matProps.SetMatrix("_ObjectToWorld", t.localToWorldMatrix);
                 Graphics.RenderPrimitivesIndexed(_renderParams, MeshTopology.Triangles, _meshTriangles, _meshTriangles.count, (int)_mesh.GetIndexStart(0), 1);
             }
-        }
-
-        public void OnTopicSelected(int value)
-        {
-            if (value < 0 || value >= topicDropdown.options.Count)
-            {
-                Debug.LogWarning("Invalid topic selected: " + value);
-                return;
-                }
-
-            string selectedTopic = topicDropdown.options[value].text;
-            if (selectedTopic == "None")
-            {
-                    OnTopicChange(null);
-                }
-                else
-                {
-                    OnTopicChange(selectedTopic);
-                }
         }
 
         private void OnValidate()

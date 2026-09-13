@@ -1,0 +1,29 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/RSL/Core/Menu/ToolkitAssets/main.uss?fileID=7433441132597879392&amp;guid=9983a0f655ec675449924512e9a7d9ac&amp;type=3#main" />
+    <!-- Control panel of a spawned grid map viewer, replacing its uGUI TopMenu
+         (30 x 35 canvas units). Same controls in the same order: topic, the
+         opacity slider, the action row, then the height and colour dropdowns.
+         The title bar is not ported; it is the grab handle.
+
+         NO Track button. The uGUI original had one, but its onClick was a
+         dangling reference (m_Target fileID: 0 — an empty component slot) that
+         quietly no-op'd, and its m_TargetAssemblyTypeName even names
+         LidarStream, not GridMapStream: a copy-paste leftover from the Lidar
+         viewer this was authored from, never wired up. GridMapStream.ToggleTrack
+         is `throw new NotImplementedException()`, so routing this button to it
+         would be a regression — a live control that CRASHES where the original
+         silently did nothing. -->
+    <ui:VisualElement name="Background" class="background sensor-viewer">
+        <ui:DropdownField name="TopicDropdown" class="viewer-dropdown" />
+        <ui:Label text="Opacity" name="OpacitySliderLabel" class="h2 viewer-label" />
+        <ui:Slider name="OpacitySlider" low-value="0" high-value="1" value="1" class="viewer-slider" />
+        <ui:VisualElement name="Actions" class="row viewer-actions viewer-actions--center">
+            <ui:Button name="Refresh" class="icon-button" tooltip="Re-scan available topics" style="background-image: url(&quot;project://database/Assets/Materials/mdi/refresh.svg?fileID=7388822144124034973&amp;guid=02f87054e03924dfa82e8b04406ca08d&amp;type=3#refresh&quot;);" />
+            <ui:Button name="Clear" class="icon-button" tooltip="Remove this viewer" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
+        </ui:VisualElement>
+        <ui:Label text="Height Layer" name="HeightDropdownLabel" class="h2 viewer-label" />
+        <ui:DropdownField name="HeightDropdown" class="viewer-dropdown" />
+        <ui:Label text="Color Layer" name="ColorDropdownLabel" class="h2 viewer-label" />
+        <ui:DropdownField name="ColorDropdown" class="viewer-dropdown" />
+    </ui:VisualElement>
+</ui:UXML>

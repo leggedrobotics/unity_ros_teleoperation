@@ -5,7 +5,6 @@ using RosMessageTypes.Sensor;
 using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector;
 using TMPro;
-using UnityEngine.UI;
 using UnityEngine.Rendering;
 using Unity.VisualScripting;
 using GaussianSplatting.Runtime;
@@ -32,14 +31,6 @@ namespace RSL.Sensors.Lidar
             if (GUILayout.Button("Refresh Topics"))
             {
                 myScript.RefreshTopics();
-            }
-            if (GUILayout.Button("Select 0"))
-            {
-                myScript.OnTopicSelect(0);
-            }
-            if (GUILayout.Button("Select 1"))
-            {
-                myScript.OnTopicSelect(1);
             }
             if (GUILayout.Button("Set color to RGB"))
             {
@@ -124,11 +115,11 @@ namespace RSL.Sensors.Lidar
         public Color intensityMin = Color.black;
         public Color intensityMax = Color.white;
 
-        public Slider densitySlider;
-        public Slider sizeSlider;
-        public Dropdown colorModeDropdown;
-
-        public Dropdown vizTypeDropdown;
+        /// <summary>Dropdown captions, in ColorMode / VizType order.</summary>
+        // Public and static so the UI Toolkit viewer panel's dropdowns offer
+        // these without restating them (and drifting from the enum they index).
+        public static readonly string[] ColorModeNames = { "RGB", "Intensity", "Z" };
+        public static readonly string[] VizTypeNames = { "Lidar", "RGBD Mesh", "RGBD", "Splat" };
 
         public TextMeshProUGUI debugText;
         public TextMeshProUGUI topicText;
@@ -184,46 +175,12 @@ namespace RSL.Sensors.Lidar
 
             SetColorMode(renderParams.material, _intensityKeyword);
 
-            if (colorModeDropdown != null)
-            {
-                colorModeDropdown.ClearOptions();
-                List<string> colorOptions = new List<string>
-                {
-                    "RGB",
-                    "Intensity",
-                    "Z"
-                };
-                colorModeDropdown.AddOptions(colorOptions);
-                colorModeDropdown.onValueChanged.AddListener(OnColorSelect);
-            }
-
-            if (vizTypeDropdown != null)
-            {
-                vizTypeDropdown.ClearOptions();
-                List<string> vizOptions = new List<string>
-                {
-                    "Lidar",
-                    "RGBD Mesh",
-                    "RGBD",
-                    "Splat"
-                };
-                vizTypeDropdown.AddOptions(vizOptions);
-                vizTypeDropdown.onValueChanged.AddListener(OnVizTypeSelect);
-            }
-
             splatRendererObj = Instantiate(splatRendererPrefab);
             splatRendererObj.SetActive(false);
 
             debugText?.SetText("--");
 
             RefreshTopics();
-            if (topicDropdown != null && densitySlider != null && sizeSlider != null)
-            {
-                topicDropdown.onValueChanged.AddListener(OnTopicSelect);
-                densitySlider.onValueChanged.AddListener(OnDensityChange);
-                sizeSlider.onValueChanged.AddListener(OnSizeChange);
-                densitySlider.value = (float)displayPts / maxPts;
-            }
 
             if ((_lidarSpawner = GetComponent<LidarSpawner>()) != null)
             {
@@ -462,25 +419,6 @@ namespace RSL.Sensors.Lidar
             Debug.Log("Subscribed to " + topic);
         }
 
-        public void OnTopicSelect(int value)
-        {
-            if (value < 0 || value >= topicDropdown.options.Count)
-            {
-                Debug.LogWarning("Invalid topic selected: " + value);
-                return;
-            }
-
-            string selectedTopic = topicDropdown.options[value].text;
-            if (selectedTopic == "None")
-            {
-                OnTopicChange(null);
-            }
-            else
-            {
-                OnTopicChange(selectedTopic);
-            }
-        }
-
         public void OnDensityChange(float density)
         {
             displayPts = (int)(density * maxPts);
@@ -494,7 +432,10 @@ namespace RSL.Sensors.Lidar
 
         public void OnColorSelect(int value)
         {
-            if (value < 0 || value >= colorModeDropdown.options.Count)
+            // Bounds-checked against the NAME LIST rather than a dropdown's own
+            // option count, so this does not depend on any particular widget
+            // existing (there is no uGUI dropdown left to reach through).
+            if (value < 0 || value >= ColorModeNames.Length)
             {
                 Debug.LogWarning("Invalid color mode selected: " + value);
                 return;
@@ -512,7 +453,7 @@ namespace RSL.Sensors.Lidar
 
         public void OnVizTypeSelect(int value)
         {
-            if (value < 0 || value >= vizTypeDropdown.options.Count)
+            if (value < 0 || value >= VizTypeNames.Length)
             {
                 Debug.LogWarning("Invalid viz type selected: " + value);
                 return;

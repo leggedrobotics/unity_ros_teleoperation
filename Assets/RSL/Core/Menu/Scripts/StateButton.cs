@@ -6,6 +6,12 @@ using UnityEngine.Events;
 
 namespace RSL.Core.Menu
 {
+    // Deprecated: uGUI cycling-icon button from before the UI Toolkit
+    // migration. New cycling/multi-state buttons should use a UI Toolkit
+    // Button with a class-based state pattern instead (see ToggleButton's
+    // own deprecation note for the established alternative). Not deleted:
+    // still driving whatever uGUI prefabs haven't been ported yet.
+    [System.Obsolete("uGUI-only state-cycling button, superseded by UI Toolkit's class-based state pattern. Do not use in new code.")]
     public class StateButton : MonoBehaviour
     {
         public int startIndex = 0;

@@ -8,7 +8,6 @@ using RosMessageTypes.Std;
 using RosMessageTypes.GridMap;
 using RosMessageTypes.Geometry;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting;
 
@@ -19,10 +18,6 @@ namespace RSL.Sensors.GridMap
     public class GridMapStream : RSL.Core.SensorStream
     {
 
-        public Dropdown colorDropdown;
-        public Dropdown heightDropdown;
-
-
         public TextMeshProUGUI topicText;
         public float opacity = 1.0f;
         public Gradient gradient;
@@ -32,6 +27,12 @@ namespace RSL.Sensors.GridMap
 
         private Mesh _mesh;
         private string[] _layers;
+
+        /// <summary>Layer names most recently advertised by the grid map.</summary>
+        // A grid map names its own layers at runtime and they differ per robot,
+        // so the UI cannot hardcode them. The uGUI dropdowns were filled from
+        // inside OnGridMap; this lets another UI read the same list.
+        public string[] Layers => _layers;
 
         private bool _enabled = false;
         private GraphicsBuffer _gridData;
@@ -56,8 +57,6 @@ namespace RSL.Sensors.GridMap
 
             topicText?.SetText(topicName);
             topicDropdown?.ClearOptions();
-            colorDropdown?.ClearOptions();
-            heightDropdown?.ClearOptions();
 
             RefreshTopics();
             _enabled = true;
@@ -67,14 +66,6 @@ namespace RSL.Sensors.GridMap
             _material = GetComponent<MeshRenderer>().material;
 
             // UpdateMesh(10, 10);
-
-            colorDropdown.AddOptions(new List<string>(new string[] { "--" }));
-            colorDropdown.onValueChanged.AddListener(OnColorChange);
-
-            heightDropdown.AddOptions(new List<string>(new string[] { "--" }));
-            heightDropdown.onValueChanged.AddListener(OnHeightChange);
-
-            topicDropdown.onValueChanged.AddListener(OnTopicSelect);
 
             _material.SetTexture("_GradientTex", LidarUtils.GradientToTexture(gradient));
             _material.SetFloat("_Opacity", opacity);
@@ -137,18 +128,6 @@ namespace RSL.Sensors.GridMap
 
 
             _layers = message.layers;
-            if (colorDropdown.options.Count != message.layers.Length)
-            {
-                colorDropdown.ClearOptions();
-                colorDropdown.AddOptions(new List<string>(message.layers));
-                colorDropdown.value = Mathf.Max(_colorLayer, 0);
-            }
-            if (heightDropdown.options.Count != message.layers.Length)
-            {
-                heightDropdown.ClearOptions();
-                heightDropdown.AddOptions(new List<string>(message.layers));
-                heightDropdown.value = Mathf.Max(_heightLayer, 0);
-            }
 
             float min, max;
             min = float.MaxValue;
@@ -202,25 +181,6 @@ namespace RSL.Sensors.GridMap
             topicText?.SetText(topic);
             _ros.Subscribe<GridMapMsg>(topic, OnGridMapMessage);
             Debug.Log("Subscribed to " + topic);
-        }
-
-        public void OnTopicSelect(int value)
-        {
-            if (value < 0 || value >= topicDropdown.options.Count)
-            {
-                Debug.LogWarning("Invalid topic selected: " + value);
-                return;
-            }
-
-            string selectedTopic = topicDropdown.options[value].text;
-            if (selectedTopic == "None")
-            {
-                OnTopicChange(null);
-            }
-            else
-            {
-                OnTopicChange(selectedTopic);
-            }
         }
 
         public void OnColorChange(int value)

@@ -38,8 +38,8 @@ namespace RSL.Sensors.Service
         // Start is called before the first frame update
         void Awake()
         {
-            topicText.text = topicName;
-            topicInputField.text = topicName;
+            if (topicText != null) topicText.text = topicName;
+            if (topicInputField != null) topicInputField.text = topicName;
 
             _ros = ROSConnection.GetOrCreateInstance();
         }
@@ -47,8 +47,8 @@ namespace RSL.Sensors.Service
         public override void OnTopicChange(string newTopic)
         {
             topicName = newTopic;
-            topicText.text = topicName;
-            topicInputField.text = topicName;
+            if (topicText != null) topicText.text = topicName;
+            if (topicInputField != null) topicInputField.text = topicName;
             Debug.Log($"Topic changed to: {topicName}");
             _ros.RegisterRosService<EmptyRequest, EmptyResponse>(topicName);
 
