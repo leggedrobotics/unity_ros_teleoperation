@@ -6,15 +6,15 @@
             <ui:TextField label="Name" name="ProfileName" placeholder-text="Robot lab" />
         </ui:VisualElement>
         <ui:VisualElement name="IPRow" class="row">
-            <ui:TextField label="Server IP" name="IP" placeholder-text="10.42.0.1" />
+            <ui:TextField label="Server IP" name="IP" placeholder-text="10.42.0.1" keyboard-type="NumbersAndPunctuation" />
         </ui:VisualElement>
         <ui:VisualElement name="PortRow" class="row">
-            <ui:TextField label="Port" name="Port" placeholder-text="10000" />
+            <ui:TextField label="Port" name="Port" placeholder-text="10000" select-word-by-double-click="true" keyboard-type="NumberPad" />
         </ui:VisualElement>
         <ui:Label name="Error" class="form-error" />
         <ui:VisualElement name="Buttons" class="row">
-            <ui:Button text="Cancel" name="Cancel" class="text-button" />
-            <ui:Button text="Save" name="Save" class="text-button text-button--primary" />
+            <ui:Button text="Cancel" name="Cancel" class="text-button" style="translate: 0 0;" />
+            <ui:Button text="Save" name="Save" class="text-button text-button--primary" style="translate: 0 0;" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
