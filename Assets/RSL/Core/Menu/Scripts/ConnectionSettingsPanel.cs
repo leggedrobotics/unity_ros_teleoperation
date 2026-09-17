@@ -346,13 +346,17 @@ namespace RSL.Core.Menu
                 portField?.SetValueWithoutNotify(_ros.RosPort.ToString());
             }
 
-            // System keyboard on every field. No commit callbacks -- nothing is
-            // applied until Save, so an abandoned edit changes nothing.
-            _entryFields.Add(SystemKeyboardField.Attach(nameField, TouchScreenKeyboardType.ASCIICapable, null, null));
-            _entryFields.Add(SystemKeyboardField.Attach(ipField, TouchScreenKeyboardType.ASCIICapable,
-                                                        ConnectionProfiles.IsValidHost, null));
-            _entryFields.Add(SystemKeyboardField.Attach(portField, TouchScreenKeyboardType.NumberPad,
-                                                        text => ConnectionProfiles.TryParsePort(text, out _), null));
+            #if UNITY_EDITOR
+                // Setup SystemKeyboardField for the Google headset, only needed when playing in the editor
+
+                // System keyboard on every field. No commit callbacks -- nothing is
+                // applied until Save, so an abandoned edit changes nothing.
+                _entryFields.Add(SystemKeyboardField.Attach(nameField, TouchScreenKeyboardType.ASCIICapable, null, null));
+                _entryFields.Add(SystemKeyboardField.Attach(ipField, TouchScreenKeyboardType.ASCIICapable,
+                                                            ConnectionProfiles.IsValidHost, null));
+                _entryFields.Add(SystemKeyboardField.Attach(portField, TouchScreenKeyboardType.NumberPad,
+                                                            text => ConnectionProfiles.TryParsePort(text, out _), null));
+            #endif
             _entryFields.RemoveAll(f => f == null);
 
             if (cancel != null) cancel.clicked += CloseEntryPanel;
