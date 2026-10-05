@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
 using UnityEngine.InputSystem;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Tf2;
 using RosMessageTypes.Std;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using TMPro;
+using UvgRos;
 using UvgRos.TF2;
 
 namespace RSL.Telemetry.Headset
@@ -27,9 +27,22 @@ namespace RSL.Telemetry.Headset
         public InputActionReference handPoseRight;
         public InputActionReference handRotationRight;
 
+        // Gates which representation(s) actually publish -- wired to the two
+        // checkboxes in the palm menu's Wifi panel. Both on by default.
+        private bool _publishTf = true;
+        private bool _publishPoseStamped = true;
+        public void SetPublishTf(bool enabled) => _publishTf = enabled;
+        public void SetPublishPoseStamped(bool enabled) => _publishPoseStamped = enabled;
+
+        // StateButton callbacks: state 0 = on (check icon), 1 = off.
+        public void OnPublishTfState(int state) => SetPublishTf(state == 0);
+        public void OnPublishPoseStampedState(int state) => SetPublishPoseStamped(state == 0);
+
         private Transform root;
         private string handFrameRight = "hand_right";
-        private ROSConnection ros;
+        private UvgRosConnection ros;
+        private UvgRosPublisher<PoseStampedMsg> _posePublisher;
+        private UvgRosPublisher<TFMessageMsg> _tfPublisher;
         private TFMessageMsg tfMsg;
         private PoseStampedMsg headsetPoseMsg;
         private PoseStampedMsg leftHandMsg;
@@ -44,7 +57,7 @@ namespace RSL.Telemetry.Headset
 
         void Start()
         {
-            ros = ROSConnection.GetOrCreateInstance();
+            ros = UvgRosConnection.GetOrCreateInstance();
 
             handFrameRight = handFrameLeft.Replace("left", "right");
 
@@ -54,12 +67,18 @@ namespace RSL.Telemetry.Headset
                 Debug.LogError("Root not found");
                 rootFrame = "odom"; // default to odom if no root is found
             }
-            else 
+            else
                 rootFrame = root.GetComponent<TF2Attachment>().FrameID;
 
-            ros.RegisterPublisher<PoseStampedMsg>(poseTopic+"/headset");
-
-            ros.RegisterPublisher<TFMessageMsg>("/tf");
+            // /quest/pose/headset: LazyPublish -- only negotiates once the
+            // server's get_subscriptions reports real demand; Send() is a
+            // no-op until then.
+            _posePublisher = ros.LazyPublish<PoseStampedMsg>(poseTopic + "/headset");
+            // /tf: eager Publish, NOT LazyPublish -- /tf always has other
+            // publishers, which get_subscriptions' demand check excludes,
+            // so a lazy /tf would never open. It is a deliberate fan-in
+            // topic; just always publish.
+            _tfPublisher = ros.Publish<TFMessageMsg>("/tf");
 
             headsetPoseMsg = new PoseStampedMsg();
             leftHandMsg = new PoseStampedMsg();
@@ -144,11 +163,15 @@ namespace RSL.Telemetry.Headset
                 if (tfMsg.transforms[i].transform.rotation.From<FLU>().Equals(default))
                     tfMsg.transforms[i].transform.rotation.w = 1;
 
-            headsetPoseMsg.pose.position = headsetPose.action.ReadValue<Vector3>().To<FLU>();
-            headsetPoseMsg.pose.orientation = quaternion;
-            ros.Publish(poseTopic+"/headset", headsetPoseMsg);
+            if (_publishPoseStamped)
+            {
+                headsetPoseMsg.pose.position = headsetPose.action.ReadValue<Vector3>().To<FLU>();
+                headsetPoseMsg.pose.orientation = quaternion;
+                _posePublisher.Send(headsetPoseMsg);
+            }
 
-            ros.Publish("/tf", tfMsg);
+            if (_publishTf)
+                _tfPublisher.Send(tfMsg);
         }
 
         public void OnDecimatorChange(float value)

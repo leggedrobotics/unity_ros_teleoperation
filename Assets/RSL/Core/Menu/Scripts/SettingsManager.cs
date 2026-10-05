@@ -53,19 +53,11 @@ namespace RSL.Core.Menu
         public Sprite unlockedIcon;
         public Sprite lockedIcon;
 
-        [Header("Streamer")]
-        public Image streamIcon;
-        public Sprite streamOnIcon;
-        public Sprite streamOffIcon;
-
-        public bool startStreaming = false;
-
         private bool _lockedPose = true;
         private bool _fixedPosition = false;
 
         private PosePublisher _posePublisher;
         private JoystickManager _joystickManager;
-        // private Streamer _streamer;
         void Start()
         {
             poseManager = RSL.Core.TF.PoseManager.Instance;

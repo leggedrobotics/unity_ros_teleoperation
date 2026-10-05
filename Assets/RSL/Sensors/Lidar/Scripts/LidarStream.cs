@@ -182,7 +182,6 @@ namespace RSL.Sensors.Lidar
         void Awake()
         {
             _msgType = "sensor_msgs/PointCloud2";
-            _ros = UvgRosConnection.GetOrCreateInstance(RobotId);
 
             mesh = LidarUtils.MakePolygon(sides);
 
@@ -259,7 +258,23 @@ namespace RSL.Sensors.Lidar
             {
                 _lidarSpawner.PointCloudGenerated += OnPointcloud;
             }
+        }
 
+        // _ros is bound here, not in Awake(), specifically so a caller that
+        // sets RobotId right after AddComponent<LidarStream>() (matching how
+        // MultiRobotConnectTest wires up a second robot's sensors) gets the
+        // CORRECT connection -- AddComponent runs Awake() synchronously,
+        // before the caller's next line has a chance to assign RobotId, so
+        // binding _ros there always saw RobotId's default (empty -> the
+        // DEFAULT connection) regardless of what it was set to a moment
+        // later. Start() runs after every Awake() in the frame (and after
+        // that field assignment), so RobotId is correct by the time this
+        // reads it. Same fix, same reason, as StaticRemapper's own
+        // Awake-vs-Start move earlier in this multi-robot work.
+        void Start()
+        {
+            _ros = UvgRosConnection.GetOrCreateInstance(RobotId);
+            RefreshTopics(); // Awake()'s own call ran before _ros was bound -- redo it now that it's correct.
             if (_enabled && !string.IsNullOrEmpty(topicName))
             {
                 _ros.Subscribe<PointCloud2Msg>(topicName, OnPointcloud, mainThread: true);
@@ -389,6 +404,16 @@ namespace RSL.Sensors.Lidar
                 Matrix4x4 inversionMatrix = Matrix4x4.Scale(new Vector3(-1, 1, 1));
                 Matrix4x4 transformationMatrix = localToWorldMatrix * rotationMatrix * inversionMatrix;
                 renderParams.matProps.SetMatrix("_ObjectToWorld", transformationMatrix);
+                // RenderPrimitivesIndexed is a raw immediate-mode draw call --
+                // it does NOT inherit this GameObject's own .layer the way a
+                // normal Renderer component would, so a camera's cullingMask
+                // has nothing to go on unless RenderParams.layer is set
+                // explicitly. Read fresh every frame (not cached once in
+                // Awake()) since a multi-robot scene can retag this
+                // GameObject's layer well after Awake() runs (see
+                // MultiRobotConnectTest.ApplyLayers, called repeatedly, not
+                // just once at setup).
+                renderParams.layer = gameObject.layer;
                 Graphics.RenderPrimitivesIndexed(renderParams, MeshTopology.Triangles, _meshTriangles, _meshTriangles.count, (int)mesh.GetIndexStart(0), _numPts);
             }
         }

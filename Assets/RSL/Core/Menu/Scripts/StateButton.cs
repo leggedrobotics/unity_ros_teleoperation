@@ -42,6 +42,7 @@ namespace RSL.Core.Menu
 
         void OnValidate()
         {
+            if (icons == null) return;
             if (startIndex >= icons.Length)
                 startIndex = icons.Length - 1;
             if (startIndex < 0)

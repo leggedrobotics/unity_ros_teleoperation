@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.Nvblox;
 using System;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
@@ -49,7 +49,7 @@ namespace RSL.Core.VoxBlox
 
         [Range(0, 1)]
         public float opacity = 0.5f;
-        private ROSConnection _ros;
+        private UvgRosConnection _ros;
         private Dictionary<Tuple<int, int, int>, GameObject> blocks;
 
         public GameObject _parent;
@@ -64,9 +64,9 @@ namespace RSL.Core.VoxBlox
             blocks = new Dictionary<Tuple<int, int, int>, GameObject>();
             material.SetFloat("_Opacity", opacity);
 
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
             if(_enabled)
-                _ros.Subscribe<MeshMsg>(topic, UpdateMesh);
+                _ros.Subscribe<MeshMsg>(topic, UpdateMesh, mainThread: true);
         }
 
         void UpdatePose(string frame)
@@ -216,7 +216,7 @@ namespace RSL.Core.VoxBlox
             _enabled = !_enabled;
             if(_enabled)
             {
-                _ros.Subscribe<MeshMsg>(topic, UpdateMesh);
+                _ros.Subscribe<MeshMsg>(topic, UpdateMesh, mainThread: true);
             } else
             {
                 _ros.Unsubscribe(topic);

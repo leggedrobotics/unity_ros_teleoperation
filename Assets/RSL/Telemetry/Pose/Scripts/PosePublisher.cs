@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.Std;
 using RosMessageTypes.Geometry;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using UnityEngine.XR.Interaction.Toolkit;
 using RosMessageTypes.Behaviortree;
@@ -34,7 +34,8 @@ namespace RSL.Telemetry.Pose
         public GameObject arrow;
         public bool debug = false;
 
-        private ROSConnection _ros;
+        private UvgRosConnection _ros;
+        private UvgRosPublisher<PoseStampedMsg> _posePublisher;
         private PoseStampedMsg poseMsg;
 
         private GameObject arrowInstance;
@@ -49,8 +50,7 @@ namespace RSL.Telemetry.Pose
 
         void Start()
         {
-            _ros = ROSConnection.GetOrCreateInstance();
-
+            _ros = UvgRosConnection.GetOrCreateInstance();
 
             GameObject root = GameObject.FindWithTag("root");
             if (root != null)
@@ -68,8 +68,10 @@ namespace RSL.Telemetry.Pose
 
             poseTopicInput.text = poseTopic;
 
-
-            _ros.RegisterPublisher<PoseStampedMsg>(poseTopic);
+            // Eager Publish, not LazyPublish: the topic is an explicit user
+            // choice and a Confirm right after setting it should not race
+            // LazyPublish's demand-detection poll.
+            _posePublisher = _ros.Publish<PoseStampedMsg>(poseTopic);
         }
 
         public void SetEnabled(bool enabled)
@@ -91,7 +93,7 @@ namespace RSL.Telemetry.Pose
             if(!_enabled || _sent) return;
 
             // publish pose
-            _ros.Publish(poseTopic, poseMsg);
+            _posePublisher.Send(poseMsg);
 
             Debug.Log("[PosePublisher] Published pose");
 
@@ -179,7 +181,7 @@ namespace RSL.Telemetry.Pose
         {
             // TODO: unsubscribe from old topic when implemented
             poseTopic = topic;
-            _ros.RegisterPublisher<PoseStampedMsg>(topic);
+            _posePublisher = _ros.Publish<PoseStampedMsg>(topic);
             Debug.Log("Pose topic set to: " + topic);
 
             //write to player prefs

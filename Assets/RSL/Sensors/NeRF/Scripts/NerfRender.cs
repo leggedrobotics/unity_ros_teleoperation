@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using RosMessageTypes.NerfTeleoperation;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Std;
@@ -30,6 +30,11 @@ namespace RSL.Sensors.NeRF
     }
     #endif
 
+    // Deprecated: kept functional (still used by ViewerTrack.cs/SphereTracker.cs
+    // via GetComponent<NerfRender>()) but not a maintained/recommended feature
+    // going forward. Remove along with those two call sites and the Viewer
+    // prefab's component once this is actually retired.
+    [System.Obsolete("NerfRender is deprecated -- not actively maintained; kept functional for existing callers (ViewerTrack, SphereTracker) only.")]
     public class NerfRender : MonoBehaviour
     {
         public enum RenderMode: byte
@@ -38,7 +43,8 @@ namespace RSL.Sensors.NeRF
             Single = 0,
             VR = 3
         }
-        ROSConnection ros;
+        UvgRosConnection ros;
+        UvgRosPublisher<NerfRenderRequestActionGoal> goalPublisher;
         public string renderTopicName = "/nerf_render";
         public string baseFrame = "odom";
 
@@ -63,15 +69,19 @@ namespace RSL.Sensors.NeRF
 
         void Start()
         {
-            ros = ROSConnection.GetOrCreateInstance();
-            ros.Subscribe<NerfRenderRequestActionFeedback>(renderTopicName+"/feedback", RenderFbCallback);
-            ros.Subscribe<NerfRenderRequestActionResult>(renderTopicName+"/result", RenderCallback);
+            ros = UvgRosConnection.GetOrCreateInstance();
+            ros.Subscribe<NerfRenderRequestActionFeedback>(renderTopicName+"/feedback", RenderFbCallback, mainThread: true);
+            ros.Subscribe<NerfRenderRequestActionResult>(renderTopicName+"/result", RenderCallback, mainThread: true);
             if(trackProgress)
             {
-                ros.Subscribe<UInt16Msg>("nerf_step", NerfStepCallback);
-                ros.Subscribe<Float32Msg>("nerf_loss", NerfLossCallback);
+                ros.Subscribe<UInt16Msg>("nerf_step", NerfStepCallback, mainThread: true);
+                ros.Subscribe<Float32Msg>("nerf_loss", NerfLossCallback, mainThread: true);
             }
-            ros.RegisterPublisher<NerfRenderRequestActionGoal>(renderTopicName+"/goal");
+            // Eager Publish, not LazyPublish: Render() is an explicit,
+            // user-triggered one-shot action (the "Render" button) -- same
+            // reasoning as PosePublisher.cs's Confirm(), a click right
+            // after Start() should not race LazyPublish's ~3s demand poll.
+            goalPublisher = ros.Publish<NerfRenderRequestActionGoal>(renderTopicName+"/goal");
 
             ID = gameObject.GetInstanceID();
 
@@ -178,7 +188,7 @@ namespace RSL.Sensors.NeRF
             NerfRenderRequestActionGoal action = new NerfRenderRequestActionGoal();
             action.goal = goal;
 
-            ros.Publish(renderTopicName+"/goal", action);
+            goalPublisher.Send(action);
             
         }
 

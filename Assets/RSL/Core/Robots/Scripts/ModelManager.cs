@@ -134,6 +134,7 @@ namespace RSL.Core.Robots
                 Destroy(_currentModel);
         
             _currentModel = Instantiate(currentRobot.prefab);
+            _UseTf2Attachments(_currentModel);
             if(_root != null)
                 _currentModel.transform.SetParent(_root.transform);
 
@@ -143,6 +144,26 @@ namespace RSL.Core.Robots
                 SceneManager.LoadScene(currentSceneName);
             }
 
+        }
+
+        // The robot packages are authored against ros-tcp-connector's stock TFAttachment, which resolves against
+        // a TFSystem nothing feeds from uvgROS -- left alone the joints never leave their bind pose.
+        private static void _UseTf2Attachments(GameObject model)
+        {
+            foreach (var stock in model.GetComponentsInChildren<Unity.Robotics.ROSTCPConnector.TFAttachment>(true))
+            {
+                GameObject go = stock.gameObject;
+                string frameId = stock.FrameID.TrimEnd('/');
+                frameId = frameId.Substring(frameId.LastIndexOf('/') + 1);
+                string tfTopic = stock.TFTopic;
+                DestroyImmediate(stock);
+                var replacement = go.AddComponent<TF2Attachment>();
+                replacement.TFTopic = tfTopic;
+                replacement.FrameID = frameId;
+            }
+            // Bind-pose bounds go stale once bones are TF-driven, which culls the mesh off-camera.
+            foreach (var skinned in model.GetComponentsInChildren<SkinnedMeshRenderer>(true))
+                skinned.updateWhenOffscreen = true;
         }
 
         public void ChangeRootFrame(string newRootFrame)

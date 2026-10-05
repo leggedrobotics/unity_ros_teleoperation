@@ -75,10 +75,29 @@ namespace RSL.Core
         /// </summary>
         public abstract void OnTopicChange(string newTopic);
 
+        // Matches Python's --lazy-refresh-interval cadence (node.py) -- a
+        // topic that appears later (the robot's driver still booting) is
+        // picked up within this window with no manual action, instead of
+        // needing the dropdown reopened by hand.
+        private const float AutoRefreshIntervalS = 5f;
+        private bool _autoRefreshStarted;
+
         public void RefreshTopics()
         {
             _ros?.GetTopicAndTypeList(UpdateTopics);
+            // Started lazily on first call (every subclass's own Start()
+            // already calls RefreshTopics() once) rather than from this
+            // base class's own Start(), which a subclass Start() that does
+            // not call base.Start() would otherwise silently skip -- see
+            // this method's own call sites for why that matters here.
+            if (!_autoRefreshStarted)
+            {
+                _autoRefreshStarted = true;
+                InvokeRepeating(nameof(AutoRefreshTopics), AutoRefreshIntervalS, AutoRefreshIntervalS);
+            }
         }
+
+        private void AutoRefreshTopics() => _ros?.GetTopicAndTypeList(UpdateTopics);
 
         /// <summary>
         /// Re-subscribes using whatever topic name is currently sitting in
@@ -94,18 +113,22 @@ namespace RSL.Core
             OnTopicChange(topicName);
         }
 
-        /// <summary>A route this client can actually decode generically --
-        /// "chain"/"msgpack_list" framing, same test UvgRosConnection.
-        /// Subscribe&lt;T&gt; itself applies before throwing
-        /// NotSupportedException. A topic can be exactly the right ROS
-        /// message type and still fail this (e.g. a sensor_msgs/Image
-        /// topic the server routes through the H.264 video transport,
-        /// which negotiates "encoded_video") -- checking this ahead of
-        /// time keeps a topic-refresh dropdown from offering a route that
-        /// would only fail once actually selected.</summary>
+        /// <summary>A route this client can actually decode -- the plain
+        /// "chain"/"msgpack_list" framings UvgRosConnection.Subscribe&lt;T&gt;
+        /// always supported, plus "encoded_video" now that
+        /// UvgRosVideoRouteWorker decodes H.264/H.265 into a real
+        /// sensor_msgs/Image (see UvgRosConnection.Subscribe&lt;T&gt;'s video
+        /// branch -- ImageView.OnTopicChange is the caller that knows to
+        /// retry with Subscribe&lt;ImageMsg&gt; for this framing specifically).
+        /// Checking this ahead of time keeps a topic-refresh dropdown from
+        /// offering a route that would only fail once actually
+        /// selected -- still relevant for anything else this client cannot
+        /// decode at all (a bare "cloudini"/"draco_mesh" PointCloud2 chain
+        /// this host's native plugins don't cover, say).</summary>
         protected static bool IsViewable(UvgRos.TopicListEntry entry)
         {
-            return entry.Framing == "chain" || entry.Framing == "msgpack_list";
+            return entry.Framing == "chain" || entry.Framing == "msgpack_list" ||
+                   entry.Framing == "encoded_video";
         }
 
         /// <summary>

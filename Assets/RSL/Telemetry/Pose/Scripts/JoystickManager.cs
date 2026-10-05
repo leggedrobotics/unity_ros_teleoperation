@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.Geometry;
 using UnityEngine.InputSystem;
 using RosMessageTypes.Sensor;
@@ -24,7 +24,8 @@ namespace RSL.Telemetry.Pose
         public InputAction controllerGripL;
         public InputAction controllerGripR;
         
-    private ROSConnection _ros;
+    private UvgRosConnection _ros;
+        private UvgRosPublisher<JoyMsg> _joyPublisher;
 
         private JoyMsg _joyMsg;
         private bool _enabled = false;
@@ -53,12 +54,23 @@ namespace RSL.Telemetry.Pose
             }
 
 
-            _ros = ROSConnection.GetOrCreateInstance();
+            _ros = UvgRosConnection.GetOrCreateInstance();
 
             _joyMsg = new JoyMsg();
             _joyMsg.header.frame_id = "vr_origin";
 
-            _ros.RegisterPublisher<JoyMsg>(joyTopic);
+            // LazyPublish, not Publish: nothing on a given ALMA deployment
+            // is guaranteed to be waiting on joystick input (a bench test
+            // server might have no teleop node subscribed at all) -- this
+            // only actually opens once the server's own get_subscriptions
+            // confirms real demand. See HeadsetPublisher.cs's own
+            // LazyPublish<PoseStampedMsg> for the same reasoning; unlike
+            // that file's /tf case, /quest/joystick has no OTHER publisher
+            // anywhere, so the demand-detection this depends on actually
+            // works for this topic (see server-side list_subscribed_topics'
+            // own doc comment on why it excludes topics with an existing
+            // publisher -- that never applies here).
+            _joyPublisher = _ros.LazyPublish<JoyMsg>(joyTopic);
         }
 
         public void SetEnabled(bool enabled)
@@ -93,7 +105,7 @@ namespace RSL.Telemetry.Pose
                     leftHandState,
                     rightHandState
                 };
-                _ros.Publish(joyTopic, _joyMsg);
+                _joyPublisher.Send(_joyMsg);
             }
         }
 

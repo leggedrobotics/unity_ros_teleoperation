@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Hands;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.Std;
 using RosMessageTypes.Geometry;
 using RosMessageTypes.Sensor;
@@ -51,7 +51,10 @@ namespace RSL.Telemetry.Hands
         private Image _img;
         public TextMeshProUGUI infoText;
 
-        ROSConnection _ros;
+        UvgRosConnection _ros;
+        UvgRosPublisher<ManoLandmarksMsg> _landmarksPublisher;
+        UvgRosPublisher<PointCloudMsg> _pointCloudPublisher;
+        UvgRosPublisher<HandGestureMsg> _gesturePublisher;
         XRHandSubsystem m_handSubsystem;
 
         private Transform _root;
@@ -118,10 +121,14 @@ namespace RSL.Telemetry.Hands
                 }
                 
             }
-            _ros = ROSConnection.GetOrCreateInstance();
-            _ros.RegisterPublisher<ManoLandmarksMsg>(_landmarksTopic);
-            _ros.RegisterPublisher<PointCloudMsg>(_pointCloudTopic);
-            _ros.RegisterPublisher<HandGestureMsg>(_gestureTopic);
+            _ros = UvgRosConnection.GetOrCreateInstance();
+            // LazyPublish: none of these three topics has any other
+            // publisher anywhere, so the server's own demand-detection
+            // (does something actually subscribe) is the correct, safe
+            // signal -- see JoystickManager.cs's identical reasoning.
+            _landmarksPublisher = _ros.LazyPublish<ManoLandmarksMsg>(_landmarksTopic);
+            _pointCloudPublisher = _ros.LazyPublish<PointCloudMsg>(_pointCloudTopic);
+            _gesturePublisher = _ros.LazyPublish<HandGestureMsg>(_gestureTopic);
 
             // setup action map listeners
             twistController.performed += _ => PubTwistController();
@@ -143,7 +150,7 @@ namespace RSL.Telemetry.Hands
         {
             HandGestureMsg msg = new HandGestureMsg();
             msg.name = "Closed_Fist";
-            _ros.Publish(_gestureTopic, msg);
+            _gesturePublisher.Send(msg);
             if(infoText != null)
                 infoText.color = Color.green;
 
@@ -153,7 +160,7 @@ namespace RSL.Telemetry.Hands
         {
             HandGestureMsg msg = new HandGestureMsg();
             msg.name = "Thumb_Up";
-            _ros.Publish(_gestureTopic, msg);
+            _gesturePublisher.Send(msg);
             
             infoText?.SetText("Twist activated");
         }
@@ -162,7 +169,7 @@ namespace RSL.Telemetry.Hands
         {
             HandGestureMsg msg = new HandGestureMsg();
             msg.name = "Thump_Down";
-            _ros.Publish(_gestureTopic, msg);
+            _gesturePublisher.Send(msg);
             infoText?.SetText("Pose activated");
         }
 
@@ -256,8 +263,8 @@ namespace RSL.Telemetry.Hands
 
                 pointCloudMsg.points = points;
                 msg.landmarks = CastPoints(points);
-                _ros.Publish(_landmarksTopic, msg);
-                _ros.Publish(_pointCloudTopic, pointCloudMsg);
+                _landmarksPublisher.Send(msg);
+                _pointCloudPublisher.Send(pointCloudMsg);
             } 
         }
 

@@ -20,9 +20,9 @@ MonoBehaviour:
     rid: 8579078181635489794
   m_OverrideGlobalSceneList: 1
   m_Scenes:
-  - m_enabled: 0
-    m_path: Assets/Scenes/Main.unity
   - m_enabled: 1
+    m_path: Assets/Scenes/Main.unity
+  - m_enabled: 0
     m_path: Assets/RSL/Core/Menu/MenuTestScene.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
@@ -51,7 +51,7 @@ MonoBehaviour:
         m_ExportAsGoogleAndroidProject: 0
         m_DebugSymbolLevel: 1
         m_DebugSymbolFormat: 5
-        m_CurrentDeploymentTargetId: 2G0YC5ZH9H01RZ
+        m_CurrentDeploymentTargetId: __builtin__target_default
         m_BuildType: 2
         m_LinkTimeOptimization: 0
         m_BuildAppBundle: 0

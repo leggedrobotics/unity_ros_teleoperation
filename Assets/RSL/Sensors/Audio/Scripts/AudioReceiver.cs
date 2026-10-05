@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.AudioCommon;
 using System;
 
@@ -8,7 +8,7 @@ namespace RSL.Sensors.Audio
 {
     public class AudioReceiver : MonoBehaviour
     {
-        private ROSConnection ros;
+        private UvgRosConnection ros;
         private AudioSource audioSource;
         private CircularBuffer<float> audioBuffer;
         private string audioDataTopic = "/audio/robot_audio";
@@ -54,8 +54,8 @@ namespace RSL.Sensors.Audio
             audioSource.clip = streamingClip;
 
             // Connect to ROS and subscribe
-            ros = ROSConnection.GetOrCreateInstance();
-            ros.Subscribe<AudioDataMsg>(audioDataTopic, ReceiveAudioMessage);
+            ros = UvgRosConnection.GetOrCreateInstance();
+            ros.Subscribe<AudioDataMsg>(audioDataTopic, ReceiveAudioMessage, mainThread: false);
 
             // Wait for buffer to fill before playing
             StartCoroutine(StartPlaybackWhenReady());

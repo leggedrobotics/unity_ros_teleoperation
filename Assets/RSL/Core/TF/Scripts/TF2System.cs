@@ -69,6 +69,56 @@ namespace UvgRos.TF2
                 m_TFTopic = tfTopic;
             }
 
+            // Keyed by the FULL frame_id (after trailing-slash stripping), not
+            // just its trailing segment. The original upstream version keyed
+            // on the trailing segment alone, matching real ROS's global
+            // frame_id-uniqueness invariant for a SINGLE robot's /tf graph --
+            // correct there, but it silently aliases two different robots'
+            // same-named leaf frames (both "base_link", both "odom", ...)
+            // onto the identical TF2Stream once robot_id prefixing is layered
+            // on top (see UvgRosConnection.RemapFrame): a "robotB/BOOM" probe
+            // and a plain "BOOM" probe resolved to the exact same GameObject,
+            // live-tracking robot A's real boom motion under robot B's name,
+            // confirmed empirically before this fix. Full-path keying makes
+            // that collision structurally impossible: two different full
+            // strings simply cannot land in the same slot.
+            //
+            // The recursive slash-splitting below (peel the trailing segment,
+            // recurse on the rest to find/create a parent) is UNCHANGED --
+            // still useful for a single external caller passing one already-
+            // hierarchical name (e.g. a genuinely namespaced ROS frame_id) --
+            // it just no longer collapses the key down to that trailing
+            // segment once the node exists.
+            // No parent is ever inferred from slashes in `frame_id` -- a
+            // second regression from the SAME multi-robot collision fix that
+            // introduced full-path keying just above. The old (leaf-keyed)
+            // code recursively treated every "/"-separated segment as a real
+            // ancestor frame, walking e.g. "a/b/c" into a->b->c. That was
+            // already semantically wrong for a robot_id prefix (robot_id is a
+            // NAMESPACE, not a real parent frame in anyone's actual tf tree),
+            // but it was harmless there because a leaf-keyed table couldn't
+            // tell the difference anyway. Once keys became full paths, this
+            // recursion started actively DOING something: the first time any
+            // caller resolved e.g. "robotB/LF_THIGH" BEFORE its real parent
+            // edge ("LF_HFE_output" -> "LF_THIGH", carried on live /tf) had
+            // arrived -- which a model's own TF2Attachment.Reparent() does,
+            // synchronously, before any network data exists at all -- this
+            // recursion silently parented it onto a synthetic "robotB" stub
+            // instead of leaving it unparented. ReceiveTF's `if (tf.Parent ==
+            // null)` guard (added by the same earlier fix, to stop a static
+            // message from clobbering an already-linked dynamic frame) then
+            // refused to ever correct it: Parent was no longer null, just
+            // wrong. Confirmed live: LF_HIP/LF_THIGH/LF_HFE_drive/LF_SHANK
+            // and their whole downstream chain sat frozen at world (0,0,0)
+            // (ALMA's legs not moving) while each still received real,
+            // changing LOCAL rotation data the whole time -- the rotation
+            // math was fine, only the parent link was wrong.
+            //
+            // Parent linkage now comes ONLY from an explicit SetParent call
+            // (ReceiveTF/StaticTF, both already using two separate atomic
+            // names + a real edge from an actual tf message) -- never
+            // inferred here. `frame_id` is treated as one opaque key
+            // regardless of how many slashes it contains.
             public TF2Stream GetOrCreateFrame(string frame_id)
             {
                 TF2Stream tf;
@@ -77,37 +127,35 @@ namespace UvgRos.TF2
 
                 var slash = frame_id.LastIndexOf('/');
                 var singleName = slash == -1 ? frame_id : frame_id.Substring(slash + 1);
-                if (!m_TransformTable.TryGetValue(singleName, out tf) || tf == null)
+                if (!m_TransformTable.TryGetValue(frame_id, out tf) || tf == null)
                 {
-                    if (slash <= 0)
-                    {
-                        // there's no slash, or only an initial slash - just create a new root object
-                        // (set the parent later if and when we learn more)
-                        tf = new TF2Stream(null, singleName, m_TFTopic);
-                    }
-                    else
-                    {
-                        var parent = GetOrCreateFrame(frame_id.Substring(0, slash));
-                        tf = new TF2Stream(parent, singleName, m_TFTopic);
-                    }
-
-                    m_TransformTable[singleName] = tf;
+                    tf = new TF2Stream(null, singleName, m_TFTopic);
+                    m_TransformTable[frame_id] = tf;
                     NotifyChanged(tf);
-                }
-                else if (slash > 0 && tf.Parent == null)
-                {
-                    tf.SetParent(GetOrCreateFrame(frame_id.Substring(0, slash)));
                 }
 
                 return tf;
             }
 
+            // Looks up/creates parent and child as two SEPARATE, already-
+            // complete frame names (exactly what StaticRemapper.StaticTF
+            // already does for /tf_static, a few lines below in that file) --
+            // NOT by concatenating them into one "parent/child" string and
+            // re-splitting, which the multi-robot case breaks: a robot-id-
+            // prefixed pair like "robotB/CABIN" + "/" + "robotB/BOOM" is a
+            // 4-segment string, and peeling one trailing segment at a time
+            // off THAT produces a spurious extra "robotB" node wedged between
+            // them instead of the intended direct CABIN -> BOOM edge. Each of
+            // header.frame_id/child_frame_id is already the caller's complete,
+            // correct name (robot_id prefix included where relevant) with no
+            // implied internal hierarchy of its own.
             public void ReceiveTF(TFMessageMsg message)
             {
                 foreach (var tf_message in message.transforms)
                 {
-                    var frame_id = tf_message.header.frame_id + "/" + tf_message.child_frame_id;
-                    var tf = GetOrCreateFrame(frame_id);
+                    var parent = GetOrCreateFrame(tf_message.header.frame_id);
+                    var tf = GetOrCreateFrame(tf_message.child_frame_id);
+                    if (tf.Parent == null) tf.SetParent(parent);
 
                     tf.Add(
                         tf_message.header.stamp.ToLongTime(kRosVersion),

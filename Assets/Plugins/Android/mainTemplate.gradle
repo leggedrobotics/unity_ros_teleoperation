@@ -1,0 +1,61 @@
+apply plugin: 'com.android.library'
+apply from: '../shared/keepUnitySymbols.gradle'
+apply from: '../shared/common.gradle'
+**APPLY_PLUGINS**
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+**DEPS**}
+
+android {
+    namespace "com.unity3d.player"
+    ndkPath "**NDKPATH**"
+    ndkVersion "**NDKVERSION**"
+
+    compileSdk **APIVERSION**
+    buildToolsVersion = "**BUILDTOOLS**"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    defaultConfig {
+        minSdk **MINSDK**
+        targetSdk **TARGETSDK**
+        ndk {
+            abiFilters **ABIFILTERS**
+            debugSymbolLevel **DEBUGSYMBOLLEVEL**
+        }
+        versionCode **VERSIONCODE**
+        versionName '**VERSIONNAME**'
+        consumerProguardFiles 'proguard-unity.txt'**USER_PROGUARD**
+**DEFAULT_CONFIG_SETUP**
+    }
+
+    lint {
+        abortOnError false
+    }
+
+    androidResources {
+        noCompress = **BUILTIN_NOCOMPRESS** + unityStreamingAssets.tokenize(', ')
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }**PACKAGING**
+
+    // Quest 3 is arm64-only hardware. AndroidTargetArchitectures (Player
+    // Settings) already restricts our own IL2CPP/native-plugin output to
+    // arm64-v8a, but that setting has no effect on third-party AARs that
+    // bundle their own prebuilt binaries as opaque assets/ files instead of
+    // real lib/<abi>/*.so JNI libraries -- which is exactly how the Meta XR
+    // SDK ships its xplat/folly/perflogger binaries (assets/lib/armeabi-v7a/
+    // AND assets/lib/arm64-v8a/, both bundled unconditionally, confirmed via
+    // `unzip -l` on a real build). Standard `ndk.abiFilters` only prunes real
+    // lib/<abi>/ JNI libraries, not assets/, so it can't reach these -- an
+    // explicit packagingOptions exclude is the only way to drop them.
+    packagingOptions {
+        exclude 'assets/lib/armeabi-v7a/**'
+    }
+}
+**IL_CPP_BUILD_SETUP**
+**SOURCE_BUILD_SETUP**
+**EXTERNAL_SOURCES**

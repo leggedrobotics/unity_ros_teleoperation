@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.Voxblox;
 using System;
 using Unity.Robotics.ROSTCPConnector.ROSGeometry;
@@ -31,7 +31,7 @@ namespace RSL.Core.VoxBlox
     {
         public string topic = "/voxblox_node/mesh";
         public Material material;
-        private ROSConnection _ros;
+        private UvgRosConnection _ros;
         public bool debug = false;
         public float size = 0.5f;
         private Dictionary<Tuple<long, long, long>, GameObject> blocks;
@@ -46,8 +46,8 @@ namespace RSL.Core.VoxBlox
 
             blocks = new Dictionary<Tuple<long, long, long>, GameObject>();
 
-            _ros = ROSConnection.GetOrCreateInstance();
-            _ros.Subscribe<MeshMsg>(topic, UpdateMesh);
+            _ros = UvgRosConnection.GetOrCreateInstance();
+            _ros.Subscribe<MeshMsg>(topic, UpdateMesh, mainThread: true);
         }
 
         void UpdatePose(string frame)

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Robotics.ROSTCPConnector;
+using UvgRos;
 using RosMessageTypes.AudioCommon;
 
 namespace RSL.Sensors.Audio
@@ -9,7 +9,8 @@ namespace RSL.Sensors.Audio
     public class AudioTransmitter : MonoBehaviour
     {
 
-        private ROSConnection ros;
+        private UvgRosConnection ros;
+        private UvgRosPublisher<AudioDataMsg> audioPublisher;
         private AudioClip micClip;
         private string audioDataTopic = "/audio/unity_audio";
         private int sampleRate = 16000;
@@ -25,9 +26,13 @@ namespace RSL.Sensors.Audio
             //staring microphone
             micClip = Microphone.Start(null, true, 1, sampleRate);
 
-            // Connects to ROS and registers the audio data topic
-            ros = ROSConnection.GetOrCreateInstance();
-            ros.RegisterPublisher<AudioDataMsg>(audioDataTopic);
+            // Connects to ROS and registers the audio data topic. LazyPublish:
+            // no other publisher exists for this topic anywhere, so the
+            // server's own demand-detection (does anything subscribe) is
+            // the correct signal -- see JoystickManager.cs's identical
+            // reasoning.
+            ros = UvgRosConnection.GetOrCreateInstance();
+            audioPublisher = ros.LazyPublish<AudioDataMsg>(audioDataTopic);
 
             if (micClip == null)
             {
@@ -89,7 +94,7 @@ namespace RSL.Sensors.Audio
                     }
 
                     //punlishing audio data
-                    ros.Publish(audioDataTopic, msg);
+                    audioPublisher.Send(msg);
                     //Debug.Log("Published audio data: " + msg.data.Length + " bytes");
 
                     audioBuffer.Clear();
