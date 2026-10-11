@@ -104,14 +104,13 @@ namespace RSL.Core
         // uGUI row never needed this because the manager pushed straight into
         // the TMP label it owned.
         public event System.Action<SensorManager> CountChanged;
-        protected List<GameObject> sensors;
+        protected List<GameObject> sensors = new List<GameObject>();
         protected ROSConnection _ros;
         // Fully qualified: UnityEngine.UIElements also defines an Image, and
         // both namespaces are in scope now that managers carry UXML rows.
         protected UnityEngine.UI.Image _icon;
 
         private string _sceneName = "";
-
 
         private void Awake()
         {
