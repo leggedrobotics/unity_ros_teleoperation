@@ -23,11 +23,11 @@
          running (and can poll) while visually hidden. -->
     <ui:VisualElement name="OptionsMenu" class="background sensor-viewer camera-options-menu">
         <ui:VisualElement name="Actions" class="row viewer-actions">
-            <ui:Button name="Clear" class="icon-button" tooltip="Remove this viewer" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;);" />
-            <ui:Button name="Track" class="icon-button track-button" tooltip="Cycle TF tracking mode" />
-            <ui:Button name="Flip" class="icon-button" tooltip="Flip horizontally" style="background-image: url(&quot;project://database/Assets/Materials/mdi/flip-horizontal.svg?fileID=7388822144124034973&amp;guid=ddac7712fd292ee66b14b3774389dc4b&amp;type=3#flip-horizontal&quot;);" />
-            <ui:Button name="Plus" class="icon-button" tooltip="Grow" style="background-image: url(&quot;project://database/Assets/Materials/mdi/plus.svg?fileID=7388822144124034973&amp;guid=dc38c50b863592ab3b74e36e27d4c8fe&amp;type=3#plus&quot;);" />
-            <ui:Button name="Minus" class="icon-button" tooltip="Shrink" style="background-image: url(&quot;project://database/Assets/Materials/mdi/minus.svg?fileID=7388822144124034973&amp;guid=93c946fc25d5ecac38c1f3f667d7dbfe&amp;type=3#minus&quot;);" />
+            <ui:Button name="Clear" tooltip="Remove this viewer" class="icon-button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/delete.svg?fileID=7388822144124034973&amp;guid=36893462c1947ffd8ad5151e01466ecf&amp;type=3#delete&quot;); translate: 0 0;" />
+            <ui:Button name="Track" tooltip="Cycle TF tracking mode" class="icon-button track-button" style="translate: 0 0;" />
+            <ui:Button name="Flip" tooltip="Flip horizontally" class="icon-button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/flip-horizontal.svg?fileID=7388822144124034973&amp;guid=ddac7712fd292ee66b14b3774389dc4b&amp;type=3#flip-horizontal&quot;); translate: 0 0;" />
+            <ui:Button name="Plus" tooltip="Grow" class="icon-button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/plus.svg?fileID=7388822144124034973&amp;guid=dc38c50b863592ab3b74e36e27d4c8fe&amp;type=3#plus&quot;); translate: 0 0;" />
+            <ui:Button name="Minus" tooltip="Shrink" class="icon-button" style="background-image: url(&quot;project://database/Assets/Materials/mdi/minus.svg?fileID=7388822144124034973&amp;guid=93c946fc25d5ecac38c1f3f667d7dbfe&amp;type=3#minus&quot;); translate: 0 0;" />
         </ui:VisualElement>
         <ui:DropdownField name="TopicDropdown" class="viewer-dropdown" />
     </ui:VisualElement>
