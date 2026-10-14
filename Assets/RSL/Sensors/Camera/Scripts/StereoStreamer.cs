@@ -125,16 +125,8 @@ namespace RSL.Sensors.Camera
 
             topicName = topic;
 
-            if (topicName.EndsWith("compressed"))
-            {
-                _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressedLeft, mainThread: true);
-                _ros.Subscribe<CompressedImageMsg>(topicName.Replace("left", "right"), OnCompressedRight, mainThread: true);
-            }
-            else
-            {
-                Debug.LogError("Only compressed images are supported at the moment");
-                // ros.Subscribe<ImageMsg>(topicName, OnImage);
-            }
+            SubscribeEye(topicName, true);
+            SubscribeEye(topicName.Replace("left", "right"), false);
             topicDropdown.gameObject.SetActive(false);
             topMenu.SetActive(false);
         }
@@ -197,6 +189,66 @@ namespace RSL.Sensors.Camera
             float height = width / aspectRatio;
 
             _Img.localScale = new Vector3(width, 1, height);
+        }
+
+        /// <summary>
+        /// Subscribes one eye. A "...compressed" name does not mean the server
+        /// negotiated JPEG: its CompressedImage rule can resolve to the video
+        /// transport, which Subscribe&lt;CompressedImageMsg&gt; refuses, so retry as
+        /// a decoded video route the same way ImageView does. Raw Image topics
+        /// arrive as decoded frames either way.
+        /// </summary>
+        private void SubscribeEye(string topic, bool left)
+        {
+            if (topic.EndsWith("compressed"))
+            {
+                try
+                {
+                    _ros.Subscribe<CompressedImageMsg>(topic, left ? (System.Action<CompressedImageMsg>)OnCompressedLeft : OnCompressedRight, mainThread: true);
+                }
+                catch (System.NotSupportedException)
+                {
+                    Debug.Log("[StereoStreamer] '" + topic + "' is not chain-framed -- retrying as a decoded video route");
+                    _ros.Subscribe<ImageMsg>(topic, left ? (System.Action<ImageMsg>)OnImageLeft : OnImageRight, mainThread: true,
+                                             rosMessageType: "sensor_msgs/CompressedImage");
+                }
+            }
+            else
+            {
+                _ros.Subscribe<ImageMsg>(topic, left ? (System.Action<ImageMsg>)OnImageLeft : OnImageRight, mainThread: true);
+            }
+        }
+
+        void OnImageLeft(ImageMsg msg) => OnImage(msg, true);
+        void OnImageRight(ImageMsg msg) => OnImage(msg, false);
+
+        /// <summary>
+        /// A decoded frame (video route or raw Image): 3 bytes per pixel, top row
+        /// first like a decoded JPEG, so it takes the same flip.
+        /// </summary>
+        private void OnImage(ImageMsg msg, bool left)
+        {
+            ParseHeader(msg.header);
+            int w = (int)msg.width, h = (int)msg.height;
+            if (msg.data == null || msg.data.Length != w * h * 3)
+            {
+                Debug.LogWarning("[StereoStreamer] unsupported image encoding '" + msg.encoding + "' (" + w + "x" + h +
+                                 ", " + (msg.data == null ? 0 : msg.data.Length) + " bytes); expected 3 bytes per pixel");
+                return;
+            }
+            try
+            {
+                SetupTex(w, h, left);
+                byte[] final = _flipDecodedJpeg ? JpegDecodeWorker.FlipRows(msg.data, w, h, 3) : msg.data;
+                Texture2D tex = left ? _leftTexture2D : _rightTexture2D;
+                tex.LoadRawTextureData(final);
+                tex.Apply();
+                Resize();
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
 
         /// <summary>

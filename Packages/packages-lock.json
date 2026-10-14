@@ -90,7 +90,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "3358e20720562e05628737ef1a07e3e4b6023ed5"
+      "hash": "514a4ad4c57dbf9d1cee7020c82d0588c22e6241"
     },
     "com.meta.xr.sdk.core": {
       "version": "205.0.0",

@@ -604,7 +604,13 @@ namespace RSL.Sensors.Camera
                 }
 
                 var sw = System.Diagnostics.Stopwatch.StartNew();
-                _tempTextureBuffer.LoadRawTextureData(msg.data);
+                // ROS images (raw and decoded video alike) are top row first, the
+                // same as a decoded JPEG, so they take the same flip OnCompressed
+                // applies; without it every video route showed upside down.
+                int bytesPerPixel = imgWidth * imgHeight > 0 ? msg.data.Length / (imgWidth * imgHeight) : 0;
+                byte[] pixels = _flipDecodedJpeg && bytesPerPixel > 0
+                    ? JpegDecodeWorker.FlipRows(msg.data, imgWidth, imgHeight, bytesPerPixel) : msg.data;
+                _tempTextureBuffer.LoadRawTextureData(pixels);
                 _tempTextureBuffer.Apply();
                 sw.Stop();
                 if (sw.Elapsed.TotalMilliseconds > 4.0)
