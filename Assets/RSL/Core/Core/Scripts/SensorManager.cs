@@ -123,6 +123,14 @@ namespace RSL.Core
             count.text = sensors.Count.ToString();
         }
         
+        // Without this, every Play session in the Editor (domain reload off)
+        // left its handler subscribed, and the next stop serialized that old
+        // manager's already-destroyed sensors (MissingReferenceException).
+        void OnDestroy()
+        {
+            Application.quitting -= OnApplicationQuit;
+        }
+
         void OnApplicationQuit()
         {
             Debug.Log("Saving layout for "+name+" in scene "+_sceneName);

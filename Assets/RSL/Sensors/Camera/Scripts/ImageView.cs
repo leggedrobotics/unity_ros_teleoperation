@@ -385,50 +385,58 @@ namespace RSL.Sensors.Camera
 
             topicName = topic;
 
-            try
+            // Deferred until connected: a viewer restored from a saved layout
+            // runs this before Connect(), and a queued Subscribe would throw
+            // inside Connect() where the CompressedImage -> Image fallback
+            // below never runs (the viewer stayed blank on a video route).
+            string t = topicName;
+            _ros.RunWhenConnected(() =>
             {
-                if (topicName.EndsWith("compressed"))
+                try
                 {
-                    try
+                    if (t.EndsWith("compressed"))
                     {
-                        _ros.Subscribe<CompressedImageMsg>(topicName, OnCompressed, mainThread: true);
-                        Debug.Log("[ImageView] subscribed '" + topicName + "'");
+                        try
+                        {
+                            _ros.Subscribe<CompressedImageMsg>(t, OnCompressed, mainThread: true);
+                            Debug.Log("[ImageView] subscribed '" + t + "'");
+                        }
+                        catch (System.NotSupportedException)
+                        {
+                            // A "...compressed" topic name does not guarantee the
+                            // server actually negotiated JPEG/chain framing for
+                            // it -- server.yaml's CompressedImage catch-all can
+                            // just as easily resolve to the video transport's
+                            // encoded_video framing (e.g. the wide-angle
+                            // cameras), which Subscribe<CompressedImageMsg>
+                            // refuses (see its own doc comment: an already-
+                            // decoded video frame is not "compressed" bytes).
+                            // Retry as ImageMsg, which is what a video route
+                            // actually decodes into -- UvgRosConnection.
+                            // Subscribe<T> throws the SAME NotSupportedException
+                            // again here if this topic genuinely isn't viewable
+                            // by either path, which the outer catch below reports.
+                            Debug.Log("[ImageView] '" + t + "' is not chain-framed -- " +
+                                      "retrying as a decoded video route");
+                            _ros.Subscribe<ImageMsg>(t, OnImage, mainThread: true,
+                                                     rosMessageType: "sensor_msgs/CompressedImage");
+                            Debug.Log("[ImageView] subscribed '" + t + "' (video)");
+                        }
                     }
-                    catch (System.NotSupportedException)
+                    else
                     {
-                        // A "...compressed" topic name does not guarantee the
-                        // server actually negotiated JPEG/chain framing for
-                        // it -- server.yaml's CompressedImage catch-all can
-                        // just as easily resolve to the video transport's
-                        // encoded_video framing (e.g. the wide-angle
-                        // cameras), which Subscribe<CompressedImageMsg>
-                        // refuses (see its own doc comment: an already-
-                        // decoded video frame is not "compressed" bytes).
-                        // Retry as ImageMsg, which is what a video route
-                        // actually decodes into -- UvgRosConnection.
-                        // Subscribe<T> throws the SAME NotSupportedException
-                        // again here if this topic genuinely isn't viewable
-                        // by either path, which the outer catch below reports.
-                        Debug.Log("[ImageView] '" + topicName + "' is not chain-framed -- " +
-                                  "retrying as a decoded video route");
-                        _ros.Subscribe<ImageMsg>(topicName, OnImage, mainThread: true,
-                                                 rosMessageType: "sensor_msgs/CompressedImage");
-                        Debug.Log("[ImageView] subscribed '" + topicName + "' (video)");
+                        _ros.Subscribe<ImageMsg>(t, OnImage, mainThread: true);
+                        Debug.Log("[ImageView] subscribed '" + t + "'");
                     }
                 }
-                else
+                catch (System.NotSupportedException e)
                 {
-                    _ros.Subscribe<ImageMsg>(topicName, OnImage, mainThread: true);
-                    Debug.Log("[ImageView] subscribed '" + topicName + "'");
+                    // Hit when a topic's negotiated framing is genuinely not one
+                    // this client can decode (neither chain/msgpack_list nor
+                    // encoded_video -- see UvgRosConnection.Subscribe<T>).
+                    Debug.LogError("[ImageView] '" + t + "' is not viewable yet: " + e.Message);
                 }
-            }
-            catch (System.NotSupportedException e)
-            {
-                // Hit when a topic's negotiated framing is genuinely not one
-                // this client can decode (neither chain/msgpack_list nor
-                // encoded_video -- see UvgRosConnection.Subscribe<T>).
-                Debug.LogError("[ImageView] '" + topicName + "' is not viewable yet: " + e.Message);
-            }
+            });
             topicDropdown.gameObject.SetActive(false);
             topMenu.SetActive(false);
         }

@@ -200,6 +200,14 @@ namespace RSL.Sensors.Camera
         /// </summary>
         private void SubscribeEye(string topic, bool left)
         {
+            // Deferred until connected, so the video fallback below also runs
+            // for eyes restored from a saved layout before Connect() -- see
+            // ImageView.OnTopicChange.
+            _ros.RunWhenConnected(() => SubscribeEyeNow(topic, left));
+        }
+
+        private void SubscribeEyeNow(string topic, bool left)
+        {
             if (topic.EndsWith("compressed"))
             {
                 try

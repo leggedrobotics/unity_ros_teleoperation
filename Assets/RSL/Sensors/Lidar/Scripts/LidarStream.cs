@@ -379,7 +379,7 @@ namespace RSL.Sensors.Lidar
 
         private void OnDestroy()
         {
-            if (topicName != null)
+            if (topicName != null && _ros != null)  // null if destroyed before Start()
                 _ros.Unsubscribe(topicName);
             _meshTriangles?.Dispose();
             _meshTriangles = null;
@@ -558,11 +558,12 @@ namespace RSL.Sensors.Lidar
             if (string.IsNullOrEmpty(topic))
                 topic = null;
 
-            if (topicName != null)
-            {
+            // _ros is bound in Start() (RobotId is set after AddComponent), but a
+            // saved layout restores through here from SensorManager.Awake --
+            // before Start. Then only record the topic; Start() subscribes it.
+            if (topicName != null && _ros != null)
                 _ros.Unsubscribe(topicName);
-                topicName = null;
-            }
+            topicName = null;
             if (topic == null)
             {
                 Debug.Log("Disabling pointcloud display");
@@ -573,6 +574,7 @@ namespace RSL.Sensors.Lidar
             _enabled = true;
             topicName = topic;
             topicText?.SetText(topic);
+            if (_ros == null) return;  // restored before Start(); it subscribes then
             try
             {
                 _ros.Subscribe<PointCloud2Msg>(topic, OnPointcloud, mainThread: true);
@@ -719,6 +721,7 @@ namespace RSL.Sensors.Lidar
         public void ToggleEnabled()
         {
             _enabled = !_enabled;
+            if (_ros == null) return;  // before Start(): it subscribes if still enabled
             if (!_enabled)
             {
                 _ros.Unsubscribe(topicName);
