@@ -86,11 +86,11 @@
       "hash": "8bcd901b561a92cd0ebb9736b47d141120aa22f7"
     },
     "com.leggedrobotics.uvgros": {
-      "version": "git@github.com:leggedrobotics/uvgRTP_ros_unity.git#7df7bb9a4ceb8d868a46812a57a66e4ffdc5bbda",
+      "version": "git@github.com:leggedrobotics/uvgRTP_ros_unity.git#b841dcb14933636f75422d116f72648c1879111e",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "7df7bb9a4ceb8d868a46812a57a66e4ffdc5bbda"
+      "hash": "b841dcb14933636f75422d116f72648c1879111e"
     },
     "com.meta.xr.sdk.core": {
       "version": "205.0.0",

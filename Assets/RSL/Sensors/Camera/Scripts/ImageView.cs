@@ -522,6 +522,24 @@ namespace RSL.Sensors.Camera
             }
         }
 
+        /// <summary>
+        /// Debayer only what the message says is a Bayer mosaic. image_transport writes the
+        /// source encoding into `format` ("bayer_grbg8; jpeg compressed ..."), so a colour JPEG
+        /// ("bgr8; jpeg compressed bgr8", or plain "jpeg") is shown as-is. Debayering every JPEG
+        /// by the prefab's default corrupted the blue channel of ordinary colour cameras.
+        /// Only a message with no format at all falls back to the inspector's debayerType.
+        /// </summary>
+        DebayerMode DebayerModeFor(string format)
+        {
+            if (string.IsNullOrEmpty(format)) return debayerType;
+            string f = format.ToLowerInvariant();
+            if (f.Contains("bayer_rggb")) return DebayerMode.RGGB;
+            if (f.Contains("bayer_bggr")) return DebayerMode.BGGR;
+            if (f.Contains("bayer_gbrg")) return DebayerMode.GBRG;
+            if (f.Contains("bayer_grbg")) return DebayerMode.GRBG;
+            return DebayerMode.None;
+        }
+
         void OnCompressed(CompressedImageMsg msg)
         {
             ParseHeader(msg.header);
@@ -573,14 +591,15 @@ namespace RSL.Sensors.Camera
 
                 SetupTex(_tempTextureBuffer.width, _tempTextureBuffer.height);
 
-                if (debayerType == DebayerMode.None)
+                DebayerMode mode = DebayerModeFor(msg.format);
+                if (mode == DebayerMode.None || debayer == null)
                 {
                     Graphics.Blit(_tempTextureBuffer, _texture2D);
                     Resize();
                     return;
                 }
 
-                debayer.SetInt("mode", (int)debayerType);
+                debayer.SetInt("mode", (int)mode);
                 debayer.SetTexture(0, "Input", _tempTextureBuffer);
                 debayer.SetTexture(0, "Result", _texture2D);
                 debayer.Dispatch(0, _tempTextureBuffer.width / 2, _tempTextureBuffer.height / 2, 1);
