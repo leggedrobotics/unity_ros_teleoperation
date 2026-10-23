@@ -97,6 +97,12 @@ namespace RSL.Core
             count.text = sensors.Count.ToString();
         }
 
+        /// <summary>False until Awake has run (a manager under an inactive menu); Serialize/Deserialize need it.</summary>
+        public bool IsAwake => sensors != null;
+
+        /// <summary>The PlayerPrefs key Awake restores this manager's layout from (and quitting saves it to).</summary>
+        public string LayoutPrefsKey => SceneManager.GetActiveScene().name + "_" + name + "_layout";
+
         public void AddSensor()
         {
             Transform target = Camera.main.transform;
