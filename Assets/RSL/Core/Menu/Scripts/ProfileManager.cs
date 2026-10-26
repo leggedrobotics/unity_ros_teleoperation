@@ -244,6 +244,12 @@ namespace RSL.Core.Menu
         {
             // Link settings first: LocalHost and AutoReconnect are read by Connect().
             var net = profile.network ?? new NetworkSettings();
+            // Already live on this server: keep the connection. A reconnect
+            // here only costs a gap, and the server tears down the old
+            // connection's sessions after the new one has opened routes under
+            // the same peer id, which leaves the restored viewers without data.
+            bool sameServer = !_ros.HasConnectionError && CurrentIp() == profile.ip &&
+                              CurrentPort() == profile.port && (_ros.LocalHost ?? "") == (net.localHost ?? "");
             _ros.LocalHost = net.localHost ?? "";
             _ros.AutoReconnect = net.autoReconnect;
             TF2Stream.UseSimTime = net.useSimTime;
@@ -251,8 +257,11 @@ namespace RSL.Core.Menu
             foreach (var label in FindObjectsByType<UseSimTime>(FindObjectsInactive.Include, FindObjectsSortMode.None))
                 label.SyncLabel();
 
-            if (rosManager != null) rosManager.SetConnection(profile.ip, profile.port);
-            else _ros.Connect(profile.ip, profile.port);
+            if (!sameServer)
+            {
+                if (rosManager != null) rosManager.SetConnection(profile.ip, profile.port);
+                else _ros.Connect(profile.ip, profile.port);
+            }
 
             ApplyRobot(profile.robot);
 

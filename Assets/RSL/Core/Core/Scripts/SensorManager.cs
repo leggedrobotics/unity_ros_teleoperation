@@ -160,7 +160,12 @@ namespace RSL.Core
         }
         public void Deserialize(string data)
         {
-            ClearAll();
+            // Immediately, not ClearAll's deferred Destroy: a viewer unsubscribes
+            // its topic by name in OnDestroy, which would otherwise run after the
+            // new viewers below subscribed to the same topics and close their routes.
+            foreach (GameObject sensor in sensors)
+                DestroyImmediate(sensor);
+            sensors.Clear();
 
             SensorManagerData sensorData = JsonUtility.FromJson<SensorManagerData>(data);
 
