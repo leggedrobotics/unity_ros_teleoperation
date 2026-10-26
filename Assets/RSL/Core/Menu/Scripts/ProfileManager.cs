@@ -196,6 +196,9 @@ namespace RSL.Core.Menu
             _serverProfile = profileName ?? "";
             if (_serverProfile.Length == 0) return;
             _tuneJson = $"{{\"global_profile\": \"{_serverProfile}\"}}";
+            // A fresh route every time: an explicit reconnect (loading a profile
+            // does one) clears the old handle and Send then drops silently.
+            _tunePublisher = null;
             _tuneSendsLeft = TuneRepeats;
             _nextTuneAt = Time.time + TuneInterval;
         }
