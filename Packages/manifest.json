@@ -10,7 +10,7 @@
     "com.leggedrobotics.ros.robots.hands.pysonic": "git@github.com:leggedrobotics/unity_ros_robots.git?path=PsyonicAbilityHand",
     "com.leggedrobotics.ros.robots.spot": "git@github.com:leggedrobotics/unity_ros_robots.git?path=Spot",
     "com.leggedrobotics.ros.robots.unitree.b2w": "git@github.com:leggedrobotics/unity_ros_robots.git?path=B2W",
-    "com.leggedrobotics.uvgros": "git@github.com:leggedrobotics/uvgRTP_ros_unity.git#b841dcb14933636f75422d116f72648c1879111e",
+    "com.leggedrobotics.uvgros": "git@github.com:leggedrobotics/uvgRTP_ros_unity.git#30f02789da607040e1c2eb5dc912f433e6dca6b8",
     "com.meta.xr.sdk.core": "205.0.0",
     "com.unity.collab-proxy": "2.10.2",
     "com.unity.feature.development": "1.0.2",
