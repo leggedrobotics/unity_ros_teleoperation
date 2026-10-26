@@ -17,10 +17,6 @@ namespace RSL.Core.Menu
         public UnityEvent<bool> OnConnectionColor;
         public UnityEvent<bool> OnConnectionStagnant;
 
-
-        public Dropdown ipDropdown;
-
-        private List<string> _ips;
         public string defaultIP = "10.42.0.1";
         public string defaultPort = "10000";
 
@@ -40,16 +36,6 @@ namespace RSL.Core.Menu
 
         void Start()
         {
-            _ips = new List<string>();
-            string ips = "";
-            if (PlayerPrefs.HasKey("ips"))
-            {
-                ips = PlayerPrefs.GetString("ips");
-            }
-            foreach(string ip in ips.Split(',')) {
-                _ips.Add(ip);
-            }
-
             if(PlayerPrefs.HasKey("ip"))
             {
                 _ip = PlayerPrefs.GetString("ip");
@@ -75,16 +61,6 @@ namespace RSL.Core.Menu
             _ros = UvgRosConnection.GetOrCreateInstance();
 
             menu.SetActive(false);
-
-            ipDropdown.ClearOptions();
-            ipDropdown.AddOptions(_ips);
-
-            ipDropdown.onValueChanged.AddListener(delegate {
-                OnPreset(ipDropdown.value);
-            });
-
-
-
 
             _ros.RosPort = _port;
             _ros.RosIPAddress = _ip;
@@ -125,11 +101,34 @@ namespace RSL.Core.Menu
             _ros.Connect();
         }
 
-        public void OnPreset(int index)
+        public string CurrentIP => _ip;
+        public int CurrentPort => _port;
+
+        /// <summary>
+        /// Switches to ip:port with a single reconnect (OnIPDone + OnPortDone
+        /// would reconnect twice), updating the fields and saved prefs. Does
+        /// not throw when the server is unreachable.
+        /// Used by ProfileManager when a profile is loaded.
+        /// </summary>
+        public void SetConnection(string ip, int port)
         {
-            _ip = _ips[index];
-            _ipText.text = _ip;
-            OnIPDone(_ip);
+            _ip = ip;
+            _port = port;
+            if (_ipText != null) _ipText.text = _ip;
+            if (_portText != null) _portText.text = _port.ToString();
+            PlayerPrefs.SetString("ip", _ip);
+            PlayerPrefs.SetInt("port", _port);
+            PlayerPrefs.Save();
+            try
+            {
+                _ros.Connect(_ip, _port);
+            }
+            catch (System.Exception e)
+            {
+                // Unreachable is a normal state for a saved profile (robot off,
+                // other network): keep the settings, the status light shows it.
+                Debug.LogWarning($"[ROSManager] could not connect to {_ip}:{_port}: {e.Message}");
+            }
         }
 
         void Update()
@@ -153,29 +152,6 @@ namespace RSL.Core.Menu
                 OnConnectionStagnant.Invoke(_stagnant);
             }
 
-        }
-
-        public void DeleteIP()
-        {
-            _ips.Remove(_ip);
-            PlayerPrefs.SetString("ips", string.Join(",", _ips));
-            PlayerPrefs.Save();
-
-            ipDropdown.ClearOptions();
-            ipDropdown.AddOptions(_ips);
-        }
-
-        public void SaveIP()
-        {
-            if(!_ips.Contains(_ip))
-            {
-                _ips.Insert(0, _ip);
-            }
-            PlayerPrefs.SetString("ips", string.Join(",", _ips));
-            PlayerPrefs.Save();
-
-            ipDropdown.ClearOptions();
-            ipDropdown.AddOptions(_ips);
         }
     }
 }

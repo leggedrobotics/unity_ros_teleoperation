@@ -23,6 +23,12 @@ namespace RSL.Core.Menu
             PlayerPrefs.Save();
         }
         
+        /// <summary>Re-reads TF2Stream.UseSimTime into the label, after something else changed it (a loaded profile).</summary>
+        public void SyncLabel()
+        {
+            if (label != null) label.text = "Use Sim Time: " + TF2Stream.UseSimTime;
+        }
+
         public void ToggleSimTime()
         {
             TF2Stream.UseSimTime = !TF2Stream.UseSimTime;
