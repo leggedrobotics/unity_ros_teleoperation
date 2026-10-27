@@ -34,6 +34,14 @@ namespace RSL.Sensors.Camera
         private JpegDecodeWorker _leftDecodeWorker;
         private JpegDecodeWorker _rightDecodeWorker;
 
+        void LateUpdate()
+        {
+            var head = UnityEngine.Camera.main;
+            if (head == null) return;
+            material.SetVector("_HeadPos", head.transform.position);
+            material.SetVector("_HeadRight", head.transform.right);
+        }
+
         /// <summary>
         /// Updates the list of the available topics in the dropdown menu
         /// </summary>
