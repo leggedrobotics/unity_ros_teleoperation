@@ -54,18 +54,32 @@ namespace RSL.Telemetry.Hands
         UvgRosConnection _ros;
         UvgRosPublisher<ManoLandmarksMsg> _landmarksPublisher;
         UvgRosPublisher<PointCloudMsg> _pointCloudPublisher;
+        UvgRosPublisher<ManoLandmarksMsg> _leftLandmarksPublisher;
+        UvgRosPublisher<ManoLandmarksMsg> _rightLandmarksPublisher;
+        UvgRosPublisher<PointCloudMsg> _leftPointCloudPublisher;
+        UvgRosPublisher<PointCloudMsg> _rightPointCloudPublisher;
         UvgRosPublisher<HandGestureMsg> _gesturePublisher;
         XRHandSubsystem m_handSubsystem;
+        private readonly List<XRHandSubsystem> _handSubsystems = new List<XRHandSubsystem>();
+        private float _nextSubsystemCheck;
+        private float _nextPublishAttempt;
 
-        private Transform _root;
         private bool _publishing = false;
+        public void OnPublishManoState(int state) => SetPublishing(state == 0);
+
+        public void SetPublishing(bool enabled)
+        {
+            _publishing = enabled;
+            if (_img != null)
+                _img.sprite = _publishing ? enableIcon : disableIcon;
+        }
 
         private bool _highConfidence = false;
         private const string _landmarksTopic = "/quest/hand_pose";
         private const string _pointCloudTopic = "/quest/hand_points";
         private const string _gestureTopic = "/quest/hand_gesture";
 
-        public string worldFrame = "quest_origin";
+        public string worldFrame = "vr_origin";
 
         void Start()
         {
@@ -77,73 +91,73 @@ namespace RSL.Telemetry.Hands
                 poseController = InputSystem.actions.FindAction("XRI LeftHand/YButton");
             }
 
-            _root = GameObject.FindWithTag("root").transform;
+            if (enableButton != null)
+                _img = enableButton.transform.Find("Image/Image").GetComponent<Image>();
+            SetPublishing(_publishing);
 
-            _img = enableButton.transform.Find("Image/Image").GetComponent<Image>();
-
-            if (PlayerPrefs.HasKey("handPublishing"))
-            {
-                _publishing = PlayerPrefs.GetInt("handPublishing") == 1;
-                _img.sprite = _publishing ? enableIcon : disableIcon;
-            } else {
-                _publishing = true;
-                _img.sprite = enableIcon;
-            }
-
-            var _handSubsystem = new List<XRHandSubsystem>();
-            SubsystemManager.GetSubsystems(_handSubsystem);
-            Debug.Log("Found " + _handSubsystem.Count + " hand subsystems");
-            foreach (var hand in _handSubsystem)
-            {
-                if(hand.running)
-                {
-                    m_handSubsystem = hand;
-                    break;
-                }
-            }
-
-            if(m_handSubsystem == null)
-            {
-                Debug.LogWarning("No running hand subsystem found");
-            } else {
-                Debug.Log("Found running hand subsystem");
-                m_handSubsystem.updatedHands += OnHandUpdate;
-
-                // check if the joints in this layout contain the joints we need
-                var joints = m_handSubsystem.jointsInLayout;
-                for (int i=0; i<27; i++)
-                {
-                    if(!joints[i])
-                    {
-                        string jointNeeded = jointMap.ContainsKey(i) ? "" : "not ";
-                        Debug.LogError("Joint " + i + " not found in joint layout, " + jointNeeded + "needed");
-                    }
-                }
-                
-            }
             _ros = UvgRosConnection.GetOrCreateInstance();
-            // LazyPublish: none of these three topics has any other
-            // publisher anywhere, so the server's own demand-detection
-            // (does something actually subscribe) is the correct, safe
-            // signal -- see JoystickManager.cs's identical reasoning.
-            _landmarksPublisher = _ros.LazyPublish<ManoLandmarksMsg>(_landmarksTopic);
-            _pointCloudPublisher = _ros.LazyPublish<PointCloudMsg>(_pointCloudTopic);
             _gesturePublisher = _ros.LazyPublish<HandGestureMsg>(_gestureTopic);
+            TryBindHandSubsystem();
 
             // setup action map listeners
-            twistController.performed += _ => PubTwistController();
-            poseController.performed += _ => PubPoseController();
+            if (twistController != null)
+                twistController.performed += OnTwistController;
+            if (poseController != null)
+                poseController.performed += OnPoseController;
         }
 
         void Update()
         {
-            if(activeController.ReadValue<float>() > 0.5f)
+            if ((m_handSubsystem == null || !m_handSubsystem.running) && Time.unscaledTime >= _nextSubsystemCheck)
+            {
+                _nextSubsystemCheck = Time.unscaledTime + 1f;
+                TryBindHandSubsystem();
+            }
+            if(activeController != null && activeController.ReadValue<float>() > 0.5f)
             {
                 PubActiveController();
             } else {
                 if(infoText != null)
                     infoText.color = Color.red;
             }
+        }
+
+        void TryBindHandSubsystem()
+        {
+            UnbindHandSubsystem();
+            _handSubsystems.Clear();
+            SubsystemManager.GetSubsystems(_handSubsystems);
+            foreach (var subsystem in _handSubsystems)
+            {
+                if (!subsystem.running) continue;
+                m_handSubsystem = subsystem;
+                m_handSubsystem.updatedHands += OnHandUpdate;
+                foreach (var jointID in jointMap.Values)
+                    if (!subsystem.jointsInLayout[jointID.ToIndex()])
+                        Debug.LogWarning("Hand publishing: joint " + jointID + " is not supported");
+                break;
+            }
+        }
+
+        void UnbindHandSubsystem()
+        {
+            if (m_handSubsystem != null)
+                m_handSubsystem.updatedHands -= OnHandUpdate;
+            m_handSubsystem = null;
+        }
+
+        void OnDisable() => UnbindHandSubsystem();
+
+        void OnTwistController(InputAction.CallbackContext context) => PubTwistController();
+        void OnPoseController(InputAction.CallbackContext context) => PubPoseController();
+
+        void OnDestroy()
+        {
+            UnbindHandSubsystem();
+            if (twistController != null)
+                twistController.performed -= OnTwistController;
+            if (poseController != null)
+                poseController.performed -= OnPoseController;
         }
 
         public void PubActiveController()
@@ -181,10 +195,7 @@ namespace RSL.Telemetry.Hands
 
         public void TogglePublishing()
         {
-            _publishing = !_publishing;
-            PlayerPrefs.SetInt("handPublishing", _publishing ? 1 : 0);
-            PlayerPrefs.Save();
-            _img.sprite = _publishing ? enableIcon : disableIcon;
+            SetPublishing(!_publishing);
         }
 
         void OnHandUpdate(XRHandSubsystem subsystem, 
@@ -198,74 +209,78 @@ namespace RSL.Telemetry.Hands
             // bypass render update to slightly throttle
             if(updateType != XRHandSubsystem.UpdateType.Dynamic) return;
             
-            ManoLandmarksMsg msg = new ManoLandmarksMsg();
-            PointCloudMsg pointCloudMsg = new PointCloudMsg();
-            HeaderMsg header = new HeaderMsg();
-            header.frame_id = worldFrame;
-            msg.header = header;
-            pointCloudMsg.header = header;
-            ChannelFloat32Msg[] channels = new ChannelFloat32Msg[1];
-            channels[0] = new ChannelFloat32Msg();
-            channels[0].name = "intensity";
-            channels[0].values = new float[jointMap.Count];
-            Point32Msg[] points = new Point32Msg[jointMap.Count];
+            if (!EnsureHandPublishers()) return;
+            PublishHand(subsystem.leftHand, _leftLandmarksPublisher, _leftPointCloudPublisher, false);
+            PublishHand(subsystem.rightHand, _rightLandmarksPublisher, _rightPointCloudPublisher, true);
+        }
 
-            XRHand hand = subsystem.rightHand;
-            if(hand.isTracked)
+        bool EnsureHandPublishers()
+        {
+            if (_rightPointCloudPublisher != null) return true;
+            if (_ros == null || _ros.HasConnectionError || Time.unscaledTime < _nextPublishAttempt) return false;
+            _nextPublishAttempt = Time.unscaledTime + 3f;
+            try
             {
-                string mode = "";
-                if(subsystem.leftHand.isTracked)
-                {
-                    mode = "Both";
-                } else {
-                    mode = "Right";
-                }
-                // if(modeText != null)
-                // infoText?.SetText(mode + " " + (updateSuccessFlags == 0 ? "Low" : "High"));
-                
-                int count =0;
-                foreach (int i in jointMap.Keys)
-                {
-                    var jointID = jointMap[i];
-                    if(jointID == XRHandJointID.EndMarker)
-                        Debug.LogWarning("end joint....?" + i + " " + jointID);
-        
-                    var trackingData = hand.GetJoint(jointID);
-                    if(trackingData == null)
-                    {
-                        Debug.LogError("Null tracking data!" + jointID);
-                        continue;
-                    }
-                    if(trackingData.TryGetPose(out UnityEngine.Pose pose))
-                    {
-                        if(points[i] == null)
-                            points[i] = new Point32Msg();
+                // Explicitly enabling MANO opens these routes even without a ROS subscriber.
+                if (_landmarksPublisher == null)
+                    _landmarksPublisher = _ros.Publish<ManoLandmarksMsg>(_landmarksTopic);
+                if (_pointCloudPublisher == null)
+                    _pointCloudPublisher = _ros.Publish<PointCloudMsg>(_pointCloudTopic);
+                if (_leftLandmarksPublisher == null)
+                    _leftLandmarksPublisher = _ros.Publish<ManoLandmarksMsg>(_landmarksTopic + "/left");
+                if (_rightLandmarksPublisher == null)
+                    _rightLandmarksPublisher = _ros.Publish<ManoLandmarksMsg>(_landmarksTopic + "/right");
+                if (_leftPointCloudPublisher == null)
+                    _leftPointCloudPublisher = _ros.Publish<PointCloudMsg>(_pointCloudTopic + "/left");
+                _rightPointCloudPublisher = _ros.Publish<PointCloudMsg>(_pointCloudTopic + "/right");
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("Could not open hand publishing routes; retrying: " + e.Message);
+                return false;
+            }
+        }
 
-                        // Transform poses relative to the pose manager's root
-                        
-                        pose.position = _root.transform.InverseTransformPoint(pose.position);
-
-
-                        points[i].x = pose.position.x;
-                        points[i].y = pose.position.z;
-                        points[i].z = pose.position.y;
-                        channels[0].values[i] = 1;
-
-                        count++;
-                    } else {
-                        Debug.LogError("Failed to get pose for joint " + jointID + " " + i);
-                        channels[0].values[i] = 0;
-                    }
-                }
-
-                // if(jointsText != null)
-                //     jointsText.SetText("Joints: "+count);
-
-                pointCloudMsg.points = points;
-                msg.landmarks = CastPoints(points);
-                _landmarksPublisher.Send(msg);
-                _pointCloudPublisher.Send(pointCloudMsg);
-            } 
+        void PublishHand(XRHand hand, UvgRosPublisher<ManoLandmarksMsg> landmarksPublisher,
+            UvgRosPublisher<PointCloudMsg> pointsPublisher, bool legacyRightHand)
+        {
+            if (!hand.isTracked) return;
+            var points = new Point32Msg[jointMap.Count];
+            var confidence = new float[jointMap.Count];
+            int count = 0;
+            foreach (var entry in jointMap)
+            {
+                int i = entry.Key;
+                points[i] = new Point32Msg();
+                if (!hand.GetJoint(entry.Value).TryGetPose(out UnityEngine.Pose pose)) continue;
+                // XR joint poses and vr_origin are both in tracking-origin coordinates.
+                points[i].x = pose.position.z;
+                points[i].y = -pose.position.x;
+                points[i].z = pose.position.y;
+                confidence[i] = 1;
+                count++;
+            }
+            if (count == 0 || (_highConfidence && count != jointMap.Count)) return;
+            long ticks = System.DateTime.UtcNow.Ticks - 621355968000000000L;
+            var header = new HeaderMsg();
+            header.frame_id = worldFrame;
+            header.stamp.sec = (int)(ticks / System.TimeSpan.TicksPerSecond);
+            header.stamp.nanosec = (uint)((ticks % System.TimeSpan.TicksPerSecond) * 100);
+            var landmarks = new ManoLandmarksMsg { header = header, landmarks = CastPoints(points) };
+            var cloud = new PointCloudMsg
+            {
+                header = header,
+                points = points,
+                channels = new[] { new ChannelFloat32Msg { name = "intensity", values = confidence } }
+            };
+            landmarksPublisher.Send(landmarks);
+            pointsPublisher.Send(cloud);
+            if (legacyRightHand)
+            {
+                _landmarksPublisher.Send(landmarks);
+                _pointCloudPublisher.Send(cloud);
+            }
         }
 
         public static PointMsg[] CastPoints(Point32Msg[] points)

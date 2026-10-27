@@ -9,6 +9,7 @@ namespace RSL.Core.Menu
     public class StateButton : MonoBehaviour
     {
         public int startIndex = 0;
+        public bool applyInitialState = false;
         public TMPro.TMP_Text label;
         public string[] states;
         public Sprite[] icons;
@@ -28,6 +29,8 @@ namespace RSL.Core.Menu
             _image = transform.Find("Image/Image").GetComponent<Image>();
 
             _index = startIndex;
+            if (applyInitialState)
+                onStateChanged?.Invoke(_index);
         }
 
         void OnClick()

@@ -27,10 +27,9 @@ namespace RSL.Telemetry.Headset
         public InputActionReference handPoseRight;
         public InputActionReference handRotationRight;
 
-        // Gates which representation(s) actually publish -- wired to the two
-        // checkboxes in the palm menu's Wifi panel. Both on by default.
+        // State 0 is checked; TF is the default representation.
         private bool _publishTf = true;
-        private bool _publishPoseStamped = true;
+        private bool _publishPoseStamped = false;
         public void SetPublishTf(bool enabled) => _publishTf = enabled;
         public void SetPublishPoseStamped(bool enabled) => _publishPoseStamped = enabled;
 
@@ -42,6 +41,8 @@ namespace RSL.Telemetry.Headset
         private string handFrameRight = "hand_right";
         private UvgRosConnection ros;
         private UvgRosPublisher<PoseStampedMsg> _posePublisher;
+        private UvgRosPublisher<PoseStampedMsg> _leftPosePublisher;
+        private UvgRosPublisher<PoseStampedMsg> _rightPosePublisher;
         private UvgRosPublisher<TFMessageMsg> _tfPublisher;
         private TFMessageMsg tfMsg;
         private PoseStampedMsg headsetPoseMsg;
@@ -49,7 +50,7 @@ namespace RSL.Telemetry.Headset
         private PoseStampedMsg rightHandMsg;
 
         private HeaderMsg headsetHeader;
-        private HeaderMsg odomHeader;
+        private float _nextPosePublishAttempt;
 
         private string rootFrame;
         private int _decimator = 1;
@@ -61,64 +62,59 @@ namespace RSL.Telemetry.Headset
 
             handFrameRight = handFrameLeft.Replace("left", "right");
 
-            root = GameObject.FindWithTag("root").transform;
+            var rootObject = GameObject.FindWithTag("root");
+            root = rootObject != null ? rootObject.transform : null;
             if (root == null)
             {
                 Debug.LogError("Root not found");
                 rootFrame = "odom"; // default to odom if no root is found
             }
             else
-                rootFrame = root.GetComponent<TF2Attachment>().FrameID;
-
-            // /quest/pose/headset: LazyPublish -- only negotiates once the
-            // server's get_subscriptions reports real demand; Send() is a
-            // no-op until then.
-            _posePublisher = ros.LazyPublish<PoseStampedMsg>(poseTopic + "/headset");
+            {
+                var attachment = root.GetComponent<TF2Attachment>();
+                rootFrame = attachment != null ? attachment.FrameID : "odom";
+            }
             // /tf: eager Publish, NOT LazyPublish -- /tf always has other
             // publishers, which get_subscriptions' demand check excludes,
             // so a lazy /tf would never open. It is a deliberate fan-in
             // topic; just always publish.
             _tfPublisher = ros.Publish<TFMessageMsg>("/tf");
 
-            headsetPoseMsg = new PoseStampedMsg();
-            leftHandMsg = new PoseStampedMsg();
-            rightHandMsg = new PoseStampedMsg();
-
-            headsetHeader = new HeaderMsg();
-            headsetHeader.frame_id = unityFrame;
-
-            odomHeader = new HeaderMsg();
-            odomHeader.frame_id = rootFrame;
-
-            tfMsg = new TFMessageMsg(); 
-
-            decimatorText.text = "TF Decimator: " + _decimator;
+            if (decimatorText != null)
+                decimatorText.text = "TF Decimator: " + _decimator;
 
         }
 
         void Update()
         {
+            if (!_publishTf && !_publishPoseStamped) return;
             // For better performance we can choose to only publish every nth frame
             _frameCounter++;
             if (_frameCounter % _decimator != 0)
                 return;
 
             _frameCounter = 0;
-
+            long ticks = System.DateTime.UtcNow.Ticks - 621355968000000000L;
+            headsetHeader = new HeaderMsg();
+            headsetHeader.frame_id = unityFrame;
+            headsetHeader.stamp.sec = (int)(ticks / System.TimeSpan.TicksPerSecond);
+            headsetHeader.stamp.nanosec = (uint)((ticks % System.TimeSpan.TicksPerSecond) * 100);
 
             // TF publishing (preferred means of poses, but sometimes weird with timing)
+            tfMsg = new TFMessageMsg();
             tfMsg.transforms = new TransformStampedMsg[4];
             tfMsg.transforms[0] = new TransformStampedMsg();
             HeaderMsg rootHeader = new HeaderMsg();
             rootHeader.frame_id = rootFrame;
+            rootHeader.stamp = headsetHeader.stamp;
             // Publish the pose from odom to unity center
             tfMsg.transforms[0].header = rootHeader;
             tfMsg.transforms[0].child_frame_id = unityFrame;
             tfMsg.transforms[0].transform = new TransformMsg();
             tfMsg.transforms[0].transform.translation = new Vector3Msg();
             tfMsg.transforms[0].transform.rotation = new QuaternionMsg();
-            tfMsg.transforms[0].transform.translation = root.InverseTransformPoint(Vector3.zero).To<FLU>();
-            tfMsg.transforms[0].transform.rotation = Quaternion.Inverse(root.rotation).To<FLU>();
+            tfMsg.transforms[0].transform.translation = (root != null ? root.InverseTransformPoint(Vector3.zero) : Vector3.zero).To<FLU>();
+            tfMsg.transforms[0].transform.rotation = (root != null ? Quaternion.Inverse(root.rotation) : Quaternion.identity).To<FLU>();
 
             // Publish the headset to unity center
             tfMsg.transforms[1] = new TransformStampedMsg();
@@ -163,21 +159,52 @@ namespace RSL.Telemetry.Headset
                 if (tfMsg.transforms[i].transform.rotation.From<FLU>().Equals(default))
                     tfMsg.transforms[i].transform.rotation.w = 1;
 
-            if (_publishPoseStamped)
+            if (_publishPoseStamped && EnsurePosePublishers())
             {
+                headsetPoseMsg = new PoseStampedMsg { header = headsetHeader };
+                leftHandMsg = new PoseStampedMsg { header = headsetHeader };
+                rightHandMsg = new PoseStampedMsg { header = headsetHeader };
                 headsetPoseMsg.pose.position = headsetPose.action.ReadValue<Vector3>().To<FLU>();
                 headsetPoseMsg.pose.orientation = quaternion;
                 _posePublisher.Send(headsetPoseMsg);
+                leftHandMsg.pose.position = handPoseLeft.action.ReadValue<Vector3>().To<FLU>();
+                leftHandMsg.pose.orientation = tfMsg.transforms[2].transform.rotation;
+                rightHandMsg.pose.position = handPoseRight.action.ReadValue<Vector3>().To<FLU>();
+                rightHandMsg.pose.orientation = tfMsg.transforms[3].transform.rotation;
+                _leftPosePublisher.Send(leftHandMsg);
+                _rightPosePublisher.Send(rightHandMsg);
             }
 
             if (_publishTf)
                 _tfPublisher.Send(tfMsg);
         }
 
+        bool EnsurePosePublishers()
+        {
+            if (_rightPosePublisher != null) return true;
+            if (ros == null || ros.HasConnectionError || Time.unscaledTime < _nextPosePublishAttempt) return false;
+            _nextPosePublishAttempt = Time.unscaledTime + 3f;
+            try
+            {
+                if (_posePublisher == null)
+                    _posePublisher = ros.Publish<PoseStampedMsg>(poseTopic + "/headset");
+                if (_leftPosePublisher == null)
+                    _leftPosePublisher = ros.Publish<PoseStampedMsg>(poseTopic + "/hand_left");
+                _rightPosePublisher = ros.Publish<PoseStampedMsg>(poseTopic + "/hand_right");
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning("Could not open pose publishing routes; retrying: " + e.Message);
+                return false;
+            }
+        }
+
         public void OnDecimatorChange(float value)
         {
-            _decimator = (int)value;
-            decimatorText.text = "TF Decimator: " + _decimator;
+            _decimator = Mathf.Max(1, (int)value);
+            if (decimatorText != null)
+                decimatorText.text = "TF Decimator: " + _decimator;
         }
     }
 }
