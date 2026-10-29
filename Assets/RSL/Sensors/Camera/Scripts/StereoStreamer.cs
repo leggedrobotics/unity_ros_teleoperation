@@ -125,8 +125,28 @@ namespace RSL.Sensors.Camera
 
             topicName = topic;
 
-            SubscribeEye(topicName, true);
-            SubscribeEye(topicName.Replace("left", "right"), false);
+            _ros.RunWhenConnected(() => _ros.GetTopicAndTypeList(topics =>
+            {
+                if (this == null || topicName != topic) return;
+                string rightTopic = topic.Replace("left", "right");
+                if (topics.TryGetValue(topic, out var entry) && entry.Framing == "encoded_video_synced")
+                {
+                    // Both textures advance in the same main-thread callback.
+                    _ros.SubscribeSynced(topic, images =>
+                    {
+                        if (this == null || topicName != topic || !images.Images.TryGetValue(topic, out var left) ||
+                            !images.Images.TryGetValue(rightTopic, out var right)) return;
+                        if (!ValidStereoImage(left) || !ValidStereoImage(right)) return;
+                        OnImage(left, true);
+                        OnImage(right, false);
+                    }, mainThread: true, rosMessageType: entry.MsgType);
+                }
+                else
+                {
+                    SubscribeEye(topic, true);
+                    SubscribeEye(rightTopic, false);
+                }
+            }));
             topicDropdown.gameObject.SetActive(false);
             topMenu.SetActive(false);
         }
@@ -198,6 +218,12 @@ namespace RSL.Sensors.Camera
         /// a decoded video route the same way ImageView does. Raw Image topics
         /// arrive as decoded frames either way.
         /// </summary>
+        private static bool ValidStereoImage(ImageMsg image)
+        {
+            return image.data != null && image.width > 0 && image.height > 0 &&
+                   image.data.LongLength == (long)image.width * image.height * 3;
+        }
+
         private void SubscribeEye(string topic, bool left)
         {
             // Deferred until connected, so the video fallback below also runs

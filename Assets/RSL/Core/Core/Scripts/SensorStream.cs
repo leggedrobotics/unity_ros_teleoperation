@@ -128,7 +128,7 @@ namespace RSL.Core
         protected static bool IsViewable(UvgRos.TopicListEntry entry)
         {
             return entry.Framing == "chain" || entry.Framing == "msgpack_list" ||
-                   entry.Framing == "encoded_video";
+                   entry.Framing == "encoded_video" || entry.Framing == "encoded_video_synced";
         }
 
         /// <summary>

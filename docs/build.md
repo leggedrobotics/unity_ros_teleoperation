@@ -20,3 +20,4 @@ Then you can use the script `./upload_build` to upload the app to the desired ch
 
 # Gaining Access
 To get access to the app on a new account, message Max (mwilder@ethz.ch) with your account email, desired channel, and group affiliation. You will then get an email invite to join the group and can access the app from the Library in the Quest.
+Every channel upload must include a short feature description (under one sentence), for example `Synchronized camera streams and Doodle radio provisioning`. Pass it through the platform uploader's `--notes` (`-n`) option and increment the Android Bundle Version Code by one. Use `EXPERIMENTAL` for test APKs.
