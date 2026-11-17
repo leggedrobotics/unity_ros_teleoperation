@@ -163,6 +163,78 @@ Button:hover {
     padding-left: 10px;
 }
 
+.unity-base-popup-field__input {
+    color: var(--color-text);
+    background-color: var(--color-input-background);
+    border-radius: 10px;
+}
+
+.unity-base-popup-field__text{
+    color: var(--color-text);
+}
+
+.unity-base-popup-field__arrow {
+    -unity-background-image-tint-color: var(--color-icon);
+}
+
+.unity-base-slider__text-field {
+    color: var(--color-text);
+    background-color: var(--color-input-background);
+    border-radius: 10px;
+}
+
+.unity-base-text-field__input {
+    opacity: 1;
+    color: var(--color-text);
+    background-color: var(--color-input-background);
+    border-radius: 10px;
+}
+
+.unity-toggle__checkmark {
+    background-color: var(--color-input-background);
+    color: var(--color-icon);
+    border-radius: 5px;
+}
+
+.unity-scroller > .unity-scroller__low-button {
+    background-color: var(--color-slider-background);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 0;
+    display: none;
+}
+
+.unity-scroller > .unity-scroller__high-button {
+    background-color: var(--color-slider-background);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    height: 0;
+    display: none;
+}
+
+.unity-scroller .unity-base-slider__tracker {
+    background-color: var(--color-slider-background);
+    border-radius: 15px;
+    border-width: 0px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.unity-scroller .unity-scroller__slider {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.unity-scroller {
+    background-color: var(--color-slider-background);
+    border-radius: 15px;
+}
+
+.unity-base-slider .unity-base-slider__dragger {
+    background-color: var(--color-slider);
+    border-radius: 10px;
+}
+
 /* ---------------------------------------------------------------------------
    Settings panel
    Icon state lives in USS rather than as Sprite fields on the controller, so

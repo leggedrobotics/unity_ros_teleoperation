@@ -15,6 +15,9 @@
     --color-on-signal: #17171a;
     --color-chip: #4a4a4d;
     --color-chip-hover: #55555a;
+    --color-input-background: #313131;
+    --color-slider: #55555a;
+    --color-slider-background: #222222;
     /* Every menu panel is this wide. 260px is 26 units at the 100 pixels-
        per-unit these panels render at, which is exactly the width of the
        uGUI WifiMenu and SettingsMenu they replace -- so the ported menus
@@ -26,4 +29,28 @@
     --row-height: 64px;
     --row-content: 54px;
 
+}
+
+.unity-base-dropdown__item {
+    color: var(--color-text);
+    background-color: var(--color-input-background);
+}
+
+.unity-base-dropdown__container-inner {
+   background-color: var(--color-input-background);
+}
+
+.unity-base-dropdown__item:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.unity-base-dropdown {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.unity-base-dropdown__item:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
