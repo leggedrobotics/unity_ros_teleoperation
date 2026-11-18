@@ -40,6 +40,10 @@ Shader "Unlit/StereoStream"
 
             sampler2D _LeftTex;
             sampler2D _RightTex;
+            // head centre and right axis, set by StereoStreamer; XR runs multi-pass,
+            // where unity_StereoEyeIndex is always 0
+            float4 _HeadPos;
+            float4 _HeadRight;
 
             
             v2f vert (appdata v)
@@ -61,9 +65,9 @@ Shader "Unlit/StereoStream"
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(i);
 
-                // sample the texture
-                fixed4 col = lerp(tex2D(_LeftTex, i.uv), tex2D(_RightTex, i.uv), unity_StereoEyeIndex);
-                // fixed4 col = tex2D(_LeftTex, i.uv);
+                float3 eyePos = mul(transpose((float3x3)UNITY_MATRIX_V), -UNITY_MATRIX_V._m03_m13_m23);
+                bool right = dot(eyePos - _HeadPos.xyz, _HeadRight.xyz) > 0;
+                fixed4 col = right ? tex2D(_RightTex, i.uv) : tex2D(_LeftTex, i.uv);
 
                 return col;
             }
