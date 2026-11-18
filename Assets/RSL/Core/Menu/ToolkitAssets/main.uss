@@ -220,9 +220,14 @@ Button:hover {
     margin-bottom: 0;
 }
 
-.unity-scroller .unity-scroller__slider {
+.unity-scroller--vertical > .unity-scroller__slider {
     margin-top: 3px;
     margin-bottom: 3px;
+}
+
+.unity-scroller--horizontal > .unity-scroller__slider {
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .unity-scroller {
@@ -233,6 +238,10 @@ Button:hover {
 .unity-base-slider .unity-base-slider__dragger {
     background-color: var(--color-slider);
     border-radius: 10px;
+}
+
+.unity-toggle__checkmark {
+    -unity-background-image-tint-color: var(--color-icon);
 }
 
 /* ---------------------------------------------------------------------------
